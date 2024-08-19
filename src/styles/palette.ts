@@ -14,6 +14,21 @@ const colors = {
 
 	primary: '#002561',
 	disablePrimary: '#5679A3',
-	kboBlue: '#2777F8',
+
+	kboNavy: '#002561',
+	kboBlue0: '#E7F0FF',
+	kboBlue500: '#2777F8',
+
+	warmOrange0: '#FFF8E7',
+	warmOrange500: '#FFA132',
+
+	activeLylac100: '#EEECFF',
+	activeLylac500: '#8277FF',
+
+	earthGreen0: '#DDF9E0',
+	earchGreen500: '#1AB733',
+
+	fireRed100: '#FFDADE',
+	fireRed400: '#FF697A',
 };
 export default colors;

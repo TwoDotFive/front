@@ -17,7 +17,10 @@ const colors = {
 
 	kboNavy: '#002561',
 	kboBlue0: '#E7F0FF',
+	kboBlue100: '#CFE1FF',
+	kboBlue400: '#78A9F7',
 	kboBlue500: '#2777F8',
+	kboBlue900: '#002561',
 
 	warmOrange0: '#FFF8E7',
 	warmOrange500: '#FFA132',

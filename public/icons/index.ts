@@ -6,6 +6,8 @@ import IconPencil from './common/icon_pencil.svg';
 import IconPlus from './common/icon_plus.svg';
 import IconUpload from './common/icon_upload.svg';
 import IconCheck from './common/icon_check.svg';
+import IconRadioDefault from './common/icon_radio_default.svg';
+import IconRadioSelected from './common/icon_radio_selected.svg';
 
 import IconDefaultPin from './map/icon_default_pin.svg';
 import IconNowPin from './map/icon_now_pin.svg';
@@ -28,6 +30,8 @@ export {
 	IconPlus,
 	IconUpload,
 	IconCheck,
+	IconRadioDefault,
+	IconRadioSelected,
 	IconDefaultPin,
 	IconNowPin,
 	IconHome,

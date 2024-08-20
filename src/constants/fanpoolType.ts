@@ -11,20 +11,20 @@ export const fanpoolType = {
 	},
 	ANY: {
 		NAME: '성별무관',
-		TEXT_COLOR: 'text-gray600',
-		BG_COLOR: 'bg-gray100',
+		TEXT_COLOR: 'gray600',
+		BG_COLOR: 'gray100',
 	},
 
 	FEMALE_ONLY: {
-		NAME: '여자만',
-		TEXT_COLOR: 'text-gray600',
-		BG_COLOR: 'bg-gray100',
+		NAME: '여성만',
+		TEXT_COLOR: 'fireRed400',
+		BG_COLOR: 'fireRed100',
 	},
 
 	MALE_ONLY: {
-		NAME: '남자만',
-		TEXT_COLOR: 'text-gray600',
-		BG_COLOR: 'bg-gray100',
+		NAME: '남성만',
+		TEXT_COLOR: 'kboBlue500',
+		BG_COLOR: 'kboBlue0',
 	},
 } as const;
 

@@ -8,7 +8,8 @@ import IconUpload from './icon_upload.svg';
 import IconCheck from './icon_check.svg';
 import IconRadioDefault from './icon_radio_default.svg';
 import IconRadioSelected from './icon_radio_selected.svg';
-
+import IconButtonPlus from './icon_button_plus.svg';
+import IconButtonMinus from './icon_button_minus.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -20,4 +21,6 @@ export {
 	IconCheck,
 	IconRadioDefault,
 	IconRadioSelected,
+	IconButtonPlus,
+	IconButtonMinus,
 };

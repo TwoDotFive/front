@@ -1,4 +1,4 @@
-export const fanfoolType = {
+export const fanpoolType = {
 	CAR_SHARE: {
 		NAME: '차량공유',
 		TEXT_COLOR: 'kboBlue500',
@@ -28,4 +28,4 @@ export const fanfoolType = {
 	},
 } as const;
 
-export type FanFoolType = keyof typeof fanfoolType;
+export type FanPoolType = keyof typeof fanpoolType;

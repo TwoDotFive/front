@@ -45,15 +45,24 @@ export default function Home() {
 		<div className="p-30pxr flex flex-col gap-20pxr">
 			<FloatingMakeButton onClick={() => {}} />
 			<div className="flex gap-20px">
-				<MinusButton onClick={() => {}} />
 				<PlusButton onClick={() => {}} />
+				<MinusButton onClick={() => {}} />
 			</div>
-			<RadioButton
-				isSelected={isSelected}
-				onClick={() => {
-					setIsSelected(!isSelected);
-				}}
-			/>
+
+			<div className="flex gap-20pxr w-32pxr">
+				<RadioButton
+					isSelected={isSelected}
+					onClick={() => {
+						setIsSelected(!isSelected);
+					}}
+				/>
+				<RadioButton
+					isSelected={!isSelected}
+					onClick={() => {
+						setIsSelected(!isSelected);
+					}}
+				/>
+			</div>
 			<div className="grid grid-cols-2 gap-10pxr">
 				{teams.map((team) => (
 					<SelectAreaButton
@@ -70,13 +79,28 @@ export default function Home() {
 					setIsSelected(!isSelected);
 				}}
 			/>
-			<SelectHighlightButton
-				text="차량공유"
-				isSelected={isSelected}
+			<SelectButton
+				isSelected={!isSelected}
 				onClick={() => {
 					setIsSelected(!isSelected);
 				}}
 			/>
+			<div className="flex gap-20pxr">
+				<SelectHighlightButton
+					text="차량공유"
+					isSelected={isSelected}
+					onClick={() => {
+						setIsSelected(!isSelected);
+					}}
+				/>
+				<SelectHighlightButton
+					text="택시팟"
+					isSelected={!isSelected}
+					onClick={() => {
+						setIsSelected(!isSelected);
+					}}
+				/>
+			</div>
 			<div className="grid grid-cols-2 gap-10pxr">
 				{teams.map((team) => (
 					<SelectTeamButton
@@ -189,7 +213,7 @@ export default function Home() {
 					disabled={true}
 				/>
 			</div>
-			<div className="w-360pxr flex flex-col gap-10pxr">
+			<div className="w-360pxr flex flex-col gap-20pxr">
 				<TapBar text="팬풀 찾아보기" type="left" />
 				<TapBar text="팬풀 찾아보기" type="mid" isNextButton={true} />
 				<TapBar text="팬풀 찾아보기" type="download" />

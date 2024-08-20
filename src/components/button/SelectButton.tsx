@@ -12,7 +12,7 @@ export default function SelectButton({
 	return (
 		<div
 			className={`w-fit h-fit rounded-44pxr px-10pxr py-4pxr hover:brightness-75 ${
-				isSelected ? 'bg-kboNavy text-gray000' : 'bg-gray50 text-gray600'
+				isSelected ? 'bg-kboNavy text-gray000' : 'bg-gray050 text-gray600'
 			}`}
 			onClick={onClick}
 		>

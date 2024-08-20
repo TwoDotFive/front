@@ -1,6 +1,7 @@
 import IconCalender from './icon_calender.svg';
 import IconCancel from './icon_cancel.svg';
 import IconLeftArrow from './icon_left_arrow.svg';
+import IconRightArrow from './icon_right_arrow.svg';
 import IconMoreMenu from './icon_more_menu.svg';
 import IconPencil from './icon_pencil.svg';
 import IconPlus from './icon_plus.svg';
@@ -14,6 +15,7 @@ export {
 	IconCalender,
 	IconCancel,
 	IconLeftArrow,
+	IconRightArrow,
 	IconMoreMenu,
 	IconPencil,
 	IconPlus,

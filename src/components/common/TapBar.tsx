@@ -1,3 +1,4 @@
+'use client';
 import { IconLeftArrow, IconRightArrow, IconUpload } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { Text } from './Text';
@@ -70,7 +71,7 @@ export default function TapBar({
 
 	return (
 		<div
-			className={`w-full h-27pxr flex items-center px-12pxr ${
+			className={`w-full h-49pxr flex items-center px-12pxr ${
 				type !== 'left' ? 'justify-between' : ''
 			}`}
 		>

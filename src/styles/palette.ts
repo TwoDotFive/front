@@ -26,7 +26,9 @@ const colors = {
 	warmOrange500: '#FFA132',
 
 	activeLylac100: '#EEECFF',
+	activeLylac300: '#B4ADFF',
 	activeLylac500: '#8277FF',
+	activeLylac600: '#7266FF',
 
 	earthGreen0: '#DDF9E0',
 	earchGreen500: '#1AB733',

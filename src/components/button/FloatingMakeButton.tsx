@@ -7,7 +7,7 @@ type FloatingMakeButtonProps = {
 export const FloatingMakeButton = ({ onClick }: FloatingMakeButtonProps) => {
 	return (
 		<div
-			className="w-fit h-fit p-12pxr flex items-center justify-center bg-[#2D67FF] rounded-30pxr"
+			className="w-fit h-fit p-12pxr flex items-center justify-center bg-[#2D67FF] rounded-30pxr cursor-pointer hover:brightness-75"
 			onClick={onClick}
 		>
 			<IconPlus />{' '}

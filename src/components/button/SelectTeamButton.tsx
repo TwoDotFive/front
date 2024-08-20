@@ -46,7 +46,7 @@ export default function SelectTeamButton({
 	return (
 		<div
 			className={`relative w-full h-102pxr flex flex-col items-center rounded-8pxr px-16pxr py-11pxr gap-2pxr cursor-pointer ${
-				isSelected ? 'bg-kboBlue100' : 'bg-gray050'
+				isSelected ? 'bg-kboBlue100 border border-kboBlue400' : 'bg-gray050'
 			}`}
 			onClick={onClick}
 		>

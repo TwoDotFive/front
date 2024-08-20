@@ -45,24 +45,16 @@ const fontSizeClasses: { [index: number]: string } = {
 
 const getLineHeight = (fontWeight: number, fontSize: number): string => {
 	if (fontSize === 12) {
-		if (fontWeight === 500) return '140%'; // 16.8px
-		if (fontWeight === 600) return '160%'; // 19.2px
-		if (fontWeight === 700) return '140%'; // 16.8px
-	}
-	if (fontSize === 14) {
-		if (fontWeight === 400) return '160%'; // 22.4px
-		if (fontWeight === 500) return '140%'; // 19.6px
-		if (fontWeight === 700) return '140%'; // 19.6px
+		if (fontWeight === 600) return '160%';
 	}
 	if (fontSize === 16) {
-		if (fontWeight === 500) return '160%'; // 25.6px
-		if (fontWeight === 600) return '150%'; // 24px
+		if (fontWeight === 400) return '150%';
 	}
-	if (fontSize === 18) {
-		if (fontWeight === 500) return '150%'; // 27px
-		if (fontWeight === 700) return '150%'; // 27px
+	if (fontSize === 20) {
+		if (fontWeight === 400) return '150%';
+		if (fontWeight === 700) return 'auto';
 	}
-	return 'normal';
+	return '140%';
 };
 
 export function Text({

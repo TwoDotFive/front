@@ -12,8 +12,8 @@ type LocationInfoCardProps = {
 export default function LocationInfoCard({ image, name, location, tagNames }: LocationInfoCardProps) {
     return (
         <div className="flex items-center gap-8pxr w-fit h-74pxr">
-            <div className="w-74pxr h-74pxr">
-                <img src ={image}/>
+            <div className="w-74pxr h-74pxr rounded-5pxr">
+                <img className='w-full h-full' src ={image}/>
             </div>
             <div className ="flex flex-col justify-between items-start flex-1 self-stretch">
                 <Text fontSize={16} fontWeight={700} color="gray700">

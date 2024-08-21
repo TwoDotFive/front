@@ -11,7 +11,7 @@ type LocationInfoCardProps = {
 
 export default function LocationInfoCard({ image, name, location, tagNames }: LocationInfoCardProps) {
     return (
-        <div className="flex items-center gap-8pxr w-fit h-74pxr">
+        <div className="flex items-center gap-8pxr w-full h-74pxr">
             <div className="w-74pxr h-74pxr rounded-5pxr">
                 <img className='w-full h-full' src ={image}/>
             </div>

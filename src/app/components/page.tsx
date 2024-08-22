@@ -12,6 +12,7 @@ import LocationInfoCard from '@/components/card/LocationInfoCard';
 import LocationInfoMiniCard from '@/components/card/LocationInfoMiniCard';
 import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
 import TravelogCard from '@/components/card/TravelogCard';
+import TravelogLocationCard from '@/components/card/TravelogLocationCard';
 import Button from '@/components/common/Button';
 import TapBar from '@/components/common/TapBar';
 import Input from '@/components/input/Input';
@@ -257,6 +258,10 @@ export default function Home() {
 			<LocationInfoMiniCard image={'/images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
 			<LocationInfoSearchCard image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
 			<LocationDeleteButton image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' onClick={() => {}}/>
+			<div className='flex flex-col gap-10pxr'>
+				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='myUserId'/>
+				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='unknown'/>
+			</div>
 		</div>
 	);
 }

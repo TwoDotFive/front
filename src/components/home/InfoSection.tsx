@@ -1,6 +1,7 @@
 import FanpoolButton from './FanpoolButton';
 import GameSchedule from './GameSchedule/GameSchedule';
 import LiveFanPool from './LiveFanPool/LiveFanPool';
+import RecentFanpoolLog from './RecentFanpoolLog/RecentFanpoolLog';
 
 interface TeamCodeProps {
 	teamCode: string;
@@ -17,6 +18,8 @@ export default function InfoSection({ teamCode }: TeamCodeProps) {
 			<div className="h-82pxr" />
 			<LiveFanPool />
 			<div className="h-40pxr" />
+			<RecentFanpoolLog />
+			<div className="h-56pxr" />
 		</section>
 	);
 }

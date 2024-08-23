@@ -1,3 +1,9 @@
+import TeamHeader from '@/components/home/TeamHeader';
+
 export default function page() {
-	return <div>page</div>;
+	return (
+		<main className="w-full h-full flex flex-col">
+			<TeamHeader teamCode="doosan" />
+		</main>
+	);
 }

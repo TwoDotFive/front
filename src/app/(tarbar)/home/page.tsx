@@ -4,7 +4,7 @@ import TeamHeader from '@/components/home/TeamHeader';
 export default function page() {
 	return (
 		<main className="w-full flex flex-col">
-			<TeamHeader teamCode="doosan" />
+			<TeamHeader teamCode="" />
 			<InfoSection teamCode="doosan" />
 		</main>
 	);

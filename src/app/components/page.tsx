@@ -14,7 +14,7 @@ import InputWithIcon from '@/components/common/input/InputWithIcon';
 import { TagFanPool } from '@/components/common/tag/TagFanPool';
 import TagLocation from '@/components/common/tag/TagLocation';
 import ChatTapBar from '@/components/common/tapbar/chatTapBar';
-import { FanPoolType } from '@/constants/fanpoolType';
+import { Tags } from '@/constants/tags';
 import { teams } from '@/constants/teams';
 import { useState } from 'react';
 
@@ -32,7 +32,7 @@ export default function Home() {
 		setInputValue(value);
 	};
 
-	const fanPoolTypes: FanPoolType[] = [
+	const tags: Tags[] = [
 		'CAR_SHARE',
 		'TAXI_PARTY',
 		'ANY',
@@ -236,7 +236,7 @@ export default function Home() {
 				onChange={handleInputChange}
 			/>
 			<div className="flex gap-10pxr">
-				{fanPoolTypes.map((type) => (
+				{tags.map((type) => (
 					<TagFanPool key={type} type={type} />
 				))}
 			</div>

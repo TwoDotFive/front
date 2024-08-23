@@ -1,4 +1,10 @@
-export const fanpoolType = {
+export interface TagType {
+	NAME: string;
+	TEXT_COLOR: string;
+	BG_COLOR: string;
+}
+
+export const tags = {
 	CAR_SHARE: {
 		NAME: '차량공유',
 		TEXT_COLOR: 'kboBlue500',
@@ -14,13 +20,11 @@ export const fanpoolType = {
 		TEXT_COLOR: 'gray600',
 		BG_COLOR: 'gray100',
 	},
-
 	FEMALE_ONLY: {
 		NAME: '여성만',
 		TEXT_COLOR: 'fireRed400',
 		BG_COLOR: 'fireRed100',
 	},
-
 	MALE_ONLY: {
 		NAME: '남성만',
 		TEXT_COLOR: 'kboBlue500',
@@ -38,4 +42,6 @@ export const fanpoolType = {
 	},
 } as const;
 
-export type FanPoolType = keyof typeof fanpoolType;
+export type Tags = keyof typeof tags;
+
+export type TagValueType = (typeof tags)[Tags];

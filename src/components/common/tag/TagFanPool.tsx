@@ -1,7 +1,7 @@
 import { FanPoolType, fanpoolType } from '@/constants/fanpoolType';
 import React from 'react';
-import { Text } from '../common/Text';
-import colors from '../../styles/palette';
+import { Text } from '../Text';
+import colors from '../../../styles/palette';
 
 type TagProps = {
 	type: FanPoolType;

@@ -1,5 +1,5 @@
 import { IconPlus } from '@/public/icons';
-import { Text } from '../common/Text';
+import { Text } from '../Text';
 
 type FloatingMakeButtonProps = {
 	onClick: () => void;

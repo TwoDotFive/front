@@ -26,6 +26,16 @@ export const fanpoolType = {
 		TEXT_COLOR: 'kboBlue500',
 		BG_COLOR: 'kboBlue0',
 	},
+	AWAY: {
+		NAME: 'AWAY',
+		TEXT_COLOR: 'activeLylac600',
+		BG_COLOR: 'activeLylac100',
+	},
+	HOME: {
+		NAME: 'HOME',
+		TEXT_COLOR: 'earthGreen500',
+		BG_COLOR: 'earthGreen0',
+	},
 } as const;
 
 export type FanPoolType = keyof typeof fanpoolType;

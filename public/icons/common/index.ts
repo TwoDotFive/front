@@ -12,7 +12,7 @@ import IconRadioSelected from './icon_radio_selected.svg';
 import IconButtonPlus from './icon_button_plus.svg';
 import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
-import IconPeople from './icon_people.svg';
+import IconPerson from './icon_person.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -28,5 +28,5 @@ export {
 	IconButtonPlus,
 	IconButtonMinus,
 	IconHamburger,
-	IconPeople,
+	IconPerson,
 };

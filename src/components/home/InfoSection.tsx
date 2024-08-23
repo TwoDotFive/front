@@ -7,7 +7,7 @@ interface TeamCodeProps {
 }
 export default function InfoSection({ teamCode }: TeamCodeProps) {
 	return (
-		<section className="w-full overflow-y-scroll bg-white pt-12pxr px-20pxr rounded-t-8pxr -mt-8pxr z-50">
+		<section className="w-full bg-white pt-12pxr px-20pxr rounded-t-8pxr -mt-8pxr z-50">
 			<GameSchedule />
 			<div className="h-13pxr" />
 			{/**

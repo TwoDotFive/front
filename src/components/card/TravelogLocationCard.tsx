@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from '../common/Text';
 import LocationInfoMiniCard from './LocationInfoMiniCard';
 import Button from '../common/Button';
 

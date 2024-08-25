@@ -11,6 +11,7 @@ import SelectTeamButton from '@/components/button/SelectTeamButton';
 import LocationInfoCard from '@/components/card/LocationInfoCard';
 import LocationInfoMiniCard from '@/components/card/LocationInfoMiniCard';
 import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
+import TravelogAddCard from '@/components/card/TravelogAddCard';
 import TravelogCard from '@/components/card/TravelogCard';
 import TravelogLocationCard from '@/components/card/TravelogLocationCard';
 import Button from '@/components/common/Button';
@@ -261,6 +262,12 @@ export default function Home() {
 			<div className='flex flex-col gap-10pxr'>
 				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='myUserId'/>
 				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='unknown'/>
+			</div>
+			<div className='flex flex-col gap-10pxr'>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png','/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png','/images/kt.png']}/>
 			</div>
 		</div>
 	);

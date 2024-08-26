@@ -1,5 +1,6 @@
 'use client';
 import { FloatingMakeButton } from '@/components/button/FloatingMakeButton';
+import LocationDeleteButton from '@/components/button/LocationDeleteButton';
 import MinusButton from '@/components/button/MinusButton';
 import PlusButton from '@/components/button/PlusButton';
 import { RadioButton } from '@/components/button/RadioButton';
@@ -7,6 +8,12 @@ import SelectAreaButton from '@/components/button/SelectAreaButton';
 import SelectButton from '@/components/button/SelectButton';
 import SelectHighlightButton from '@/components/button/SelectHighlightButton';
 import SelectTeamButton from '@/components/button/SelectTeamButton';
+import LocationInfoCard from '@/components/card/LocationInfoCard';
+import LocationInfoMiniCard from '@/components/card/LocationInfoMiniCard';
+import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
+import TravelogAddCard from '@/components/card/TravelogAddCard';
+import TravelogCard from '@/components/card/TravelogCard';
+import TravelogLocationCard from '@/components/card/TravelogLocationCard';
 import Button from '@/components/common/Button';
 import TapBar from '@/components/common/TapBar';
 import Input from '@/components/input/Input';
@@ -244,6 +251,23 @@ export default function Home() {
 				{tagNames.map((name) => (
 					<TagLocation key={name} name={name} />
 				))}
+			</div>
+			<div className="flex gap-10pxr">
+				<LocationInfoCard image={'/images/kt.png'} name="잠실 야구 경기장" location="서울 잠실" tagNames={tagNames}/>
+			</div>
+			<TravelogCard image='/images/kt.png' userName='네임드호빵' userImage='/images/kt.png' title='비오는날 경기 대신 서울 나들이' locations={['잠실야구장', '피처캠프 신천점', '새마을 전통시장','멸치집 본점']} />
+			<LocationInfoMiniCard image={'/images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
+			<LocationInfoSearchCard image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
+			<LocationDeleteButton image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' onClick={() => {}}/>
+			<div className='flex flex-col gap-10pxr'>
+				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='myUserId'/>
+				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='unknown'/>
+			</div>
+			<div className='flex flex-col gap-10pxr'>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png','/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png']}/>
+				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png','/images/kt.png']}/>
 			</div>
 		</div>
 	);

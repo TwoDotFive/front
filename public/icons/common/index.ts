@@ -14,6 +14,8 @@ import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
 import IconPerson from './icon_person.svg';
 import IconClose from './icon_close.svg';
+import IconShiftLeft from './icon_shift_left.svg';
+import IconShiftRight from './icon_shift_right.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -31,4 +33,6 @@ export {
 	IconHamburger,
 	IconPerson,
 	IconClose,
+	IconShiftLeft,
+	IconShiftRight,
 };

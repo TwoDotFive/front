@@ -2,32 +2,40 @@
 import React, { useEffect } from 'react';
 import { Text } from '@/components/common/Text';
 import { IconClose } from '@/public/icons';
+import UserProfile from './UserProfile';
 
 interface DrawerProps {
 	isVisible: boolean;
 	onClose: () => void;
-	children: React.ReactNode;
 }
 
-export const Drawer: React.FC<DrawerProps> = ({
-	isVisible,
-	onClose,
-	children,
-}) => {
+export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
 	const drawerClasses = isVisible ? 'translate-x-0' : '-translate-x-full';
 	const overlayClasses = isVisible
 		? 'opacity-50 pointer-events-auto'
 		: 'opacity-0 pointer-events-none';
 
 	useEffect(() => {
+		// Prevent scrolling on body when drawer is visible
+		const scrollContentsElement = document.querySelector('.scroll-contents');
+
 		if (isVisible) {
 			document.body.style.overflow = 'hidden';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.remove('scroll-contents');
+			}
 		} else {
 			document.body.style.overflow = '';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.add('scroll-contents');
+			}
 		}
 
 		return () => {
 			document.body.style.overflow = '';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.add('scroll-contents');
+			}
 		};
 	}, [isVisible]);
 
@@ -48,7 +56,28 @@ export const Drawer: React.FC<DrawerProps> = ({
 						</div>
 					</div>
 				</div>
-				<div className="flex-1 overflow-y-auto p-4">{children}</div>
+				<div className="flex-1 overflow-y-auto px-20pxr">
+					<UserProfile
+						name={'네임드호빵'}
+						fanfoolCount={3}
+						fanfoolLogCount={4}
+					/>
+					<div className="h-24pxr" />
+					<div className="flex flex-col gap-18pxr">
+						<Text fontSize={14} fontWeight={400}>
+							설정
+						</Text>
+						<Text fontSize={14} fontWeight={400}>
+							서비스 약관
+						</Text>
+						<Text fontSize={14} fontWeight={400}>
+							로그아웃
+						</Text>
+						<Text fontSize={14} fontWeight={400}>
+							탈퇴
+						</Text>
+					</div>
+				</div>
 			</div>
 		</>
 	);

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Text } from '../common/Text';
 import { IconHamburger, IconPerson } from '@/public/icons';
 import BottomSheet from './BottomSheet';
-import Drawer from './Drawer';
+import Drawer from './Drawer/Drawer';
 
 interface TeamCodeProps {
 	teamCode?: string;
@@ -95,9 +95,7 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 						</Text>
 					</span>
 				</div>
-				<Drawer isVisible={isDrawerVisible} onClose={toggleDrawer}>
-					<p>Your drawer content goes here</p>
-				</Drawer>
+				<Drawer isVisible={isDrawerVisible} onClose={toggleDrawer} />
 			</section>
 			{isSheetOpen && (
 				<BottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />

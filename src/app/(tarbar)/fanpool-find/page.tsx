@@ -1,3 +1,9 @@
+import TapBar from '@/components/common/TapBar';
+
 export default function page() {
-	return <div>팬풀찾기화면</div>;
+	return (
+		<section>
+			<TapBar text="팬풀 찾아보기" type="mid" isNextButton={false} />
+		</section>
+	);
 }

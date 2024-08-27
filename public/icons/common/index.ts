@@ -13,6 +13,7 @@ import IconButtonPlus from './icon_button_plus.svg';
 import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
 import IconPerson from './icon_person.svg';
+import IconClose from './icon_close.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -29,4 +30,5 @@ export {
 	IconButtonMinus,
 	IconHamburger,
 	IconPerson,
+	IconClose,
 };

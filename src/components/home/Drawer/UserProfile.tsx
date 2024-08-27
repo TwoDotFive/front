@@ -2,14 +2,14 @@ import { Text } from '@/components/common/Text';
 
 interface UserProfileProps {
 	name: string;
-	fanfoolCount: number;
-	fanfoolLogCount: number;
+	fanpoolCount: number;
+	fanpoolLogCount: number;
 }
 
 export default function UserProfile({
 	name,
-	fanfoolCount,
-	fanfoolLogCount,
+	fanpoolCount,
+	fanpoolLogCount,
 }: UserProfileProps) {
 	return (
 		<section className="flex gap-4pxr">
@@ -19,7 +19,7 @@ export default function UserProfile({
 					{name}
 				</Text>
 				<Text fontSize={12} fontWeight={400} color="gray700">
-					{fanfoolCount}개의 팬풀 | {fanfoolLogCount}개의 여행기
+					{fanpoolCount}개의 팬풀 | {fanpoolLogCount}개의 여행기
 				</Text>
 			</div>
 		</section>

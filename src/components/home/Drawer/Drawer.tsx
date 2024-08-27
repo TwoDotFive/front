@@ -59,8 +59,8 @@ export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
 				<div className="flex-1 overflow-y-auto px-20pxr">
 					<UserProfile
 						name={'네임드호빵'}
-						fanfoolCount={3}
-						fanfoolLogCount={4}
+						fanpoolCount={3}
+						fanpoolLogCount={4}
 					/>
 					<div className="h-24pxr" />
 					<div className="flex flex-col gap-18pxr">

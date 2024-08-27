@@ -16,6 +16,9 @@ import IconPerson from './icon_person.svg';
 import IconClose from './icon_close.svg';
 import IconShiftLeft from './icon_shift_left.svg';
 import IconShiftRight from './icon_shift_right.svg';
+import IconShiftBottom from './icon_shift_bottom.svg';
+import IconFavorite from './icon_favorite.svg';
+import IconFilter from './icon_filter.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -35,4 +38,7 @@ export {
 	IconClose,
 	IconShiftLeft,
 	IconShiftRight,
+	IconShiftBottom,
+	IconFavorite,
+	IconFilter,
 };

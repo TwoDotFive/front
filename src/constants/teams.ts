@@ -1,4 +1,9 @@
-export const teams = [
+export interface teamsType {
+	code: string;
+	name: string;
+	area: string;
+}
+export const teams: teamsType[] = [
 	{ code: 'doosan', name: '두산 베어스', area: '잠실' }, // 잠실야구장
 	{ code: 'hanwha', name: '한화 이글스', area: '대전' }, // 대전 한화생명 이글스파크
 	{ code: 'kiwoom', name: '키움 히어로즈', area: '고척' }, // 고척 스카이돔

@@ -1,13 +1,4 @@
 'use client';
-import { FloatingMakeButton } from '@/components/button/FloatingMakeButton';
-import LocationDeleteButton from '@/components/button/LocationDeleteButton';
-import MinusButton from '@/components/button/MinusButton';
-import PlusButton from '@/components/button/PlusButton';
-import { RadioButton } from '@/components/button/RadioButton';
-import SelectAreaButton from '@/components/button/SelectAreaButton';
-import SelectButton from '@/components/button/SelectButton';
-import SelectHighlightButton from '@/components/button/SelectHighlightButton';
-import SelectTeamButton from '@/components/button/SelectTeamButton';
 import LocationInfoCard from '@/components/card/LocationInfoCard';
 import LocationInfoMiniCard from '@/components/card/LocationInfoMiniCard';
 import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
@@ -16,12 +7,21 @@ import TravelogCard from '@/components/card/TravelogCard';
 import TravelogLocationCard from '@/components/card/TravelogLocationCard';
 import Button from '@/components/common/Button';
 import TapBar from '@/components/common/TapBar';
-import Input from '@/components/input/Input';
-import InputWithIcon from '@/components/input/InputWithIcon';
-import { TagFanPool } from '@/components/tag/TagFanPool';
-import TagLocation from '@/components/tag/TagLocation';
-import ChatTapBar from '@/components/tapbar/chatTapBar';
-import { FanPoolType } from '@/constants/fanpoolType';
+import { FloatingMakeButton } from '@/components/common/button/FloatingMakeButton';
+import LocationDeleteButton from '@/components/common/button/LocationDeleteButton';
+import MinusButton from '@/components/common/button/MinusButton';
+import PlusButton from '@/components/common/button/PlusButton';
+import { RadioButton } from '@/components/common/button/RadioButton';
+import SelectAreaButton from '@/components/common/button/SelectAreaButton';
+import SelectButton from '@/components/common/button/SelectButton';
+import SelectHighlightButton from '@/components/common/button/SelectHighlightButton';
+import SelectTeamButton from '@/components/common/button/SelectTeamButton';
+import Input from '@/components/common/input/Input';
+import InputWithIcon from '@/components/common/input/InputWithIcon';
+import { TagFanPool } from '@/components/common/tag/TagFanPool';
+import TagLocation from '@/components/common/tag/TagLocation';
+import ChatTapBar from '@/components/common/tapbar/chatTapBar';
+import { Tags } from '@/constants/tags';
 import { teams } from '@/constants/teams';
 import { useState } from 'react';
 
@@ -39,7 +39,7 @@ export default function Home() {
 		setInputValue(value);
 	};
 
-	const fanPoolTypes: FanPoolType[] = [
+	const tags: Tags[] = [
 		'CAR_SHARE',
 		'TAXI_PARTY',
 		'ANY',
@@ -243,7 +243,7 @@ export default function Home() {
 				onChange={handleInputChange}
 			/>
 			<div className="flex gap-10pxr">
-				{fanPoolTypes.map((type) => (
+				{tags.map((type) => (
 					<TagFanPool key={type} type={type} />
 				))}
 			</div>
@@ -253,21 +253,92 @@ export default function Home() {
 				))}
 			</div>
 			<div className="flex gap-10pxr">
-				<LocationInfoCard image={'/images/kt.png'} name="잠실 야구 경기장" location="서울 잠실" tagNames={tagNames}/>
+				<LocationInfoCard
+					image={'/images/kt.png'}
+					name="잠실 야구 경기장"
+					location="서울 잠실"
+					tagNames={tagNames}
+				/>
 			</div>
-			<TravelogCard image='/images/kt.png' userName='네임드호빵' userImage='/images/kt.png' title='비오는날 경기 대신 서울 나들이' locations={['잠실야구장', '피처캠프 신천점', '새마을 전통시장','멸치집 본점']} />
-			<LocationInfoMiniCard image={'/images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
-			<LocationInfoSearchCard image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' location='서울 송파구 올림픽로 25'/>
-			<LocationDeleteButton image={'images/doosan.png'} name='잠실종합운동장 잠실야구장' onClick={() => {}}/>
-			<div className='flex flex-col gap-10pxr'>
-				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='myUserId'/>
-				<TravelogLocationCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' userId='unknown'/>
+			<TravelogCard
+				image="/images/kt.png"
+				userName="네임드호빵"
+				userImage="/images/kt.png"
+				title="비오는날 경기 대신 서울 나들이"
+				locations={[
+					'잠실야구장',
+					'피처캠프 신천점',
+					'새마을 전통시장',
+					'멸치집 본점',
+				]}
+			/>
+			<LocationInfoMiniCard
+				image={'/images/doosan.png'}
+				name="잠실종합운동장 잠실야구장"
+				location="서울 송파구 올림픽로 25"
+			/>
+			<LocationInfoSearchCard
+				image={'images/doosan.png'}
+				name="잠실종합운동장 잠실야구장"
+				location="서울 송파구 올림픽로 25"
+			/>
+			<LocationDeleteButton
+				image={'images/doosan.png'}
+				name="잠실종합운동장 잠실야구장"
+				onClick={() => {}}
+			/>
+			<div className="flex flex-col gap-10pxr">
+				<TravelogLocationCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					userId="myUserId"
+				/>
+				<TravelogLocationCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					userId="unknown"
+				/>
 			</div>
-			<div className='flex flex-col gap-10pxr'>
-				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png']}/>
-				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='myUserId' locationImage={['/images/kt.png','/images/kt.png']}/>
-				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png']}/>
-				<TravelogAddCard image='/images/kt.png' name='수원 KT위즈파크' location='경기도 수원시 장안구' description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다" userId='yourId' locationImage={['/images/kt.png','/images/kt.png','/images/kt.png','/images/kt.png']}/>
+			<div className="flex flex-col gap-10pxr">
+				<TravelogAddCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다"
+					userId="myUserId"
+					locationImage={['/images/kt.png']}
+				/>
+				<TravelogAddCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다"
+					userId="myUserId"
+					locationImage={['/images/kt.png', '/images/kt.png']}
+				/>
+				<TravelogAddCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다"
+					userId="yourId"
+					locationImage={['/images/kt.png', '/images/kt.png', '/images/kt.png']}
+				/>
+				<TravelogAddCard
+					image="/images/kt.png"
+					name="수원 KT위즈파크"
+					location="경기도 수원시 장안구"
+					description="설명입니다~설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다설명입니다"
+					userId="yourId"
+					locationImage={[
+						'/images/kt.png',
+						'/images/kt.png',
+						'/images/kt.png',
+						'/images/kt.png',
+					]}
+				/>
 			</div>
 		</div>
 	);

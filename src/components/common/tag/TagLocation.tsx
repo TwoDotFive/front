@@ -1,4 +1,4 @@
-import { Text } from '../common/Text';
+import { Text } from '../Text';
 
 export default function TagLocation({ name }: { name: string }) {
 	return (

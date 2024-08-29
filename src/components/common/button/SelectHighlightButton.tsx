@@ -1,6 +1,6 @@
 import React from 'react';
 import { teams } from '@/constants/teams';
-import { Text } from '../common/Text';
+import { Text } from '../Text';
 
 type SelectHighlightButtonProps = {
 	text: string;

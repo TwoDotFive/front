@@ -1,4 +1,4 @@
-import { Text } from '../common/Text';
+import { Text } from '../Text';
 
 type SelectButtonProps = {
 	isSelected: boolean;

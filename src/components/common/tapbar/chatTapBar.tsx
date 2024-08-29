@@ -1,6 +1,6 @@
 import { IconLeftArrow } from '@/public/icons';
 import { useRouter } from 'next/navigation';
-import { Text } from '../common/Text';
+import { Text } from '../Text';
 
 type ChatTapBarProps = {
 	text: string;

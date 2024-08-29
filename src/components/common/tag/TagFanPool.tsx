@@ -1,17 +1,17 @@
-import { FanPoolType, fanpoolType } from '@/constants/fanpoolType';
 import React from 'react';
-import { Text } from '../common/Text';
-import colors from '../../styles/palette';
+import { Text } from '../Text';
+import colors from '../../../styles/palette';
+import { Tags, tags } from '@/constants/tags';
 
 type TagProps = {
-	type: FanPoolType;
+	type: Tags;
 };
 
 export const TagFanPool = ({ type }: TagProps) => {
 	/**
 	 * 정의된 fanpoolType 가져오기
 	 */
-	const { TEXT_COLOR, BG_COLOR, NAME } = fanpoolType[type];
+	const { TEXT_COLOR, BG_COLOR, NAME } = tags[type];
 
 	/**
 	 * textColor,bgColor을 사용하기 위해 정의

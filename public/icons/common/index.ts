@@ -13,6 +13,11 @@ import IconButtonPlus from './icon_button_plus.svg';
 import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
 import IconPerson from './icon_person.svg';
+import IconShare from './icon_share.svg';
+import IconLink from './icon_link.svg';
+import IconBookMark from './icon_bookmark.svg';
+import IconBookMarkSelected from './icon_bookmark_selected.svg';
+
 export {
 	IconCalender,
 	IconCancel,
@@ -29,4 +34,8 @@ export {
 	IconButtonMinus,
 	IconHamburger,
 	IconPerson,
+	IconShare,
+	IconLink,
+	IconBookMark,
+	IconBookMarkSelected
 };

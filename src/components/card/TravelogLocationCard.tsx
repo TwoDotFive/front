@@ -12,7 +12,7 @@ type TravelogLocationCardProps = {
 export default function TravelogLocationCard({image, name, location, userId}: TravelogLocationCardProps){
     if(userId !== 'myUserId'){
         return (
-            <div className='flex w-300pxr p-12pxr items-center gap-8pxr flex-shrink-0 rounded-8pxr bg-gray000'>
+            <div className='flex w-300pxr p-12pxr items-center gap-8pxr flex-shrink-0 rounded-8pxr bg-gray000 shadow-[2px_2px_20px_0px_rgba(47,47,48,0.10)]'>
                 <LocationInfoMiniCard image={image} name={name} location={location} />
             </div>
         );

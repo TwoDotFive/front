@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from '../common/Text';
-import TagLocation from '../tag/TagLocation';
+import TagLocation from '../common/tag/TagLocation';
 
 type LocationInfoCardProps = {
     image: string;

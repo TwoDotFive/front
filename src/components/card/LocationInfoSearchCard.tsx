@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from '../common/Text';
-import SelectButton from '../button/SelectButton';
+import SelectButton from '../common/button/SelectButton';
+
 
 type LocationInfoSearchCardProps = {
     image: string;

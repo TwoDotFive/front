@@ -19,6 +19,8 @@ import IconShiftRight from './icon_shift_right.svg';
 import IconShiftBottom from './icon_shift_bottom.svg';
 import IconFavorite from './icon_favorite.svg';
 import IconFilter from './icon_filter.svg';
+import IconCheckNavy from './icon_check_navy.svg';
+import IconChat from './icon_chat.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -41,4 +43,6 @@ export {
 	IconShiftBottom,
 	IconFavorite,
 	IconFilter,
+	IconCheckNavy,
+	IconChat,
 };

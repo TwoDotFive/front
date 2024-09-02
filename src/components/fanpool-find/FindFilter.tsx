@@ -3,21 +3,35 @@
 import { useState } from 'react';
 import { format, isToday } from 'date-fns';
 import { Text } from '../common/Text';
-import { IconFilter } from '@/public/icons';
+import { IconCheckNavy, IconFilter } from '@/public/icons';
 import FilterBottomSheet from './FilterBottomSheet';
 import { teams } from '@/constants/teams';
+import InputWithIcon from '../common/input/InputWithIcon';
+import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
+import MatchSelectBottomSheet from './MatchSelectBottomSheet';
 
 export default function FindFilter() {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 	const [selectedTeam, setSelectedTeam] = useState<string>('');
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
+	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
+		useState(false);
+	const [selectedMatch, setSelectedMatch] = useState<number>(0);
+
+	const [inputValue, setInputValue] = useState<string>('');
 	const toggleBottomSheet = () => {
 		setIsBottomSheetVisible(!isBottomSheetVisible);
+	};
+	const toggleMatchBottomSheet = () => {
+		setIsMatchSelectBottomSheetVisible(!isMatchSelectBottomSheetVisible);
 	};
 
 	const handleTeamSelect = (code: string) => {
 		setSelectedTeam(code);
+	};
+	const handleMatchSelect = (code: number) => {
+		setSelectedMatch(0);
 	};
 
 	const formatDate = (date: Date) => {
@@ -67,7 +81,31 @@ export default function FindFilter() {
 					</Text>
 				</div>
 			</div>
-
+			<div onClick={toggleMatchBottomSheet}>
+				<FanpoolMatchSelectButton matchCount={13} />
+			</div>
+			<InputWithIcon
+				placeholder="여기 근처에서 출발!"
+				value={inputValue}
+				onChange={() => {}}
+			/>
+			<div className="h-8pxr" />
+			<div className="flex justify-between">
+				<Text fontSize={12} fontWeight={500} color="gray400">
+					인기순
+				</Text>
+				<div className="flex gap-2pxr">
+					<Text fontSize={12} fontWeight={500} color="kboNavy">
+						마감된 팬풀 안보기
+					</Text>
+					<IconCheckNavy />
+				</div>
+			</div>
+			<MatchSelectBottomSheet
+				isVisible={isMatchSelectBottomSheetVisible}
+				onClose={toggleMatchBottomSheet}
+				onMatchSelect={handleMatchSelect}
+			/>
 			<FilterBottomSheet
 				isVisible={isBottomSheetVisible}
 				selectedTeam={selectedTeam}

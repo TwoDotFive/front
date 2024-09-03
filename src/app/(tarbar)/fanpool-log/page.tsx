@@ -18,9 +18,8 @@ export default function page() {
 			<div className="p-20pxr">
 				<RecentFanpoolLog />
 				<div className="m-60pxr"></div>
-				<TeamTravelog team="KT위즈" />
 				<div className="fixed bottom-88pxr left-1/2 transform -translate-x-1/2">
-				<Button
+					<Button
 						width="135px"
 						height="46px"
 						text={'+ 팬풀로그 작성'}

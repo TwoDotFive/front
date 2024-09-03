@@ -52,8 +52,12 @@ export default function TapBar({
 	};
 
 	const renderRightSection = () => {
-		if (type === 'mid' && isNextButton) {
-			return <IconRightArrow className="cursor-pointer" onClick={handleNext} />;
+		if (type === 'mid') {
+			if (isNextButton)
+				return (
+					<IconRightArrow className="cursor-pointer" onClick={handleNext} />
+				);
+			else return <div className="w-25pxr" />;
 		}
 		if (type === 'download') {
 			return <IconUpload className="cursor-pointer" />;

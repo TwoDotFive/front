@@ -55,7 +55,6 @@ export default function page() {
       <div className={'fixed flex items-center justify-center inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr'}
 				style={{ zIndex: 1000, overflowY: 'unset' }}>
           <Button
-            width="320px"
             height="50px"
             text={'완료'}
             borderRadius={8}

@@ -6,6 +6,7 @@ import Button from '@/components/common/Button';
 import TagFilter from '@/components/fanpool-log/Create-log/TagFilter';
 import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
 import LocationDeleteButton from '@/components/common/button/LocationDeleteButton'; // Import LocationDeleteButton
+import { motion } from 'framer-motion';
 
 export default function Page() {
   const tags = ['식당', '카페', '지역명소', '숙소', '쇼핑', '주차장'];
@@ -58,7 +59,12 @@ export default function Page() {
   };
 
   return (
-    <div className="fixed flex flex-col h-screen w-full">
+    <motion.div      
+      initial={{ x: '100%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: '-100%', opacity: 0 }}
+      transition={{ duration: 0.5 }}  
+      className="fixed flex flex-col h-screen w-full">
       {/* 탭바 */}
       <div className='fixed top-0 left-0 right-0 z-100 bg-white'>
         <TapBar text="팬풀로그 만들기" type="mid" isNextButton={false} />
@@ -91,7 +97,7 @@ export default function Page() {
         style={{ zIndex: 1000, boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
         {selectedItems.length > 0 ? (
           <>
-            <div className="w-full flex justify-start gap-12pxr overflow-x-auto px-20pxr pt-22pxr">
+            <div className="w-full flex justify-start gap-12pxr overflow-x-auto pt-22pxr">
               {selectedItems.map((item, index) => (
                 <LocationDeleteButton
                   key={index}
@@ -102,7 +108,6 @@ export default function Page() {
               ))}
             </div>
             <Button
-              width="320px"
               height="50px"
               text={'로그 작성 시작하기'}
               borderRadius={8}
@@ -115,7 +120,6 @@ export default function Page() {
           </>
         ) : (
           <Button
-            width="320px"
             height="50px"
             text={'나중에 할래요'}
             borderRadius={8}
@@ -127,7 +131,7 @@ export default function Page() {
           />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

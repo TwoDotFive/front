@@ -32,7 +32,7 @@ export default function page() {
       className='absolute flex flex-col items-start h-screen w-full'
       >
       {/* 탭바 */}
-      <TapBar text='팬풀로그 만들기' type='mid' isNextButton={true}/>
+      <TapBar text='팬풀로그 만들기' type='mid' isNextButton={false}/>
       <div className='mt-24pxr'/>
       <div className='ml-20pxr'>
         <Text fontSize={18} fontWeight={700} color='gray700'>어느 경기장으로 직관 가시나요?</Text>

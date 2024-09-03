@@ -7,9 +7,11 @@ type LocationInfoSearchCardProps = {
     image: string;
     name: string;
     location: string;
+    isSelected: boolean;
+    onClick: () => void;
 }
 
-export default function LocationInfoSearchCard({image, name, location}: LocationInfoSearchCardProps){
+export default function LocationInfoSearchCard({image, name, location, isSelected, onClick}: LocationInfoSearchCardProps){
     return (
         <div className='flex items-center gap-4pxr w-full h-50pxr'>
             <div className='flex items-center gap-8pxr flex-1'>
@@ -26,7 +28,7 @@ export default function LocationInfoSearchCard({image, name, location}: Location
                 </div>
             </div>
             <div className='ml-auto'>
-                <SelectButton isSelected={false} onClick={() => {}}/>
+                <SelectButton isSelected={isSelected} onClick={onClick}/>
             </div>
         </div>
     );

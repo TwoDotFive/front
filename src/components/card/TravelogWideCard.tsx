@@ -42,7 +42,7 @@ export default function TravelogWideCard({id, image, userName, title, locations 
       };
 
     return(
-        <div className='flex flex-col items-start justify-center w-full h-180pxr rounded-t-8pxr  shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]' onClick={handleClick}>
+        <div className='flex flex-col items-start justify-center w-full h-180pxr rounded-8pxr  shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]' onClick={handleClick}>
             <div className='w-full h-86pxr rounded-t-8pxr'>
                 <img className='w-full h-full rounded-t-8pxr object-cover' src={image} />
             </div>

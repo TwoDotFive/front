@@ -1,4 +1,5 @@
 import { Text } from '@/components/common/Text';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 type TagFilterProps = {
@@ -12,8 +13,14 @@ export default function TagFilter({
   selectedTags,
   onTagSelect,
 }: TagFilterProps) {
+  const pathname = usePathname();
+
   return (
-    <div className="flex flex-wrap gap-8pxr mt-11pxr">
+    <div
+      className={`flex gap-8pxr mt-11pxr ${
+        pathname === '/fanpool-log' ? 'flex-nowrap overflow-x-auto' : 'flex-wrap'
+      }`}
+    >
       {tags.map((tag) => (
         <button
           key={tag}

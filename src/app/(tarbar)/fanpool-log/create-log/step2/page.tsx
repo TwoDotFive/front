@@ -1,15 +1,17 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import TapBar from '@/components/common/TapBar';
-import { Text } from '@/components/common/Text';
-import Button from '@/components/common/Button';
-import TagFilter from '@/components/fanpool-log/Create-log/TagFilter';
-import LocationInfoSearchCard from '@/components/card/LocationInfoSearchCard';
-import LocationDeleteButton from '@/components/common/button/LocationDeleteButton'; // Import LocationDeleteButton
-import { motion } from 'framer-motion';
+"use client";
+import React, { useState, useEffect } from "react";
+import TapBar from "@/components/common/TapBar";
+import { Text } from "@/components/common/Text";
+import Button from "@/components/common/Button";
+import TagFilter from "@/components/fanpool-log/Create-log/TagFilter";
+import LocationInfoSearchCard from "@/components/card/LocationInfoSearchCard";
+import LocationDeleteButton from "@/components/common/button/LocationDeleteButton"; // Import LocationDeleteButton
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const tags = ['식당', '카페', '지역명소', '숙소', '쇼핑', '주차장'];
+  const router = useRouter();
+  const tags = ["식당", "카페", "지역명소", "숙소", "쇼핑", "주차장"];
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -18,12 +20,78 @@ export default function Page() {
 
   // 더미 데이터
   const dummyData = [
-    { name: '피처캠프 신천점', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 25', category: '식당' },
-    { name: '스타벅스 올림픽공원점', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 26', category: '카페' },
-    { name: '올림픽공원', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 27', category: '지역명소' },
-    { name: '올림픽파크텔', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 28', category: '숙소' },
-    { name: '롯데월드몰', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 29', category: '쇼핑' },
-    { name: '잠실종합운동장 주차장', image: '/images/fanpool-log_ex.png', location: '서울 송파구 올림픽로 30', category: '주차장' },
+    {
+      name: "피처캠프 신천점",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 25",
+      category: "식당",
+    },
+    {
+      name: "스타벅스 올림픽공원점",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 26",
+      category: "카페",
+    },
+    {
+      name: "올림픽공원",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 27",
+      category: "지역명소",
+    },
+    {
+      name: "올림픽파크텔",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 28",
+      category: "숙소",
+    },
+    {
+      name: "롯데월드몰",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 29",
+      category: "쇼핑",
+    },
+    {
+      name: "잠실종합운동장 주차장",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 30",
+      category: "주차장",
+    },
+    {
+      name: "피처캠프 신천점",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 25",
+      category: "식당",
+    },
+    {
+      name: "스타벅스 올림픽공원점",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 26",
+      category: "카페",
+    },
+    {
+      name: "올림픽공원",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 27",
+      category: "지역명소",
+    },
+    {
+      name: "올림픽파크텔",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 28",
+      category: "숙소",
+    },
+    {
+      name: "롯데월드몰",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 29",
+      category: "쇼핑",
+    },
+    {
+      name: "잠실종합운동장 주차장",
+      image: "/images/fanpool-log_ex.png",
+      location: "서울 송파구 올림픽로 30",
+      category: "주차장",
+    },
   ];
 
   useEffect(() => {
@@ -37,7 +105,7 @@ export default function Page() {
       setFilteredItems(locationData); // 태그가 선택되지 않았을 때 전체 표시
     } else {
       setFilteredItems(
-        locationData.filter(item => selectedTags.includes(item.category))
+        locationData.filter((item) => selectedTags.includes(item.category))
       );
     }
   }, [selectedTags, locationData]);
@@ -58,24 +126,33 @@ export default function Page() {
     }
   };
 
+  const handleNextPage = () => {
+    router.push("/fanpool-log/create-log/step3");
+  };
+
   return (
-    <motion.div      
-      initial={{ x: '100%', opacity: 0 }}
+    <motion.div
+      initial={{ x: "100%", opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: '-100%', opacity: 0 }}
-      transition={{ duration: 0.5 }}  
-      className="fixed flex flex-col h-screen w-full">
+      exit={{ x: "-100%", opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed flex flex-col h-screen w-full"
+    >
       {/* 탭바 */}
-      <div className='fixed top-0 left-0 right-0 z-100 bg-white'>
+      <div className="top-0 left-0 right-0 z-100 bg-white">
         <TapBar text="팬풀로그 만들기" type="mid" isNextButton={false} />
       </div>
-      <div className="mt-[calc(49px+24px)]" />
+      <div className="mt-24pxr" />
       <div className="ml-20pxr">
         <Text fontSize={18} fontWeight={700} color="gray700">
           경기장 근처의 이런 곳은 어떠세요?
         </Text>
         {/* 태그 필터 */}
-        <TagFilter tags={tags} selectedTags={selectedTags} onTagSelect={handleTagSelect} />
+        <TagFilter
+          tags={tags}
+          selectedTags={selectedTags}
+          onTagSelect={handleTagSelect}
+        />
       </div>
 
       {/* 장소 리스트 */}
@@ -93,15 +170,19 @@ export default function Page() {
       </div>
 
       {/* 바텀 시트 */}
-      <div className={'fixed w-full flex flex-col items-center justify-center gap-32pxr inset-x-0 bottom-0 bg-white rounded-t-20pxr p-20pxr pt-16pxr'}
-        style={{ zIndex: 1000, boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
+      <div
+        className={
+          "fixed w-full flex flex-col items-center justify-center gap-32pxr inset-x-0 bottom-0 bg-white rounded-t-20pxr p-20pxr pt-16pxr"
+        }
+        style={{ zIndex: 1000, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}
+      >
         {selectedItems.length > 0 ? (
           <>
             <div className="w-full flex justify-start gap-12pxr overflow-x-auto pt-22pxr">
               {selectedItems.map((item, index) => (
                 <LocationDeleteButton
                   key={index}
-                  image={'/images/fanpool-log_ex.png'} // 이미지 정보 전달
+                  image={"/images/fanpool-log_ex.png"} // 이미지 정보 전달
                   name={item} // 이름 전달
                   onClick={() => handleItemSelect(item)} // 클릭 시 선택 해제
                 />
@@ -109,29 +190,28 @@ export default function Page() {
             </div>
             <Button
               height="50px"
-              text={'로그 작성 시작하기'}
+              text={"로그 작성 시작하기"}
               borderRadius={8}
-              enabledTextColor={'text-white'}
-              enabledBackgroundColor={'bg-primary'}
-              disabledTextColor={'text-[#5679A3]'}
-              disabledBackgroundColor={'bg-primary'}
-              onClick={() => {}}
+              enabledTextColor={"text-white"}
+              enabledBackgroundColor={"bg-primary"}
+              disabledTextColor={"text-[#5679A3]"}
+              disabledBackgroundColor={"bg-primary"}
+              onClick={handleNextPage}
             />
           </>
         ) : (
           <Button
             height="50px"
-            text={'나중에 할래요'}
+            text={"나중에 할래요"}
             borderRadius={8}
-            enabledTextColor={'text-primary'}
-            enabledBackgroundColor={'bg-[#CCD3DF]'}
-            disabledTextColor={'text-[#5679A3]'}
-            disabledBackgroundColor={'bg-primary'}
-            onClick={() => {}}
+            enabledTextColor={"text-primary"}
+            enabledBackgroundColor={"bg-[#CCD3DF]"}
+            disabledTextColor={"text-[#5679A3]"}
+            disabledBackgroundColor={"bg-primary"}
+            onClick={handleNextPage}
           />
         )}
       </div>
     </motion.div>
   );
 }
-

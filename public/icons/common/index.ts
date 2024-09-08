@@ -21,6 +21,9 @@ import IconFavorite from './icon_favorite.svg';
 import IconFilter from './icon_filter.svg';
 import IconCheckNavy from './icon_check_navy.svg';
 import IconChat from './icon_chat.svg';
+import IconSplash from './icon_splash.svg';
+import IconSplashEmpty from './icon_splash_empty.svg';
+import IconKakao from './icon_kakao.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -45,4 +48,7 @@ export {
 	IconFilter,
 	IconCheckNavy,
 	IconChat,
+	IconSplash,
+	IconSplashEmpty,
+	IconKakao,
 };

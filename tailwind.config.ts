@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
-import colors from "./src/styles/palette";
+import type { Config } from 'tailwindcss';
+import colors from './src/styles/palette';
 // 단위 자동 변환 함수
 const pxToRem = (px: number, base = 16) => `${px / base}rem`;
 
@@ -12,9 +12,9 @@ const generateSpacingValues = (length: number) =>
 
 const config: Config = {
 	content: [
-		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
 		extend: {
@@ -25,12 +25,15 @@ const config: Config = {
 			fontSize: generateSpacingValues(100),
 			keyframes: {
 				spin: {
-					"0%": { transform: "rotate(0deg)" },
-					"100%": { transform: "rotate(360deg)" },
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' },
 				},
 			},
 			animation: {},
 			boxShadow: {},
+			fontFamily: {
+				sanTokki: ['HSSanTokki20-Regular'],
+			},
 		},
 	},
 	plugins: [],

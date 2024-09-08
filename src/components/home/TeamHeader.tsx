@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Text } from '../common/Text';
 import { IconHamburger, IconPerson } from '@/public/icons';
 import BottomSheet from './BottomSheet';
+import Drawer from './Drawer/Drawer';
 
 interface TeamCodeProps {
 	teamCode?: string;
@@ -12,6 +13,11 @@ interface TeamCodeProps {
 
 export default function TeamHeader({ teamCode }: TeamCodeProps) {
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
+	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+
+	const toggleDrawer = () => {
+		setIsDrawerVisible(!isDrawerVisible);
+	};
 
 	const team = teams.find((team) => team.code === teamCode);
 	const name = team ? team.name : '응원하는 팀이 <br /> 아직 없어요!';
@@ -36,7 +42,7 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 				 */}
 				<section>
 					<div className="absolute top-55pxr left-20pxr cursor-pointer">
-						<IconHamburger />
+						<IconHamburger onClick={toggleDrawer} />
 					</div>
 					<div className="absolute top-55pxr right-20pxr cursor-pointer">
 						<IconPerson />
@@ -89,6 +95,7 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 						</Text>
 					</span>
 				</div>
+				<Drawer isVisible={isDrawerVisible} onClose={toggleDrawer} />
 			</section>
 			{isSheetOpen && (
 				<BottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />

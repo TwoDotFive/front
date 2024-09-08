@@ -13,6 +13,14 @@ import IconButtonPlus from './icon_button_plus.svg';
 import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
 import IconPerson from './icon_person.svg';
+import IconClose from './icon_close.svg';
+import IconShiftLeft from './icon_shift_left.svg';
+import IconShiftRight from './icon_shift_right.svg';
+import IconShiftBottom from './icon_shift_bottom.svg';
+import IconFavorite from './icon_favorite.svg';
+import IconFilter from './icon_filter.svg';
+import IconCheckNavy from './icon_check_navy.svg';
+import IconChat from './icon_chat.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -29,4 +37,12 @@ export {
 	IconButtonMinus,
 	IconHamburger,
 	IconPerson,
+	IconClose,
+	IconShiftLeft,
+	IconShiftRight,
+	IconShiftBottom,
+	IconFavorite,
+	IconFilter,
+	IconCheckNavy,
+	IconChat,
 };

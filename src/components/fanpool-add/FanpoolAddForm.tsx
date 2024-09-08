@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import FanpoolSubmitButton from './FanpoolSubmitButton';
-import FanpoolDateBottomSheet from './FanpoolDateBottomSheet';
+import { FanpoolDateBottomSheet } from './FanpoolDateBottomSheet';
 import { Text } from '../common/Text';
+import { FanpoolMatchBottomSheet } from './FanpoolMatchBottomSheet';
 
 interface FanpoolFormData {
 	title: string;
@@ -11,8 +12,14 @@ interface FanpoolFormData {
 }
 
 export default function FanpoolAddForm() {
-	const { register, handleSubmit, setValue } = useForm<FanpoolFormData>(); // Include setValue to update the form
-	const [isDatePickerVisible, setIsDatePickerVisible] = useState(false); // State for bottom sheet visibility
+	const { register, handleSubmit, setValue } = useForm<FanpoolFormData>();
+	const [bottomSheet, setBottomSheet] = useState<{
+		visible: boolean;
+		type: 'date' | 'match' | null;
+	}>({
+		visible: false,
+		type: null,
+	});
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null); // State to store selected date
 
 	const onSubmit: SubmitHandler<FanpoolFormData> = (data) => {
@@ -22,7 +29,15 @@ export default function FanpoolAddForm() {
 	const handleDateSelect = (date: Date) => {
 		setSelectedDate(date);
 		setValue('date', date);
-		setIsDatePickerVisible(false);
+		setBottomSheet({ visible: false, type: null });
+	};
+
+	const openBottomSheet = (type: 'date' | 'match') => {
+		setBottomSheet({ visible: true, type });
+	};
+
+	const closeBottomSheet = () => {
+		setBottomSheet({ visible: false, type: null });
 	};
 
 	return (
@@ -49,7 +64,7 @@ export default function FanpoolAddForm() {
 					</Text>
 					<div
 						className="w-full h-full p-12pxr rounded-8pxr bg-gray050 cursor-pointer"
-						onClick={() => setIsDatePickerVisible(true)}
+						onClick={() => openBottomSheet('date')}
 					>
 						<Text fontSize={14} fontWeight={400} color="gray400">
 							{selectedDate
@@ -59,12 +74,32 @@ export default function FanpoolAddForm() {
 					</div>
 				</div>
 
+				<div className="flex flex-col gap-8pxr">
+					<Text fontSize={18} fontWeight={700} color="gray700">
+						경기
+					</Text>
+					<div
+						className="w-full h-full p-12pxr rounded-8pxr bg-kboBlue0 cursor-pointer text-center"
+						onClick={() => openBottomSheet('match')}
+					>
+						<Text fontSize={16} fontWeight={500} color="kboBlue500">
+							해당 날짜 경기 찾아보기
+						</Text>
+					</div>
+				</div>
+
 				<FanpoolSubmitButton />
 			</form>
 
 			<FanpoolDateBottomSheet
-				isVisible={isDatePickerVisible}
-				onClose={() => setIsDatePickerVisible(false)}
+				isVisible={bottomSheet.visible && bottomSheet.type === 'date'}
+				onClose={closeBottomSheet}
+				onDateSelect={handleDateSelect}
+			/>
+
+			<FanpoolMatchBottomSheet
+				isVisible={bottomSheet.visible && bottomSheet.type === 'match'}
+				onClose={closeBottomSheet}
 				onDateSelect={handleDateSelect}
 			/>
 		</>

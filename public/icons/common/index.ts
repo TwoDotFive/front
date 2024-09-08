@@ -24,6 +24,11 @@ import IconChat from './icon_chat.svg';
 import IconSplash from './icon_splash.svg';
 import IconSplashEmpty from './icon_splash_empty.svg';
 import IconKakao from './icon_kakao.svg';
+import IconLeftArrowWhite from './icon_left_arrow_white.svg';
+import IconShare from './icon_share.svg';
+import IconLink from './icon_link.svg';
+import IconBookmarkUnChecked from './icon_bookmark_unchecked.svg';
+import IconBookmarkChecked from './icon_bookmark_checked.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -51,4 +56,9 @@ export {
 	IconSplash,
 	IconSplashEmpty,
 	IconKakao,
+	IconLeftArrowWhite,
+	IconShare,
+	IconLink,
+	IconBookmarkUnChecked,
+	IconBookmarkChecked,
 };

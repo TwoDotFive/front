@@ -4,7 +4,7 @@ import { Text } from '../common/Text';
 export default function SplashLogin() {
 	return (
 		<section
-			className="w-screen h-screen relative bg-cover bg-center"
+			className="w-full h-screen relative bg-cover bg-center"
 			style={{ backgroundImage: "url('/images/image_splash_background.png')" }}
 		>
 			<div className="absolute top-[33vh] left-20pxr flex gap-12pxr flex-col justify-center">

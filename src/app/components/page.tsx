@@ -39,13 +39,7 @@ export default function Home() {
 		setInputValue(value);
 	};
 
-	const tags: Tags[] = [
-		'CAR_SHARE',
-		'TAXI_PARTY',
-		'ANY',
-		'FEMALE_ONLY',
-		'MALE_ONLY',
-	];
+	const tags: Tags[] = ['CAR_SHARE', 'TAXI_PARTY', 'ANY', '여성만', '남성만'];
 
 	const tagNames = ['식당', '인기많은', '지역명소', '선수방문', '할인중'];
 	return (

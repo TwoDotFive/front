@@ -4,6 +4,7 @@ import IconLeftArrow from './icon_left_arrow.svg';
 import IconRightArrow from './icon_right_arrow.svg';
 import IconMoreMenu from './icon_more_menu.svg';
 import IconPencil from './icon_pencil.svg';
+import IconPencilGray from './icon_pencil_gray.svg';
 import IconPlus from './icon_plus.svg';
 import IconUpload from './icon_upload.svg';
 import IconCheck from './icon_check.svg';
@@ -36,6 +37,7 @@ export {
 	IconRightArrow,
 	IconMoreMenu,
 	IconPencil,
+	IconPencilGray,
 	IconPlus,
 	IconUpload,
 	IconCheck,

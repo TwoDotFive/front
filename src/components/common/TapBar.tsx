@@ -7,12 +7,14 @@ type TapBarProps = {
 	text: string;
 	isNextButton?: boolean;
 	type: 'download' | 'left' | 'mid' | 'none';
+	isRigihtIconAction?: () => void;
 };
 
 export default function TapBar({
 	text,
 	isNextButton = false,
 	type,
+	isRigihtIconAction,
 }: TapBarProps) {
 	const router = useRouter();
 
@@ -60,7 +62,9 @@ export default function TapBar({
 			else return <div className="w-25pxr" />;
 		}
 		if (type === 'download') {
-			return <IconUpload className="cursor-pointer" />;
+			return (
+				<IconUpload className="cursor-pointer" onClick={isRigihtIconAction} />
+			);
 		}
 		return null;
 	};

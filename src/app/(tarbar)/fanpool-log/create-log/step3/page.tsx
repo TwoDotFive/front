@@ -14,7 +14,7 @@ import { Map } from "react-kakao-maps-sdk";
 import TapBar from "@/components/common/TapBar";
 import InfinityLine from "@/components/common/InfinityLine";
 import { Text } from "@/components/common/Text";
-import { IconDefaultPin } from "@/public/icons";
+import { IconClose, IconDefaultPin, IconUpload } from "@/public/icons";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
 import Button from "@/components/common/Button";
 import MemoBottomSheet from "@/components/fanpool-log/Create-log/MemoBottomSheet";
@@ -56,6 +56,9 @@ function SortableItem({ id, children, isChangeMode }: any) {
 
 export default function Page() {
   useKakaoLoader();
+
+  const [rImage, setRImage] = useState<string | null>(null);
+
   const [isMemoBottomSheetVisible, setIsMemoBottomSheetVisible] =
     useState<boolean>(false);
   const [isDayBottomSheetVisible, setIsDayBottomSheetVisible] =
@@ -105,6 +108,18 @@ export default function Page() {
       memo: { content: "", images: [] },
     },
   ]);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const uploadedImage = URL.createObjectURL(file);
+      setRImage(uploadedImage);
+    }
+  };
+
+  const handleImageRemove = () => {
+    setRImage(null);
+  };
 
   const handleRemoveLocation = (index: number) => {
     setLocations((locations) =>
@@ -156,6 +171,63 @@ export default function Page() {
         <TapBar text="팬풀로그 만들기" type="mid" isNextButton={false} />
       </div>
       <div className="overflow-y-auto">
+        <div className="mt-24pxr" />
+        <div className="flex flex-col items-start gap-24pxr px-20pxr w-full">
+          <div className="flex flex-col items-start gap-8pxr w-full">
+            <Text fontSize={14} fontWeight={500} color="gray600">
+              대표 사진(선택)
+            </Text>
+            {rImage ? (
+              <div className="relative w-60pxr h-60pxr">
+                <button
+                  onClick={handleImageRemove}
+                  className="absolute top-0 right-0 bg-white rounded-full p-1"
+                >
+                  <IconClose />
+                </button>
+                <img
+                  className="w-full h-full object-cover rounded-lg"
+                  src={rImage}
+                  alt={"Representative Image"}
+                />
+              </div>
+            ) : (
+              <label className="w-70pxr h-70pxr rounded-4pxr border-1 border-dashed border-gray050 flex items-center justify-center cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <IconUpload />
+              </label>
+            )}
+          </div>
+          <div className="flex flex-col items-start gap-8pxr w-full">
+            <div className="flex items-center w-full">
+              <Text fontSize={14} fontWeight={500} color="gray600">
+                로그 제목
+              </Text>
+              <Text fontSize={14} fontWeight={500} color="fireRed400">
+                *
+              </Text>
+            </div>
+            <input
+              type="text"
+              placeholder="로그 제목을 입력해주세요"
+              className="w-full h-24pxr focus:outline-none color-gray200 weight-700 text-20pxr"
+            ></input>
+          </div>
+          <div className="flex flex-col items-start gap-8pxr w-full">
+            <Text fontSize={14} fontWeight={500} color="gray600">
+              경기장
+            </Text>
+            <Text fontSize={16} fontWeight={700} color="gray700">
+              잠실 종합 운동장
+            </Text>
+          </div>
+        </div>
         <div className="mt-24pxr" />
         {/* 카카오맵 */}
         <Map

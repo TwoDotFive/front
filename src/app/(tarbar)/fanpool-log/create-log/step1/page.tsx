@@ -1,27 +1,64 @@
 "use client";
+import { getStadiumList } from "@/api/fanpool-log/step1";
 import Button from "@/components/common/Button";
 import SelectAreaButton from "@/components/common/button/SelectAreaButton";
 import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
-import { regions } from "@/constants/regions";
+import useFanpoologStore from "@/store/fanpool-log/store";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+interface Stadium {
+  id: number;
+  shortenName: string;
+  address: {
+    fullText: string;
+    x: number;
+    y: number;
+  };
+}
 
 export default function page() {
   const router = useRouter();
 
   const [isSelected, setIsSelected] = useState<boolean>(false);
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedStadiumId, setSelectedStadiumId] = useState<number | null>(
+    null
+  );
+  const setStadiumId = useFanpoologStore((state) => state.setStadiumId);
+  const setStadiumPosition = useFanpoologStore(
+    (state) => state.setStadiumPosition
+  );
+  const [stadiumList, setStadiumList] = useState<Stadium[]>([]);
 
-  const handleTeamSelect = (area: string) => {
-    setSelectedRegion(area);
+  const handleTeamSelect = (id: number) => {
+    setSelectedStadiumId(id);
     setIsSelected(true);
   };
 
   const handleNextPage = () => {
-    router.push("/fanpool-log/create-log/step2");
+    if (selectedStadiumId) {
+      setStadiumId(selectedStadiumId);
+      setStadiumPosition({
+        x: stadiumList.find((stadium) => stadium.id === selectedStadiumId)!
+          .address.x,
+        y: stadiumList.find((stadium) => stadium.id === selectedStadiumId)!
+          .address.y,
+      });
+      router.push("/fanpool-log/create-log/step2");
+    }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("userId");
+    if (!token) {
+      console.log("token is null");
+    }
+    getStadiumList(token!).then((res) => {
+      setStadiumList(res.stadiums);
+    });
+  }, []);
 
   return (
     <motion.div
@@ -42,13 +79,13 @@ export default function page() {
       {/* 지역 선택 */}
       <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-20pxr">
         <div className="grid grid-cols-3 gap-10pxr">
-          {regions.map((region) => (
+          {stadiumList.map((stadium) => (
             <SelectAreaButton
-              key={region.code}
-              code={region.code}
-              isSelected={selectedRegion === region.area}
+              key={stadium.id}
+              area={stadium.shortenName}
+              isSelected={selectedStadiumId === stadium.id}
               onClick={() => {
-                handleTeamSelect(region.area);
+                handleTeamSelect(stadium.id);
               }}
             />
           ))}

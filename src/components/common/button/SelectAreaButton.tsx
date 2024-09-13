@@ -1,5 +1,5 @@
 import React from 'react';
-import { teams } from '@/constants/teams';
+import { regions } from '@/constants/regions';
 import { Text } from '../Text';
 
 type SelectAreaButtonProps = {
@@ -13,7 +13,7 @@ export default function SelectAreaButton({
 	isSelected = false,
 	onClick,
 }: SelectAreaButtonProps) {
-	const team = teams.find((team) => team.code === code);
+	const region = regions.find((region) => region.code === code);
 
 	return (
 		<div
@@ -30,7 +30,7 @@ export default function SelectAreaButton({
 				color={isSelected ? 'activeLylac600' : 'gray700'}
 				className="whitespace-nowrap"
 			>
-				{team!.area}
+				{region!.area}
 			</Text>
 		</div>
 	);

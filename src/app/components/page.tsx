@@ -261,6 +261,7 @@ export default function Home() {
 				/>
 			</div>
 			<TravelogCard
+				id = {"1"}
 				image="/images/kt.png"
 				userName="네임드호빵"
 				userImage="/images/kt.png"

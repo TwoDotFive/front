@@ -12,6 +12,7 @@ import IconRadioSelected from './icon_radio_selected.svg';
 import IconButtonPlus from './icon_button_plus.svg';
 import IconButtonMinus from './icon_button_minus.svg';
 import IconHamburger from './icon_hamburger.svg';
+import IconHamburgerGray from "./icon_hamburger_gray.svg";
 import IconPerson from './icon_person.svg';
 import IconClose from './icon_close.svg';
 import IconShiftLeft from './icon_shift_left.svg';
@@ -21,6 +22,11 @@ import IconFavorite from './icon_favorite.svg';
 import IconFilter from './icon_filter.svg';
 import IconCheckNavy from './icon_check_navy.svg';
 import IconChat from './icon_chat.svg';
+import IconShare from "./icon_share.svg";
+import IconLink from "./icon_link.svg";
+import IconBookMark from "./icon_bookmark.svg";
+import IconBookMarkSelected from "./icon_bookmark_selected.svg";
+
 export {
 	IconCalender,
 	IconCancel,
@@ -36,6 +42,7 @@ export {
 	IconButtonPlus,
 	IconButtonMinus,
 	IconHamburger,
+  IconHamburgerGray,
 	IconPerson,
 	IconClose,
 	IconShiftLeft,
@@ -45,4 +52,8 @@ export {
 	IconFilter,
 	IconCheckNavy,
 	IconChat,
+  IconShare,
+  IconLink,
+  IconBookMark,
+  IconBookMarkSelected,
 };

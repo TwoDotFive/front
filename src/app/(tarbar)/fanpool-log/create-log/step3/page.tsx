@@ -165,7 +165,7 @@ export default function Page() {
   };
 
   return (
-    <div className="fixed flex flex-col w-full h-screen">
+    <div className="absolute flex flex-col w-full h-screen">
       {/* 탭바 */}
       <div className="top-0 left-0 right-0 z-100 bg-white">
         <TapBar text="팬풀로그 만들기" type="mid" isNextButton={false} />

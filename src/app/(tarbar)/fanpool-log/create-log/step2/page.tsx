@@ -136,7 +136,7 @@ export default function Page() {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: "-100%", opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed flex flex-col h-screen w-full"
+      className="absolute flex flex-col h-screen w-full"
     >
       {/* 탭바 */}
       <div className="top-0 left-0 right-0 z-100 bg-white">
@@ -168,7 +168,7 @@ export default function Page() {
           />
         ))}
       </div>
-
+      <div className="mb-102pxr" />
       {/* 바텀 시트 */}
       <div
         className={

@@ -12,6 +12,8 @@ type TravelLogAddCardProps = {
   userId: string; // 수정 필요
   locationImage: string[];
   onClick: () => void;
+  onRemove?: () => void;
+  isEditing: boolean;
 };
 
 export default function TravelogAddCard({
@@ -22,6 +24,8 @@ export default function TravelogAddCard({
   userId,
   locationImage,
   onClick,
+  onRemove,
+  isEditing,
 }: TravelLogAddCardProps) {
   // locationImage의 length에 따라 이미지를 보여주는 방식을 다르게 해야함
   // userId가 myUserId인 경우에만 메모 추가 버튼이 보여야함
@@ -43,7 +47,8 @@ export default function TravelogAddCard({
             image={image}
             name={name}
             location={location}
-            isEditing={false}
+            isEditing={isEditing}
+            onRemove={onRemove}
           />
           <Text fontSize={14} fontWeight={500} color="gray700">
             {description}
@@ -58,7 +63,7 @@ export default function TravelogAddCard({
               />
             ))}
           </div>
-          {userId === "myUserId" && (
+          {userId === "myUserId" && !isEditing && (
             <Button
               width="276px"
               height="40px"

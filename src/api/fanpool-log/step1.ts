@@ -1,16 +1,9 @@
-import api from "@/api/index";
+import apiClient from "@/api/index";
 
-export const getStadiumList = async (token: string) => {
-  const header = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
+export const getStadiumList = async () => {
   try {
-    const response = await api.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/baseball/stadium/list`,
-      header
+    const response = await apiClient.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/baseball/stadium/list`
     );
     return response.data;
   } catch (e) {

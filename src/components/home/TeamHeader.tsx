@@ -4,8 +4,8 @@ import { teams } from '@/constants/teams';
 import Image from 'next/image';
 import { Text } from '../common/Text';
 import { IconHamburger, IconPerson } from '@/public/icons';
-import BottomSheet from './BottomSheet';
 import Drawer from './Drawer/Drawer';
+import SelectTeamBottomSheet from './SelectTeamBottomSheet';
 
 interface TeamCodeProps {
 	teamCode?: string;
@@ -97,9 +97,7 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 				</div>
 				<Drawer isVisible={isDrawerVisible} onClose={toggleDrawer} />
 			</section>
-			{isSheetOpen && (
-				<BottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
-			)}
+			<SelectTeamBottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
 		</>
 	);
 }

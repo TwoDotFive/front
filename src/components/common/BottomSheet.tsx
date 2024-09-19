@@ -47,7 +47,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 	return (
 		<>
 			<div
-				className={`max-w-399pxr left-1/2 -translate-x-1/2 fixed inset-0 z-[998] bg-black transition-opacity duration-300 ease-in-out ${overlayClasses}`}
+				className={`max-w-399pxr w-full left-1/2 -translate-x-1/2 fixed inset-0 z-[998] bg-black transition-opacity duration-300 ease-in-out ${overlayClasses}`}
 				onClick={onClose}
 			/>
 			<div

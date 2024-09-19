@@ -30,6 +30,7 @@ import IconShare from './icon_share.svg';
 import IconLink from './icon_link.svg';
 import IconBookmarkUnChecked from './icon_bookmark_unchecked.svg';
 import IconBookmarkChecked from './icon_bookmark_checked.svg';
+import IconCar from './icon_car.svg';
 export {
 	IconCalender,
 	IconCancel,
@@ -63,4 +64,5 @@ export {
 	IconLink,
 	IconBookmarkUnChecked,
 	IconBookmarkChecked,
+	IconCar,
 };

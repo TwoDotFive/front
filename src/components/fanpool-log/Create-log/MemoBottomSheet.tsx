@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Text } from "@/components/common/Text";
 import BottomSheet from "@/components/common/BottomSheet";
 import { IconUpload, IconClose } from "@/public/icons";
+import { Memo } from "@/store/fanpool-log/store";
 
 interface MemoBottomSheetProps {
   isVisible: boolean;
   onClose: () => void;
   isEditMode: boolean;
-  onSave: (content: string, images: string[]) => void; // 메모 저장 함수
+  onSave: (memo: Memo) => void; // 메모 저장 함수
   onDelete: () => void;
   initialMemo?: string;
   initialImages?: string[];
@@ -51,7 +52,16 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
   };
 
   const handleMemoSave = () => {
-    onSave(memo, images); // 메모와 이미지를 상위로 전달
+    const memoImages = images.map((url, index) => ({
+      sequence: index + 1, // sequence는 1부터 시작
+      url,
+    }));
+
+    onSave({
+      content: memo,
+      images: memoImages,
+    });
+
     onClose();
   };
 

@@ -51,11 +51,7 @@ export default function page() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("userId");
-    if (!token) {
-      console.log("token is null");
-    }
-    getStadiumList(token!).then((res) => {
+    getStadiumList().then((res) => {
       setStadiumList(res.stadiums);
     });
   }, []);
@@ -95,9 +91,14 @@ export default function page() {
       {/* 바텀 시트 */}
       <div
         className={
-          "fixed flex items-center justify-center inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr"
+          "max-w-399pxr fixed first-letter:fixed flex items-center justify-center inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr"
         }
-        style={{ zIndex: 1000, overflowY: "unset" }}
+        style={{
+          zIndex: 1000,
+          overflowY: "unset",
+          left: "50%",
+          transform: "translate(-50%)",
+        }}
       >
         <Button
           height="50px"

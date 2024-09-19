@@ -55,11 +55,7 @@ export default function Page() {
   } | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("userId");
-    if (!token) {
-      console.log("token is null");
-    }
-    getFanpoologList(token!).then((res) => {
+    getFanpoologList().then((res) => {
       if (res) {
         const items = res.items;
         setTravelogData(items);

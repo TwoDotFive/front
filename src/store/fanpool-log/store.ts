@@ -5,19 +5,19 @@ interface Place {
   address: string;
   thumbnail: string;
   distance: number;
-  contentId?: number;
-  contentType?: number;
+  contentId: number;
+  contentType: string;
   x: number;
   y: number;
 }
 
-interface Memo {
+export interface Memo {
   content?: string;
   images?: { sequence: number; url: string }[];
 }
 
 // 팬풀로그 저장시 사용하는 인터페이스
-interface Schedule {
+export interface Schedule {
   place: Place;
   day: number;
   sequence: number;

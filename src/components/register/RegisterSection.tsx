@@ -17,7 +17,7 @@ interface FormData {
 }
 
 export default function RegisterSection() {
-	const [currentStep, setCurrentStep] = useState<number>(4);
+	const [currentStep, setCurrentStep] = useState<number>(1);
 	const router = useRouter();
 
 	const { register, handleSubmit, setValue, getValues } = useForm<FormData>({

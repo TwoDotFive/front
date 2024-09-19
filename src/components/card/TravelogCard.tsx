@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text } from '../common/Text';
+import { useRouter } from 'next/navigation';
 
 type TravelogCardProps = {
+    id: string;
     image: string;
     userName: string;
     userImage: string;
@@ -9,10 +11,15 @@ type TravelogCardProps = {
     locations: string[];
 }
 
-export default function TravelogCard({ image, userName, userImage, title, locations }: TravelogCardProps) {
+export default function TravelogCard({id, image, userName, userImage, title, locations }: TravelogCardProps) {
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push(`/fanpool-log/detail/${id}`)
+    }
     return(
-        <div className='flex flex-col items-start w-235pxr h-302pxr relative'>
-            <div className='self-stretch h-180pxr rounded-t-8pxr'>
+        <div className='flex flex-col items-start w-235pxr h-302pxr rounded-t-8pxr relative shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]' onClick={handleClick}>
+            <div className='self-stretch h-180pxr'>
                 <img className='w-full h-full' src={image} />
             </div>
             <div className='absolute top-150pxr left-10pxr w-40pxr h-40pxr rounded-full border-1pxr border-gray300 z-10'>

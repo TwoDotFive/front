@@ -51,22 +51,22 @@ export default function Accommodation({
             {placeContent.checkOutTime || "제공되지 않음"}
           </Text>
         </div>
-      </div>
-      <div className="flex flex-col items-start gap-4pxr">
-        <Text fontSize={16} fontWeight={700}>
-          주차시설
-        </Text>
-        <Text fontSize={14} fontWeight={400} color="gray600">
-          {placeContent.parking || "제공되지 않음"}
-        </Text>
-      </div>
-      <div className="flex flex-col items-start gap-4pxr">
-        <Text fontSize={16} fontWeight={700}>
-          예약 안내 홈페이지
-        </Text>
-        <Text fontSize={14} fontWeight={400} color="gray600">
-          {placeContent.reservervationPageUrl || "제공되지 않음"}
-        </Text>
+        <div className="flex flex-col items-start gap-4pxr">
+          <Text fontSize={16} fontWeight={700}>
+            주차시설
+          </Text>
+          <Text fontSize={14} fontWeight={400} color="gray600">
+            {placeContent.parking || "제공되지 않음"}
+          </Text>
+        </div>
+        <div className="flex flex-col items-start gap-4pxr">
+          <Text fontSize={16} fontWeight={700}>
+            예약 안내 홈페이지
+          </Text>
+          <Text fontSize={14} fontWeight={400} color="gray600">
+            {placeContent.reservervationPageUrl || "제공되지 않음"}
+          </Text>
+        </div>
       </div>
     </div>
   );

@@ -112,7 +112,7 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
             </div>
           ))}
           {images.length < 4 && (
-            <label className="w-60pxr h-60pxr rounded-lg border-2 border-dashed border-gray300 flex items-center justify-center cursor-pointer">
+            <label className="w-70pxr h-70pxr rounded-4pxr border-1 bg-gray050 border-gray050 flex items-center justify-center cursor-pointer">
               <input
                 type="file"
                 accept="image/*"

@@ -54,6 +54,7 @@ export default function RecentFanpoolLog({
       <div className="w-full flex gap-12pxr overflow-x-auto whitespace-nowrap py-20pxr">
         {travelLogData.map((travelLog, index) => (
           <TravelogCard
+            key={travelLog.id}
             id={travelLog.id}
             image={travelLog.image}
             userName={travelLog.profile.nickname}

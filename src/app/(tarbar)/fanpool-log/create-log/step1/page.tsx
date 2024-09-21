@@ -1,5 +1,5 @@
 "use client";
-import { getStadiumList } from "@/api/fanpool-log/step1";
+import { getStadiumList } from "@/api/fanpool-log/create-log/step1";
 import Button from "@/components/common/Button";
 import SelectAreaButton from "@/components/common/button/SelectAreaButton";
 import TapBar from "@/components/common/TapBar";

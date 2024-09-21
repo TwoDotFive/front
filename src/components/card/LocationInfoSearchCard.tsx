@@ -25,7 +25,9 @@ export default function LocationInfoSearchCard({
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/fanpool-log/place/${contentId}/?contentType=${contentType}`);
+    router.push(
+      `/fanpool-log/place/${contentId}/?contentType=${contentType}&name=${name}&address=${location}&thumbnail=${image}`
+    );
   };
 
   return (
@@ -35,15 +37,17 @@ export default function LocationInfoSearchCard({
           <img className="w-full h-full rounded-5pxr" src={image} />
         </div>
         <div
-          className="flex flex-col justify-between items-start flex-1 self-stretch"
+          className="flex flex-col justify-between items-start flex-1 self-stretch cursor-pointer"
           onClick={handleCardClick}
         >
           <Text fontSize={16} fontWeight={700} color="gray700">
             {name}
           </Text>
-          <Text fontSize={14} fontWeight={400} color="gray600">
-            {location}
-          </Text>
+          <div className="line-clamp-1">
+            <Text fontSize={14} fontWeight={400} color="gray600">
+              {location}
+            </Text>
+          </div>
         </div>
       </div>
       <div className="ml-auto">

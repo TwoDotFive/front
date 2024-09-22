@@ -14,6 +14,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
+				<div id="modal"></div>
 				<div className="w-full h-full relative overflow-hidden">{children}</div>
 			</body>
 		</html>

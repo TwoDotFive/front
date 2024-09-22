@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Text } from '@/components/common/Text';
 import { IconClose } from '@/public/icons';
 import UserProfile from './UserProfile';
+import { useRouter } from 'next/navigation';
 
 interface DrawerProps {
 	isVisible: boolean;
@@ -10,13 +11,14 @@ interface DrawerProps {
 }
 
 export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
+	const router = useRouter();
 	const drawerClasses = isVisible ? 'translate-x-0' : '-translate-x-full';
 	const overlayClasses = isVisible
 		? 'opacity-50 pointer-events-auto'
 		: 'opacity-0 pointer-events-none';
 
+	const handleLogout = () => {};
 	useEffect(() => {
-		// Prevent scrolling on body when drawer is visible
 		const scrollContentsElement = document.querySelector('.scroll-contents');
 
 		if (isVisible) {
@@ -65,16 +67,19 @@ export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
 					<div className="h-24pxr" />
 					<div className="flex flex-col gap-18pxr">
 						<Text fontSize={14} fontWeight={400}>
+							나의 관심 팬풀
+						</Text>
+						<Text fontSize={14} fontWeight={400}>
 							설정
 						</Text>
 						<Text fontSize={14} fontWeight={400}>
 							서비스 약관
 						</Text>
-						<Text fontSize={14} fontWeight={400}>
+						<Text fontSize={14} fontWeight={400} onClick={handleLogout}>
 							로그아웃
 						</Text>
 						<Text fontSize={14} fontWeight={400}>
-							탈퇴
+							회원탈퇴
 						</Text>
 					</div>
 				</div>

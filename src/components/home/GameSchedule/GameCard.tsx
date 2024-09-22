@@ -15,60 +15,62 @@ export default function GameCard() {
 
 	const placeName = '서울종합운동장 잠실야구장';
 
-	const date = format(new Date(), 'M월 d일 aaa h:mm').toUpperCase();
+	const date = format(new Date(), 'yyyy. MM. dd aaa HH:mm').toUpperCase();
 
 	return (
-		<section className="w-full flex flex-col bg-primary opacity-80 rounded-12pxr">
-			{/**
-			 * HOME VS AWAY
-			 */}
-			<section className="w-full py-19pxr">
-				<section className="flex justify-center items-center gap-16pxr">
-					<div className="flex flex-col gap-8pxr items-center">
-						<div className="w-67pxr h-67pxr flex items-center justify-center bg-white rounded-full">
-							<Image
-								src={`/images/${homeInfo.code}.png`}
-								alt={homeInfo.name}
-								width={60}
-								height={60}
-							/>
-						</div>
-						<Text fontSize={14} fontWeight={700} color="white">
-							{homeInfo.name}
-						</Text>
-					</div>
-					<Text fontSize={14} fontWeight={700} color="white">
-						VS
-					</Text>
-					<div className="flex flex-col gap-8pxr items-center">
-						<div className="w-67pxr h-67pxr flex items-center justify-center bg-white rounded-full">
-							<Image
-								src={`/images/${awayInfo.code}.png`}
-								alt={awayInfo.name}
-								width={60}
-								height={60}
-							/>
-						</div>
-						<Text fontSize={14} fontWeight={700} color="white">
-							{awayInfo.name}
-						</Text>
-					</div>
-				</section>
-			</section>
-			<div className="h-8pxr" />
+		<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden">
+			<div
+				className="absolute inset-0 bg-cover bg-center opacity-30"
+				style={{ backgroundImage: 'url(/images/image_game_background.png)' }}
+			/>
+
 			{/**
 			 * 위치,시간 정보
 			 */}
-			<section className="w-full pb-12pxr flex flex-col items-center gap-4pxr">
-				<Text fontSize={14} fontWeight={500} color="white">
-					{placeName}
+			<section className="relative w-full flex flex-col items-center gap-4pxr pt-20pxr">
+				<Text fontSize={14} fontWeight={700} color="kboNavy">
+					{date}
 				</Text>
 				<div className="flex gap-4pxr items-center">
-					<Text fontSize={14} fontWeight={500} color="white">
-						{date}
+					<Text fontSize={14} fontWeight={500} color="kboNavy">
+						{placeName}
 					</Text>
 					<TagFanPool type="AWAY" />
 				</div>
+			</section>
+			<div className="h-12pxr" />
+			{/**
+			 * HOME VS AWAY
+			 */}
+			<section className="relative w-full pb-13pxr">
+				<section className="flex justify-center items-center gap-14pxr">
+					<div className="flex gap-2pxr items-center">
+						<Image
+							src={`/images/${homeInfo.code}.png`}
+							alt={homeInfo.name}
+							width={28}
+							height={28}
+						/>
+
+						<Text fontSize={18} fontWeight={800} color="kboNavy">
+							{homeInfo.name}
+						</Text>
+					</div>
+					<Text fontSize={14} fontWeight={500} color="kboNavy">
+						VS
+					</Text>
+					<div className="flex gap-2pxr items-center">
+						<Text fontSize={18} fontWeight={800} color="kboNavy">
+							{awayInfo.name}
+						</Text>
+						<Image
+							src={`/images/${awayInfo.code}.png`}
+							alt={awayInfo.name}
+							width={28}
+							height={28}
+						/>
+					</div>
+				</section>
 			</section>
 		</section>
 	);

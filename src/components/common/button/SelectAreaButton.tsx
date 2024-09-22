@@ -30,7 +30,7 @@ export default function SelectAreaButton({
 				color={isSelected ? 'activeLylac600' : 'gray700'}
 				className="whitespace-nowrap"
 			>
-				{region!.area}
+				{region ? region.area : ''}
 			</Text>
 		</div>
 	);

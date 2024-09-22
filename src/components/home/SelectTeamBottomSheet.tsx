@@ -1,8 +1,11 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Text } from '../common/Text';
-import { teams } from '@/constants/teams';
 import SelectTeamButton from '../common/button/SelectTeamButton';
 import BottomSheet from '../common/BottomSheet';
+import { teams } from '@/constants/teams';
+import getTeams from '@/api/baseball/getTeams';
 
 interface BottomSheetProps {
 	isOpen: boolean;
@@ -14,6 +17,31 @@ export default function SelectTeamBottomSheet({
 	onClose,
 }: BottomSheetProps) {
 	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
+
+	// API에서 팀 데이터를 가져옴
+	useEffect(() => {
+		const fetchTeams = async () => {
+			try {
+				const response = await getTeams();
+				const mappedTeams = response.map((team) => {
+					const matchedTeam = teams.find(
+						(localTeam) => localTeam.name === team.name
+					);
+					return {
+						code: matchedTeam ? matchedTeam.code : '',
+						name: team.name,
+						area: team.stadiumAliasName,
+					};
+				});
+				setApiTeams(mappedTeams);
+			} catch (error) {
+				console.error('Error fetching teams:', error);
+			}
+		};
+
+		fetchTeams();
+	}, []);
 
 	const handleTeamSelect = (code: string) => {
 		setSelectedTeam(code);
@@ -36,8 +64,8 @@ export default function SelectTeamBottomSheet({
 					<div className="h-18pxr" />
 
 					<div className="grid grid-cols-3 gap-8pxr">
-						{teams.map((team, index) => (
-							<div key={team.code} className="mb-8pxr">
+						{apiTeams.map((team, index) => (
+							<div key={team.code || `team-${index}`} className="mb-8pxr">
 								<SelectTeamButton
 									code={team.code}
 									isSelected={selectedTeam === team.code}

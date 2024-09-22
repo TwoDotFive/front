@@ -4,11 +4,11 @@ import { format, addDays, subDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { Text } from '../../common/Text';
 import GameCard from './GameCard';
+import FanpoolButton from '../FanpoolButton';
 
 export default function GameSchedule() {
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-	// 오늘 날짜 기준으로 어제와 5일 뒤의 날짜까지
 	const dates = Array.from({ length: 7 }, (_, i) =>
 		addDays(subDays(new Date(), 1), i)
 	);
@@ -30,9 +30,9 @@ export default function GameSchedule() {
 				{dates.map((date) => (
 					<div
 						key={date.toISOString()}
-						className={`flex flex-col cursor-pointer items-center transition-transform duration-150 ${
+						className={`flex flex-col cursor-pointer p-12pxr items-center transition-transform duration-150 ${
 							selectedDate.toDateString() === date.toDateString()
-								? 'gap-2pxr transform -translate-y-2pxr'
+								? 'gap-2pxr transform -translate-y-2pxr rounded-[30px] border border-gray-100 bg-white shadow-md'
 								: ''
 						}`}
 						onClick={() => handleDateClick(date)}
@@ -63,10 +63,20 @@ export default function GameSchedule() {
 				))}
 			</div>
 			<div className="h-36pxr" />
-			{/**
-			 * 경기 보여주는 부분
-			 */}
-			<GameCard />
+			<div
+				className="rounded-12pxr"
+				style={{ boxShadow: '0px 0px 11px 0px rgba(0, 0, 0, 0.11)' }}
+			>
+				{/**
+				 * 경기 보여주는 부분
+				 */}
+
+				<GameCard />
+				{/**
+				 * 팬풀 검색 버튼
+				 */}
+				<FanpoolButton />
+			</div>
 		</section>
 	);
 }

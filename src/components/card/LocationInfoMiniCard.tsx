@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "../common/Text";
 import { IconClose, IconHamburgerGray } from "@/public/icons";
+import { usePathname } from "next/navigation";
 
 type LocationInfoMiniCardProps = {
   image: string;
@@ -17,6 +18,10 @@ export default function LocationInfoMiniCard({
   onRemove,
   isEditing,
 }: LocationInfoMiniCardProps) {
+  const pathname = usePathname();
+
+  const isLogDetailPage = pathname.startsWith("/fanpool-log/log/");
+
   return (
     <div className="relative flex items-center gap-8pxr w-fit">
       <div className="w-50pxr h-50pxr rounded-5pxr">
@@ -32,15 +37,17 @@ export default function LocationInfoMiniCard({
       </div>
 
       {/* isEditing 상태에 따라 X 버튼 또는 햄버거 버튼 표시 */}
-      <div className="absolute right-0 top-0">
-        {isEditing ? (
-          <IconHamburgerGray />
-        ) : (
-          <button onClick={onRemove}>
-            <IconClose />
-          </button>
-        )}
-      </div>
+      {!isLogDetailPage && (
+        <div className="absolute right-0 top-0">
+          {isEditing ? (
+            <IconHamburgerGray />
+          ) : (
+            <button onClick={onRemove}>
+              <IconClose />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

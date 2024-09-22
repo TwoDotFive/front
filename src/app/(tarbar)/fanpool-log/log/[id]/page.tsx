@@ -36,8 +36,6 @@ interface DetailPageProps {
 export default function FanpoolLogDetailPage() {
   useKakaoLoader();
 
-  const [rImage, setRImage] = useState<string | null>(null);
-
   const [fanpoolLog, setFanpoolLog] = useState<DetailPageProps | null>(null);
 
   const router = useRouter();
@@ -103,7 +101,7 @@ export default function FanpoolLogDetailPage() {
               lng: schedule.place.x,
             }}
             image={{
-              src: "icons/map/icons_default_pin.svg",
+              src: "/icons/map/icon_default_pin.svg",
               size: { width: 28, height: 40 },
             }}
           />

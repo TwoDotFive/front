@@ -3,7 +3,7 @@ import apiClient from "@/api/index";
 export const getTourInfo = async (
   x: string,
   y: string,
-  selectedTagId: string
+  selectedTagId: string | null
 ) => {
   const radius = "1000";
   const pageSize = 10;
@@ -18,7 +18,7 @@ export const getTourInfo = async (
         x,
         y,
         radius,
-        contentType: selectedTagId,
+        contentTypeId: selectedTagId,
       },
     }
   );

@@ -9,6 +9,7 @@ import LocationDeleteButton from "@/components/common/button/LocationDeleteButto
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import useFanpoologStore from "@/store/fanpool-log/store";
+import { getTourInfo } from "@/api/fanpool-log/create-log/step2";
 
 interface TourInfoList {
   name: string;
@@ -26,13 +27,12 @@ export default function Page() {
   const tags = [
     { id: "12", name: "관광지" },
     { id: "14", name: "문화시설" },
-    { id: "28", name: "레저" },
     { id: "32", name: "숙소" },
     { id: "38", name: "쇼핑" },
     { id: "39", name: "식당" },
   ];
 
-  const [selectedTagId, setSelectedTagId] = useState<string>("12");
+  const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<TourInfoList[]>([]);
   const [tourInfoList, setTourInfoList] = useState<TourInfoList[]>([]);
 
@@ -40,61 +40,25 @@ export default function Page() {
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
   const schedules = useFanpoologStore((state) => state.schedules);
 
-  // 더미 데이터
-  const dummyData = [
-    {
-      name: "피처캠프 신천점",
-      address: "서울 송파구 올림픽로 26",
-      thumbnail: "/images/fanpool-log_ex.png",
-      distance: 0,
-      contentId: 0,
-      contentType: "14",
-      x: 37.5110296,
-      y: 127.0830765,
-    },
-    {
-      name: "스타벅스 올림픽공원점",
-      address: "서울 송파구 올림픽로 26",
-      thumbnail: "/images/fanpool-log_ex.png",
-      distance: 0,
-      contentId: 1,
-      contentType: "39",
-      x: 37.5133218,
-      y: 127.1230999,
-    },
-    {
-      name: "올림픽공원",
-      address: "서울 송파구 올림픽로 424",
-      thumbnail: "/images/fanpool-log_ex.png",
-      distance: 0,
-      contentId: 2,
-      contentType: "12",
-      x: 37.5206868,
-      y: 127.1214941,
-    },
-  ];
-
   useEffect(() => {
-    // API 호출
-
-    // TourInfoList 설정
-    setTourInfoList(dummyData);
-  }, []);
+    if (!stadiumPosition || !stadiumId) {
+      router.replace("/fanpool-log/create-log/step1");
+    } else {
+      // API 호출
+      getTourInfo(
+        stadiumPosition!.y.toString(),
+        stadiumPosition!.x.toString(),
+        selectedTagId
+      ).then((res) => {
+        // TourInfoList 설정
+        setTourInfoList(res);
+      });
+    }
+  }, [selectedTagId]);
 
   useEffect(() => {
     setSelectedItems(schedules.map((schedule) => schedule.place));
   }, [schedules]);
-
-  // // 태그에 따라 아이템 필터링
-  // useEffect(() => {
-  //   if (selectedTags.length === 0) {
-  //     setFilteredItems(locationData); // 태그가 선택되지 않았을 때 전체 표시
-  //   } else {
-  //     setFilteredItems(
-  //       locationData.filter((item) => selectedTags.includes(item.category))
-  //     );
-  //   }
-  // }, [selectedTags, locationData]);
 
   const handleTagSelect = (selectedTagName: string) => {
     const selectedTag = tags.find((tag) => tag.name === selectedTagName);
@@ -115,8 +79,6 @@ export default function Page() {
     } else {
       setSelectedItems([...selectedItems, item]);
     }
-
-    console.log(selectedItems);
   };
 
   const handleNextPage = () => {
@@ -172,10 +134,12 @@ export default function Page() {
       <div className="flex flex-col gap-12pxr mt-24pxr px-20pxr overflow-y-scroll flex-grow">
         {tourInfoList.map((item, index) => (
           <LocationInfoSearchCard
-            key={index}
+            key={item.contentId}
             image={item.thumbnail}
             name={item.name}
             location={item.address}
+            contentId={item.contentId}
+            contentType={item.contentType}
             onClick={() => handleItemSelect(item)}
             isSelected={selectedItems.some(
               (selectedItem) => selectedItem.contentId === item.contentId

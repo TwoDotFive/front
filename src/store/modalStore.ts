@@ -1,3 +1,4 @@
+'use client';
 import { ModalType } from '@/constants/modalType';
 import { ReactNode } from 'react';
 import { create } from 'zustand';

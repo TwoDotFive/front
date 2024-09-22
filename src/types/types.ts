@@ -12,6 +12,7 @@ export interface Game {
 	homeTeam: Team;
 	startDate: string;
 	stadium: string;
+	state?: string;
 }
 
 export interface Location {
@@ -39,4 +40,8 @@ export interface FanpoolInformation {
 
 export interface FanpoolType {
 	fanpoolInformation: FanpoolInformation;
+}
+
+export interface GameResponse {
+	games: Game[];
 }

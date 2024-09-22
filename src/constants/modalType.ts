@@ -1,1 +1,1 @@
-export type ModalType = 'confirm' | 'error' | '';
+export type ModalType = 'confirm' | 'error' | 'confirmUser' | '';

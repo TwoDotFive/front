@@ -1,6 +1,12 @@
 "use client";
 
-import { deleteFanpoolLog, getFanpoolLog } from "@/api/fanpool-log/log/main";
+import {
+  addBookmark,
+  deleteBookmark,
+  deleteFanpoolLog,
+  getBookmark,
+  getFanpoolLog,
+} from "@/api/fanpool-log/log/main";
 import TravelogAddCard from "@/components/card/TravelogAddCard";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
 import Button from "@/components/common/Button";
@@ -9,6 +15,7 @@ import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
 import FanpoologUser from "@/components/fanpool-log/FanpoologDetail/FanpoologUser";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
+import { stadiumMap } from "@/constants/stadium";
 import {
   IconBookMark,
   IconBookMarkSelected,
@@ -16,13 +23,13 @@ import {
   IconLink,
   IconShare,
 } from "@/public/icons";
-import { Schedule } from "@/store/fanpool-log/store";
+import useFanpoologStore, { Schedule } from "@/store/fanpool-log/store";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 interface DetailPageProps {
-  id: number;
+  id: string;
   title: string;
   image: string | null;
   stadium: string;
@@ -37,19 +44,65 @@ export default function FanpoolLogDetailPage() {
   useKakaoLoader();
 
   const [fanpoolLog, setFanpoolLog] = useState<DetailPageProps | null>(null);
+  const [fanpoolLogUserId, setFanpoolLogUserId] = useState();
+  const userId = localStorage.getItem("userId");
 
   const router = useRouter();
   const params = useParams();
   const { id } = params;
 
   const [isSelected, setIsSelected] = useState<boolean>(false);
+
+  // 전역 상태 설정
+  const setFanpoolLogId = useFanpoologStore((state) => state.setFanpoolLogId);
+  const setTitle = useFanpoologStore((state) => state.setTitle);
+  const setImage = useFanpoologStore((state) => state.setImage);
+  const setStaidumId = useFanpoologStore((state) => state.setStadiumId);
+  const setStadiumPosition = useFanpoologStore(
+    (state) => state.setStadiumPosition
+  );
+
   const handleBookMarkButton = () => {
-    setIsSelected(!isSelected);
+    if (isSelected) {
+      deleteBookmark(id.toString()).then((res) => {
+        if (res.status === 200) {
+          setIsSelected(!isSelected);
+        }
+      });
+    } else {
+      addBookmark(id.toString()).then((res) => {
+        if (res.status === 200) {
+          setIsSelected(!isSelected);
+        }
+      });
+    }
+  };
+
+  const handleEditButton = () => {
+    // 전역 상태 설정 후 페이지 이동
+    setFanpoolLogId(id.toString());
+    setTitle(fanpoolLog!.title);
+    if (fanpoolLog!.image) setImage(fanpoolLog!.image);
+    setStaidumId(stadiumMap.get(fanpoolLog!.stadium)!);
+    setStadiumPosition({
+      x: fanpoolLog!.schedules[0].place.y,
+      y: fanpoolLog!.schedules[0].place.x,
+    });
+    useFanpoologStore.setState({ schedules: fanpoolLog!.schedules });
+    router.push(`/fanpool-log/create-log/step3`);
   };
 
   useEffect(() => {
     getFanpoolLog(id.toString()).then((res) => {
       setFanpoolLog(res.data);
+      setFanpoolLogUserId(res.data.user.id);
+    });
+    getBookmark(id.toString()).then((res) => {
+      if (res.status === 200) {
+        setIsSelected(true);
+      } else if (res.status === 404) {
+        setIsSelected(false);
+      }
     });
   }, []);
 
@@ -57,7 +110,16 @@ export default function FanpoolLogDetailPage() {
 
   return (
     <div className="w-full">
-      <TapBar text="" type="left" />
+      {userId === fanpoolLogUserId ? (
+        <TapBar
+          text=""
+          type="edit"
+          isNextButton={true}
+          onClick={handleEditButton}
+        />
+      ) : (
+        <TapBar text="" type="left" />
+      )}
       {/* 팬풀 로그 타이틀 및 장소 */}
       <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
         {fanpoolLog.image && (

@@ -172,7 +172,11 @@ export default function FanpoolLogDetailPage() {
       {/* 팬풀 등록자 */}
       <FanpoologUser
         name={fanpoolLog.user.nickname}
-        image={fanpoolLog.user.image}
+        image={
+          fanpoolLog.user.image === ""
+            ? "/images/default_profile.png"
+            : fanpoolLog.user.image
+        }
       />
 
       <InfinityLine

@@ -32,10 +32,12 @@ interface FanpoologState {
   stadiumId: number | null;
   stadiumPosition: { x: number; y: number } | null;
   schedules: Schedule[];
+  fanpoolLogId: string | null;
   setTitle: (title: string) => void;
   setImage: (image: string) => void;
   setStadiumId: (stadiumId: number) => void;
   setStadiumPosition: (position: { x: number; y: number }) => void;
+  setFanpoolLogId: (fanpoolLogId: string) => void;
   addSchedule: (schedule: Schedule) => void;
   updateSchedule: (index: number, schedule: Schedule) => void;
   removeSchedule: (index: number) => void;
@@ -47,6 +49,7 @@ const useFanpoologStore = create<FanpoologState>((set) => ({
   stadiumId: null,
   stadiumPosition: null,
   schedules: [],
+  fanpoolLogId: null,
 
   setTitle: (title: string) => set({ title }),
 
@@ -56,6 +59,8 @@ const useFanpoologStore = create<FanpoologState>((set) => ({
 
   setStadiumPosition: (position: { x: number; y: number }) =>
     set({ stadiumPosition: position }),
+
+  setFanpoolLogId: (fanpoolLogId: string) => set({ fanpoolLogId }),
 
   addSchedule: (schedule: Schedule) =>
     set((state) => ({ schedules: [...state.schedules, schedule] })),

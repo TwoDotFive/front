@@ -48,7 +48,8 @@ export default function Page() {
       getTourInfo(
         stadiumPosition!.y.toString(),
         stadiumPosition!.x.toString(),
-        selectedTagId
+        selectedTagId,
+        1
       ).then((res) => {
         // TourInfoList 설정
         setTourInfoList(res);
@@ -62,7 +63,11 @@ export default function Page() {
 
   const handleTagSelect = (selectedTagName: string) => {
     const selectedTag = tags.find((tag) => tag.name === selectedTagName);
-    if (selectedTag) setSelectedTagId(selectedTag.id);
+    if (selectedTagId === selectedTag?.id) {
+      setSelectedTagId(null);
+    } else {
+      setSelectedTagId(selectedTag?.id || null);
+    }
   };
 
   const handleItemSelect = (item: TourInfoList) => {
@@ -135,7 +140,11 @@ export default function Page() {
         {tourInfoList.map((item, index) => (
           <LocationInfoSearchCard
             key={item.contentId}
-            image={item.thumbnail}
+            image={
+              item.thumbnail === ""
+                ? "/images/empty_image_place.png"
+                : item.thumbnail
+            }
             name={item.name}
             location={item.address}
             contentId={item.contentId}

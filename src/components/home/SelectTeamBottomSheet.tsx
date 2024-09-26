@@ -65,7 +65,7 @@ export default function SelectTeamBottomSheet({
 				name: selectedTeamData.name,
 				stadiumAliasName: selectedTeamData.stadiumAliasName,
 				stadiumName: selectedTeamData.stadiumName,
-				representativeImageUrl: selectedTeamData.representativeImageUrl,
+				representativeImageUrl: selectedTeamData.representativeImageUrl!,
 			};
 
 			// userProfile 업데이트

@@ -6,12 +6,10 @@ import { Text } from '../common/Text';
 import { IconHamburger, IconPerson } from '@/public/icons';
 import Drawer from './Drawer/Drawer';
 import SelectTeamBottomSheet from './SelectTeamBottomSheet';
+import { useUserStore } from '@/store/useUserStore';
 
-interface TeamCodeProps {
-	teamCode?: string;
-}
-
-export default function TeamHeader({ teamCode }: TeamCodeProps) {
+export default function TeamHeader() {
+	const { userProfile } = useUserStore();
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
@@ -19,7 +17,8 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 		setIsDrawerVisible(!isDrawerVisible);
 	};
 
-	const team = teams.find((team) => team.code === teamCode);
+	// userProfile이 업데이트되면 해당 팀 찾기
+	const team = teams.find((team) => team.id === userProfile?.favoriteTeam?.id);
 	const name = team ? team.name : '응원하는 팀이 <br /> 아직 없어요!';
 	const imageUrl = team
 		? `/images/${team.code}_bg.png`
@@ -75,9 +74,6 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 							) : (
 								name
 							)}
-						</Text>
-						<Text fontWeight={500} color="white" fontSize={24}>
-							{team ? `이번 주 경기 ${count}개` : ''}
 						</Text>
 						<Text fontWeight={500} color="white" fontSize={24}>
 							{team ? `이번 주 경기 ${count}개` : ''}

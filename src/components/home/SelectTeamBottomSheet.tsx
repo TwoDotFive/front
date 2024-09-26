@@ -1,11 +1,11 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { Text } from '../common/Text';
 import SelectTeamButton from '../common/button/SelectTeamButton';
 import BottomSheet from '../common/BottomSheet';
 import { teams } from '@/constants/teams';
 import getTeams from '@/api/baseball/getTeams';
+import { useUserStore } from '@/store/useUserStore';
+import patchUserProfile from '@/api/user/patchUserProfile';
 
 interface BottomSheetProps {
 	isOpen: boolean;
@@ -16,6 +16,7 @@ export default function SelectTeamBottomSheet({
 	isOpen,
 	onClose,
 }: BottomSheetProps) {
+	const { userProfile, setUserProfile } = useUserStore();
 	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
 
@@ -26,12 +27,15 @@ export default function SelectTeamBottomSheet({
 				const response = await getTeams();
 				const mappedTeams = response.map((team) => {
 					const matchedTeam = teams.find(
-						(localTeam) => localTeam.name === team.name
+						(localTeam) => localTeam.id === team.id
 					);
 					return {
+						id: team.id,
 						code: matchedTeam ? matchedTeam.code : '',
 						name: team.name,
-						area: team.stadiumAliasName,
+						stadiumAliasName: team.stadiumAliasName,
+						stadiumName: team.stadiumName,
+						representativeImageUrl: team.representativeImageUrl,
 					};
 				});
 				setApiTeams(mappedTeams);
@@ -43,12 +47,47 @@ export default function SelectTeamBottomSheet({
 		fetchTeams();
 	}, []);
 
+	// 팀 선택 시
 	const handleTeamSelect = (code: string) => {
 		setSelectedTeam(code);
 	};
 
-	const handleSelect = () => {
-		onClose();
+	// 선택한 팀 정보 저장 및 API 요청
+	const handleSelect = async () => {
+		// 선택한 팀 데이터 가져오기
+		const selectedTeamData = apiTeams.find(
+			(team) => team.code === selectedTeam
+		);
+
+		if (selectedTeamData && userProfile) {
+			const updatedFavoriteTeam = {
+				id: selectedTeamData.id,
+				name: selectedTeamData.name,
+				stadiumAliasName: selectedTeamData.stadiumAliasName,
+				stadiumName: selectedTeamData.stadiumName,
+				representativeImageUrl: selectedTeamData.representativeImageUrl,
+			};
+
+			// userProfile 업데이트
+			const updatedUserProfile = {
+				...userProfile,
+				favoriteTeam: updatedFavoriteTeam,
+			};
+			console.log(updatedUserProfile);
+			// 상태 업데이트
+			setUserProfile(updatedUserProfile);
+
+			// 서버로 업데이트된 프로필 정보 전송
+			try {
+				const response = await patchUserProfile(updatedUserProfile);
+				console.log(response);
+				console.log('Favorite team updated successfully');
+			} catch (error) {
+				console.error('Failed to update favorite team:', error);
+			}
+		}
+
+		onClose(); // 선택 완료 후 닫기
 	};
 
 	return (

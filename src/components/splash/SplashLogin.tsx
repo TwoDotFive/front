@@ -1,7 +1,19 @@
 import { IconKakao, IconSplashEmpty } from '@/public/icons';
 import { Text } from '../common/Text';
+import getKakaoLogin from '@/api/auth/getKakaoLogin';
 
 export default function SplashLogin() {
+	const handleLogin = async () => {
+		try {
+			const response = await getKakaoLogin();
+
+			// URL로 리다이렉트
+			window.location.href = response;
+		} catch (error) {
+			console.error('로그인 처리 중 오류 발생:', error);
+		}
+	};
+
 	return (
 		<section
 			className="w-full h-screen relative bg-cover bg-center"
@@ -30,7 +42,10 @@ export default function SplashLogin() {
 			</div>
 
 			<div className="absolute bottom-44pxr left-0 right-0 flex justify-center flex-col gap-20pxr items-center">
-				<button className="p-10pxr flex items-center justify-between bg-kakaoYellow w-300pxr h-50pxr rounded-12pxr cursor-pointer">
+				<button
+					className="p-10pxr flex items-center justify-between bg-kakaoYellow w-300pxr h-50pxr rounded-12pxr cursor-pointer"
+					onClick={handleLogin}
+				>
 					<div className="w-34pxr h-34pxr flex items-center justify-center">
 						<IconKakao />
 					</div>

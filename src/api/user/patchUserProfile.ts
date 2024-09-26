@@ -19,7 +19,7 @@ interface PatchUserProfileRequest {
 	name?: string;
 	oneLiner?: string;
 	userRole?: string;
-	favoritTeam?: {
+	favoriteTeam?: {
 		id?: number;
 		name?: string;
 		representativeImageUrl?: string;

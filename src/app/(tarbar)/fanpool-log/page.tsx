@@ -9,26 +9,17 @@ import { useRouter } from "next/navigation";
 import TagFilter from "@/components/fanpool-log/Create-log/TagFilter"; // TagFilter 컴포넌트 불러오기
 import { getFanpoologList } from "@/api/fanpool-log/main";
 
-export interface regionsType {
-  code: string;
-  name: string;
-  area: string;
-}
-
 // 지역 데이터
-export const regions: regionsType[] = [
-  { code: "doosan", name: "두산 베어스", area: "잠실" },
-  { code: "hanwha", name: "한화 이글스", area: "대전" },
-  { code: "hanwha2", name: "한화 이글스", area: "청주" },
-  { code: "kiwoom", name: "키움 히어로즈", area: "고척" },
-  { code: "kia", name: "기아 타이거즈", area: "광주" },
-  { code: "kt", name: "KT 위즈", area: "수원" },
-  { code: "lotte", name: "롯데 자이언츠", area: "부산" },
-  { code: "lotte2", name: "롯데 자이언츠", area: "울산" },
-  { code: "nc", name: "NC 다이노스", area: "창원" },
-  { code: "ssg", name: "SSG 랜더스", area: "인천" },
-  { code: "samsung", name: "삼성 라이온즈", area: "대구" },
-  { code: "samsung2", name: "삼성 라이온즈", area: "포항" },
+const regions = [
+  "잠실",
+  "수원",
+  "문학",
+  "창원",
+  "광주",
+  "사직",
+  "대구",
+  "대전",
+  "고척",
 ];
 
 interface FanpoolLogList {
@@ -120,7 +111,7 @@ export default function Page() {
         {/* 지역 별 필터 */}
         <div className="w-full overflow-x-scroll no-scrollbar whitespace-nowrap mb-16pxr">
           <TagFilter
-            tags={regions.map((region) => region.area)}
+            tags={regions.map((region) => region)}
             selectedTags={selectedTags}
             onTagSelect={handleTagSelect}
           />

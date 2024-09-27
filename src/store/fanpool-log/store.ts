@@ -28,13 +28,13 @@ export interface Schedule {
 
 interface FanpoologState {
   title: string;
-  image: string | null; // 팬풀로그 대표 이미지 (rImage)
+  image: File | string | null; // 팬풀로그 대표 이미지 (rImage)
   stadiumId: number | null;
   stadiumPosition: { x: number; y: number } | null;
   schedules: Schedule[];
   fanpoolLogId: string | null;
   setTitle: (title: string) => void;
-  setImage: (image: string) => void;
+  setImage: (image: File | string) => void;
   setStadiumId: (stadiumId: number) => void;
   setStadiumPosition: (position: { x: number; y: number }) => void;
   setFanpoolLogId: (fanpoolLogId: string) => void;
@@ -53,7 +53,7 @@ const useFanpoologStore = create<FanpoologState>((set) => ({
 
   setTitle: (title: string) => set({ title }),
 
-  setImage: (image: string) => set({ image }),
+  setImage: (image: File | string) => set({ image }),
 
   setStadiumId: (stadiumId: number) => set({ stadiumId }),
 

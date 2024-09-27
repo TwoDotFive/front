@@ -100,8 +100,6 @@ export default function FanpoolLogDetailPage() {
     getBookmark(id.toString()).then((res) => {
       if (res.status === 200) {
         setIsSelected(true);
-      } else if (res.status === 404) {
-        setIsSelected(false);
       }
     });
   }, []);

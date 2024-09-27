@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -10,7 +10,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
-import { Map } from "react-kakao-maps-sdk";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 import TapBar from "@/components/common/TapBar";
 import InfinityLine from "@/components/common/InfinityLine";
 import { Text } from "@/components/common/Text";
@@ -21,6 +21,15 @@ import MemoBottomSheet from "@/components/fanpool-log/Create-log/MemoBottomSheet
 import DayBottomSheet from "@/components/fanpool-log/Create-log/DayBottomSheet";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
 import TravelogAddCard from "@/components/card/TravelogAddCard";
+import useFanpoologStore, { Memo } from "@/store/fanpool-log/store";
+import { useRouter } from "next/navigation";
+import {
+  editFanpoolLog,
+  getPresignedUrl,
+  postFanoolLog,
+  uploadImageToS3,
+} from "@/api/fanpool-log/create-log/step3";
+import { reverseStadiumMap, stadiumMap } from "@/constants/stadium";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -57,63 +66,36 @@ function SortableItem({ id, children, isChangeMode }: any) {
 export default function Page() {
   useKakaoLoader();
 
-  const [rImage, setRImage] = useState<string | null>(null);
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [rImage, setRImage] = useState<File | string | null>(null); // 대표 이미지 상태
+  const [title, setTitle] = useState<string>(""); // 로그 제목 상태
 
   const [isMemoBottomSheetVisible, setIsMemoBottomSheetVisible] =
-    useState<boolean>(false);
+    useState<boolean>(false); // 메모 편집 바텀 시트 상태
   const [isDayBottomSheetVisible, setIsDayBottomSheetVisible] =
-    useState<boolean>(false);
+    useState<boolean>(false); // Day 편집 바텀 시트 상태
 
   const [isMemoEditMode, setIsMemoEditMode] = useState<boolean>(false);
   const [isChangeMode, setIsChangeMode] = useState<boolean>(false);
   const [days, setDays] = useState(["Day 1"]);
-  const [selectedLocationIndex, setSelectedLocationIndex] = useState<
+  const [selectedScheduleIndex, setSelectedScheduleIndex] = useState<
     number | null
-  >(null);
-  const [locations, setLocations] = useState<
-    Array<{
-      id: number;
-      name: string;
-      location: string;
-      image: string;
-      memo: { content: string; images: string[] };
-    }>
-  >([
-    {
-      id: 1,
-      name: "잠실종합운동장 잠실야구장",
-      location: "서울 송파구 올림픽로 25",
-      image: "/images/doosan.png",
-      memo: { content: "", images: [] },
-    },
-    {
-      id: 2,
-      name: "장소 2",
-      location: "서울 송파구 올림픽로 25",
-      image: "/images/kt.png",
-      memo: { content: "", images: [] },
-    },
-    {
-      id: 3,
-      name: "장소 3",
-      location: "서울 송파구 올림픽로 25",
-      image: "/images/samsung.png",
-      memo: { content: "", images: [] },
-    },
-    {
-      id: 4,
-      name: "장소 4",
-      location: "서울 송파구 올림픽로 25",
-      image: "/images/ssg.png",
-      memo: { content: "", images: [] },
-    },
-  ]);
+  >(null); // 선택된 장소의 인덱스 (메모 추가할 때 사용)
+
+  const stadiumId = useFanpoologStore((state) => state.stadiumId);
+  const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
+  const schedules = useFanpoologStore((state) => state.schedules);
+  const updateSchedule = useFanpoologStore((state) => state.updateSchedule);
+  const removeSchedule = useFanpoologStore((state) => state.removeSchedule);
+  const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      const uploadedImage = URL.createObjectURL(file);
-      setRImage(uploadedImage);
+      setRImage(file);
     }
   };
 
@@ -122,47 +104,170 @@ export default function Page() {
   };
 
   const handleRemoveLocation = (index: number) => {
-    setLocations((locations) =>
-      locations.filter((location) => location.id !== index)
-    );
+    if (selectedScheduleIndex === index) setSelectedScheduleIndex(null);
+    removeSchedule(index);
   };
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      setLocations((locations) => {
-        const oldIndex = locations.findIndex((item) => item.id === active.id);
-        const newIndex = locations.findIndex((item) => item.id === over.id);
-        return arrayMove(locations, oldIndex, newIndex);
+
+    if (!over) return; // 만약 over가 없으면 함수 종료
+
+    const activeIndex = schedules.findIndex(
+      (item) => item.place.contentId === active.id
+    );
+    const overIndex = schedules.findIndex(
+      (item) => item.place.contentId === over.id
+    );
+
+    if (activeIndex !== -1 && overIndex !== -1) {
+      const updatedSchedules = arrayMove(schedules, activeIndex, overIndex);
+
+      // 드래그가 끝난 후 각 Day에 맞춰 schedules를 재배치
+      let currentDay = 1; // 첫 번째 Day부터 시작
+      let currentSequence = 1;
+
+      // groupedByDay 타입을 정의합니다.
+      const groupedByDay: { [key: number]: typeof updatedSchedules } =
+        updatedSchedules.reduce(
+          (acc: { [key: number]: typeof updatedSchedules }, schedule) => {
+            const day = schedule.day;
+            if (!acc[day]) {
+              acc[day] = [];
+            }
+            acc[day].push(schedule);
+            return acc;
+          },
+          {}
+        );
+
+      // Day별로 sequence 재정렬
+      Object.keys(groupedByDay).forEach((day) => {
+        groupedByDay[Number(day)].forEach((schedule: any, index: number) => {
+          schedule.sequence = index + 1;
+        });
       });
+
+      // schedules 업데이트
+      updatedSchedules.forEach((schedule, index) =>
+        updateSchedule(index, schedule)
+      );
     }
   };
 
   const handleMemoOpen = (index: number) => {
-    setSelectedLocationIndex(index);
+    setSelectedScheduleIndex(index);
     setIsMemoBottomSheetVisible(true);
     setIsMemoEditMode(true);
   };
 
-  const handleMemoSave = (content: string, images: string[]) => {
-    if (selectedLocationIndex !== null) {
-      const updatedLocations = [...locations];
-      updatedLocations[selectedLocationIndex].memo.content = content;
-      updatedLocations[selectedLocationIndex].memo.images = images;
-      setLocations(updatedLocations);
+  const handleMemoSave = (memo: Memo) => {
+    if (selectedScheduleIndex !== null) {
+      const updatedSchedule = {
+        ...schedules[selectedScheduleIndex],
+        memo,
+      };
+      updateSchedule(selectedScheduleIndex, updatedSchedule);
       setIsMemoBottomSheetVisible(false);
     }
   };
 
   const handleMemoDelete = () => {
-    if (selectedLocationIndex !== null) {
-      const updatedLocations = [...locations];
-      updatedLocations[selectedLocationIndex].memo.content = "";
-      updatedLocations[selectedLocationIndex].memo.images = [];
-      setLocations(updatedLocations);
+    if (selectedScheduleIndex !== null) {
+      const updatedSchedule = {
+        ...schedules[selectedScheduleIndex],
+        memo: { content: "", images: [] },
+      };
+      updateSchedule(selectedScheduleIndex, updatedSchedule);
       setIsMemoBottomSheetVisible(false);
     }
   };
+
+  const handlePageBack = () => {
+    router.push("/fanpool-log/create-log/step2");
+  };
+
+  const handleSubmit = async () => {
+    if (!title.trim()) {
+      console.log("제목 입력 필요");
+    } else {
+      // post 하기 전, 메모가 없는 것에는 memo:{content: "", images:[]} 를 추가
+      const updatedSchedules = schedules.map((schedule) => {
+        if (!schedule.memo) {
+          return {
+            ...schedule,
+            memo: { content: "", images: [] },
+          };
+        }
+        return schedule;
+      });
+      // API 호출
+      try {
+        let imageUrl = null;
+        if (rImage && rImage instanceof File) {
+          const presignedUrl = await getPresignedUrl();
+
+          await uploadImageToS3(presignedUrl.data.toString(), rImage);
+
+          imageUrl = presignedUrl.data.toString().split("?")[0];
+        } else if (typeof rImage === "string") {
+          imageUrl = rImage;
+        }
+        if (fanpoolLogId) {
+          // 수정
+          const res = await editFanpoolLog(
+            fanpoolLogId,
+            title,
+            imageUrl,
+            updatedSchedules
+          );
+          if (res.status === 200) {
+            // 전역 상태 모두 초기화 하고 페이지 이동
+            useFanpoologStore.setState({
+              title: "",
+              image: null,
+              stadiumId: null,
+              stadiumPosition: null,
+              schedules: [],
+              fanpoolLogId: null,
+            });
+            router.replace(`/fanpool-log/log/${fanpoolLogId}`);
+          }
+        } else {
+          // 초기 생성
+          const res = await postFanoolLog(
+            title,
+            imageUrl,
+            stadiumId!,
+            updatedSchedules
+          );
+          if (res.status === 200) {
+            router.replace(`/fanpool-log/log/${res.data}`);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!stadiumPosition || !stadiumId || !schedules) {
+      router.replace("/fanpool-log/create-log/step1");
+    } else {
+      setIsLoading(false);
+    }
+    if (fanpoolLogId) {
+      setTitle(useFanpoologStore.getState().title);
+      setRImage(useFanpoologStore.getState().image);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(schedules);
+  }, [schedules]);
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="absolute flex flex-col w-full h-screen">
@@ -187,12 +292,16 @@ export default function Page() {
                 </button>
                 <img
                   className="w-full h-full object-cover rounded-lg"
-                  src={rImage}
+                  src={
+                    rImage instanceof File
+                      ? URL.createObjectURL(rImage)
+                      : rImage
+                  }
                   alt={"Representative Image"}
                 />
               </div>
             ) : (
-              <label className="w-70pxr h-70pxr rounded-4pxr border-1 border-dashed border-gray050 flex items-center justify-center cursor-pointer">
+              <label className="w-70pxr h-70pxr rounded-4pxr border-1 bg-gray050 border-gray050 flex items-center justify-center cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"
@@ -217,6 +326,8 @@ export default function Page() {
               type="text"
               placeholder="로그 제목을 입력해주세요"
               className="w-full h-24pxr focus:outline-none color-gray200 weight-700 text-20pxr"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             ></input>
           </div>
           <div className="flex flex-col items-start gap-8pxr w-full">
@@ -224,7 +335,7 @@ export default function Page() {
               경기장
             </Text>
             <Text fontSize={16} fontWeight={700} color="gray700">
-              잠실 종합 운동장
+              {reverseStadiumMap.get(stadiumId!)}
             </Text>
           </div>
         </div>
@@ -233,15 +344,37 @@ export default function Page() {
         <Map
           id="map"
           center={{
-            lat: 33.450701,
-            lng: 126.570667,
+            lat: stadiumPosition!.x || 37.5123,
+            lng: stadiumPosition!.y || 127.0719,
           }}
           style={{
             width: "100%",
             height: "170px",
           }}
-          level={3}
-        />
+          level={7}
+        >
+          {/* 경기장 마커 */}
+          {schedules.map((schedule, index) => (
+            <MapMarker
+              key={index}
+              position={{
+                lat: schedule.place.y,
+                lng: schedule.place.x,
+              }}
+              image={{
+                src: "/icons/map/icon_default_pin.svg",
+                size: { width: 28, height: 40 },
+              }}
+            />
+          ))}
+          <MapMarker
+            position={{ lat: stadiumPosition!.x, lng: stadiumPosition!.y }}
+            image={{
+              src: "/icons/map/icon_default_pin.svg",
+              size: { width: 28, height: 40 },
+            }}
+          />
+        </Map>
         <div className="mt-45pxr" />
         <InfinityLine
           color="bg-gray-50"
@@ -251,31 +384,32 @@ export default function Page() {
         />
         {/* 장소 리스트 */}
         <div className="relative flex flex-col items-start px-20pxr">
-          {days.map((day, dayIndex) => (
-            <div
-              key={dayIndex}
-              className="flex flex-col items-start justify-center w-full "
-            >
-              <Text fontSize={18} fontWeight={700} color="gray800">
-                {day}
-              </Text>
-              <div className="mt-18pxr" />
+          <DndContext
+            modifiers={[restrictToWindowEdges]} // 드래그 중 윈도우 경계로 제한
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd} // 드래그 완료 후 처리 함수
+          >
+            {days.map((day, dayIndex) => (
+              <SortableContext
+                key={dayIndex}
+                items={schedules
+                  .filter((schedule) => schedule.day === dayIndex + 1)
+                  .map((schedule) => schedule.place.contentId)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="flex flex-col items-start justify-center w-full">
+                  <Text fontSize={18} fontWeight={700} color="gray800">
+                    {`Day ${dayIndex + 1}`}
+                  </Text>
+                  <div className="mt-18pxr" />
 
-              {/* 드래그 앤 드롭 기능은 isChangeMode가 true일 때만 활성화 */}
-              {isChangeMode ? (
-                <DndContext
-                  modifiers={[restrictToWindowEdges]} // 드래그 중 윈도우 경계로 제한
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd}
-                >
-                  <SortableContext
-                    items={locations}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    {locations.map((location, index) => (
+                  {/* Day에 해당하는 장소들 */}
+                  {schedules
+                    .filter((schedule) => schedule.day === dayIndex + 1)
+                    .map((schedule, index) => (
                       <SortableItem
-                        key={location.id}
-                        id={location.id}
+                        key={schedule.place.contentId}
+                        id={schedule.place.contentId}
                         isChangeMode={isChangeMode}
                       >
                         <div className="relative flex items-center mb-16pxr w-full">
@@ -295,94 +429,42 @@ export default function Page() {
                           </div>
                           {/* 장소 카드 */}
                           <div className="ml-16pxr w-full">
-                            {location.memo.content.length > 0 ? (
+                            {schedule.memo &&
+                            (schedule.memo.content ||
+                              (schedule.memo.images &&
+                                schedule.memo.images?.length > 0)) ? (
                               <TravelogAddCard
-                                image={location.image}
-                                name={location.name}
-                                location={location.location}
-                                description={location.memo.content}
+                                image={schedule.place.thumbnail}
+                                name={schedule.place.name}
+                                location={schedule.place.address}
+                                description={schedule.memo.content || ""}
                                 userId={"myUserId"}
-                                locationImage={location.memo.images}
+                                locationImage={
+                                  schedule.memo.images?.map((img) => img.url) ||
+                                  []
+                                }
                                 onClick={() => handleMemoOpen(index)}
                                 isEditing={isChangeMode}
-                                onRemove={() =>
-                                  handleRemoveLocation(location.id)
-                                }
+                                onRemove={() => handleRemoveLocation(index)}
                               />
                             ) : (
                               <TravelogLocationCard
-                                image={location.image}
-                                name={location.name}
-                                location={location.location}
+                                image={schedule.place.thumbnail}
+                                name={schedule.place.name}
+                                location={schedule.place.address}
                                 isEditing={isChangeMode}
                                 onClick={() => handleMemoOpen(index)}
-                                onRemove={() =>
-                                  handleRemoveLocation(location.id)
-                                }
+                                onRemove={() => handleRemoveLocation(index)}
                               />
                             )}
                           </div>
                         </div>
                       </SortableItem>
                     ))}
-                  </SortableContext>
-                </DndContext>
-              ) : (
-                /* 드래그 앤 드롭이 불가능할 때는 단순한 리스트만 렌더링 */
-                locations.map((location, index) => (
-                  <div
-                    key={location.id}
-                    className="relative flex items-center mb-16pxr w-full"
-                  >
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-center">
-                        <IconDefaultPin />
-                      </div>
-                      <span className="absolute inset-0 flex items-center justify-center">
-                        <Text fontSize={12} fontWeight={700} color="white">
-                          {index + 1}
-                        </Text>
-                      </span>
-                    </div>
-                    {/* 장소 카드 */}
-                    <div className="ml-16pxr w-full">
-                      {location.memo.content.length > 0 ? (
-                        <TravelogAddCard
-                          image={location.image}
-                          name={location.name}
-                          location={location.location}
-                          description={location.memo.content}
-                          userId={"myUserId"}
-                          locationImage={location.memo.images}
-                          onClick={() => handleMemoOpen(index)}
-                          onRemove={() => handleRemoveLocation(location.id)}
-                          isEditing={isChangeMode}
-                        />
-                      ) : (
-                        <TravelogLocationCard
-                          image={location.image}
-                          name={location.name}
-                          location={location.location}
-                          isEditing={isChangeMode}
-                          onClick={() => handleMemoOpen(index)}
-                          onRemove={() => handleRemoveLocation(location.id)}
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))
-              )}
-
-              {dayIndex < days.length - 1 && (
-                <InfinityLine
-                  color="bg-gray-50"
-                  thickness="h-3pxr"
-                  marginTop="mt-20pxr"
-                  marginBottom="mb-32pxr"
-                />
-              )}
-            </div>
-          ))}
+                </div>
+              </SortableContext>
+            ))}
+          </DndContext>
         </div>
 
         {/* 장소 리스트 끝 버튼 */}
@@ -400,7 +482,7 @@ export default function Page() {
                   enabledBackgroundColor={"bg-gray050"}
                   disabledTextColor={"text-gray600"}
                   disabledBackgroundColor={"bg-gray050"}
-                  onClick={() => {}}
+                  onClick={handlePageBack}
                 />
                 <Button
                   width="146px"
@@ -434,9 +516,14 @@ export default function Page() {
       <div className="mb-102pxr" />
       <div
         className={
-          "fixed flex items-center justify-center inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr"
+          "max-w-399pxr fixed flex items-center justify-center inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr"
         }
-        style={{ zIndex: 1, overflowY: "unset" }}
+        style={{
+          zIndex: 1,
+          overflowY: "unset",
+          left: "50%",
+          transform: "translate(-50%)",
+        }}
       >
         <Button
           height="50px"
@@ -447,7 +534,7 @@ export default function Page() {
           disabledTextColor={"text-[#5679A3]"}
           disabledBackgroundColor={"bg-primary"}
           disabled={isChangeMode}
-          onClick={() => {}}
+          onClick={handleSubmit}
         />
       </div>
 
@@ -459,13 +546,15 @@ export default function Page() {
         onSave={handleMemoSave}
         onDelete={handleMemoDelete}
         initialMemo={
-          selectedLocationIndex !== null
-            ? locations[selectedLocationIndex].memo.content
+          selectedScheduleIndex !== null
+            ? schedules[selectedScheduleIndex].memo?.content
             : ""
         }
         initialImages={
-          selectedLocationIndex !== null
-            ? locations[selectedLocationIndex].memo.images
+          selectedScheduleIndex !== null
+            ? schedules[selectedScheduleIndex].memo?.images?.map(
+                (img) => img.url
+              ) || []
             : []
         }
       />

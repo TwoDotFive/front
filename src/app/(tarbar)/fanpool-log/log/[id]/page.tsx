@@ -54,6 +54,7 @@ export default function FanpoolLogDetailPage() {
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   // 전역 상태 설정
+  const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
   const setFanpoolLogId = useFanpoologStore((state) => state.setFanpoolLogId);
   const setTitle = useFanpoologStore((state) => state.setTitle);
   const setImage = useFanpoologStore((state) => state.setImage);
@@ -85,8 +86,13 @@ export default function FanpoolLogDetailPage() {
     if (fanpoolLog!.image) setImage(fanpoolLog!.image);
     setStaidumId(stadiumMap.get(fanpoolLog!.stadium)!);
     setStadiumPosition({
-      x: fanpoolLog!.schedules[0].place.y,
-      y: fanpoolLog!.schedules[0].place.x,
+      // schedule.place.contentType이 28인 것으로 설정
+      x: fanpoolLog!.schedules.filter(
+        (schedule) => schedule.place.contentType === "28"
+      )[0].place.y,
+      y: fanpoolLog!.schedules.filter(
+        (schedule) => schedule.place.contentType === "28"
+      )[0].place.x,
     });
     useFanpoologStore.setState({ schedules: fanpoolLog!.schedules });
     router.push(`/fanpool-log/create-log/step3`);
@@ -152,8 +158,8 @@ export default function FanpoolLogDetailPage() {
         id="map"
         center={{
           // 지도의 중심좌표
-          lat: 33.450701,
-          lng: 126.570667,
+          lat: stadiumPosition!.x,
+          lng: stadiumPosition!.y,
         }}
         style={{
           // 지도의 크기

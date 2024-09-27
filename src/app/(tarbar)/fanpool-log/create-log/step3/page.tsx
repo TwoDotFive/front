@@ -242,7 +242,7 @@ export default function Page() {
             updatedSchedules
           );
           if (res.status === 200) {
-            router.replace(`/fanpool-log/log/${res.data}`);
+            router.replace(`/fanpool-log/log/${res.data.id}`);
           }
         }
       } catch (e) {
@@ -367,13 +367,6 @@ export default function Page() {
               }}
             />
           ))}
-          <MapMarker
-            position={{ lat: stadiumPosition!.x, lng: stadiumPosition!.y }}
-            image={{
-              src: "/icons/map/icon_default_pin.svg",
-              size: { width: 28, height: 40 },
-            }}
-          />
         </Map>
         <div className="mt-45pxr" />
         <InfinityLine

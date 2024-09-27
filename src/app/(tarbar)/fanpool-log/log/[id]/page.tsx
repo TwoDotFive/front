@@ -42,6 +42,7 @@ interface DetailPageProps {
 
 export default function FanpoolLogDetailPage() {
   useKakaoLoader();
+  const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
 
   const [fanpoolLog, setFanpoolLog] = useState<DetailPageProps | null>(null);
   const [fanpoolLogUserId, setFanpoolLogUserId] = useState();
@@ -54,7 +55,6 @@ export default function FanpoolLogDetailPage() {
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   // 전역 상태 설정
-  const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
   const setFanpoolLogId = useFanpoologStore((state) => state.setFanpoolLogId);
   const setTitle = useFanpoologStore((state) => state.setTitle);
   const setImage = useFanpoologStore((state) => state.setImage);
@@ -110,6 +110,15 @@ export default function FanpoolLogDetailPage() {
     getFanpoolLog(id.toString()).then((res) => {
       setFanpoolLog(res.data);
       setFanpoolLogUserId(res.data.user.id);
+      setStadiumPosition({
+        // schedule.place.contentType이 28인 것으로 설정
+        x: res.data.schedules.filter(
+          (schedule: any) => schedule.place.contentType === "28"
+        )[0].place.y,
+        y: res.data.schedules.filter(
+          (schedule: any) => schedule.place.contentType === "28"
+        )[0].place.x,
+      });
     });
     getBookmark(id.toString()).then((res) => {
       if (res.status === 200) {

@@ -2,6 +2,7 @@
 import { IconLeftArrow, IconRightArrow, IconUpload } from "@/public/icons";
 import { useRouter } from "next/navigation";
 import { Text } from "./Text";
+import useFanpoologStore from "@/store/fanpool-log/store";
 
 type TapBarProps = {
   text: string;
@@ -17,8 +18,15 @@ export default function TapBar({
   onClick,
 }: TapBarProps) {
   const router = useRouter();
+  const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
 
   const handleBack = () => {
+    if (fanpoolLogId) {
+      // 편집모드인 경우, 스케줄 전역상태 초기화 후 페이지 이동
+      useFanpoologStore.setState({
+        schedules: [],
+      });
+    }
     router.back();
   };
 

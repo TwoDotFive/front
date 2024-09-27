@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text } from "../common/Text";
 import { useRouter } from "next/navigation";
 
@@ -19,8 +19,16 @@ export default function TravelogWideCard({
 }: TravelogWideCardProps) {
   const router = useRouter();
 
+  const [imageSrc, setImageSrc] = useState(image);
+
   const handleClick = () => {
     router.push(`/fanpool-log/log/${id}`);
+  };
+
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    setImageSrc("/images/empty_image_place.png");
   };
 
   // 장소가 1~3개일 경우와 4개 이상일 경우를 나누어서 렌더링
@@ -56,7 +64,8 @@ export default function TravelogWideCard({
       <div className="w-full h-86pxr rounded-t-8pxr">
         <img
           className="w-full h-full rounded-t-8pxr object-cover"
-          src={image}
+          src={imageSrc}
+          onError={handleImageError}
         />
       </div>
       <div className="flex flex-col items-start justify-center gap-10pxr p-14pxr h-94pxr">

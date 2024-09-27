@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text } from "../common/Text";
 import { useRouter } from "next/navigation";
 
@@ -21,9 +21,25 @@ export default function TravelogCard({
 }: TravelogCardProps) {
   const router = useRouter();
 
+  const [imageSrc, setImageSrc] = useState(image);
+  const [userImageSrc, setUserImageSrc] = useState(userImage);
+
   const handleClick = () => {
     router.push(`/fanpool-log/log/${id}`);
   };
+
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    setImageSrc("/images/empty_image_place.png");
+  };
+
+  const handleUserImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    setUserImageSrc("/images/default_profile.png");
+  };
+
   return (
     <div
       className="flex flex-col items-start w-235pxr h-302pxr rounded-8pxr relative shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]"
@@ -31,10 +47,18 @@ export default function TravelogCard({
       style={{ minWidth: "235px" }}
     >
       <div className="self-stretch w-full h-180pxr rounded-t-8pxr">
-        <img className="w-full h-full rounded-t-8pxr" src={image} />
+        <img
+          className="w-full h-full rounded-t-8pxr"
+          src={imageSrc}
+          onError={handleImageError}
+        />
       </div>
       <div className="absolute top-150pxr left-10pxr w-40pxr h-40pxr rounded-full border-1pxr border-gray300 z-10">
-        <img className="w-full h-full" src={userImage} />
+        <img
+          className="w-full h-full"
+          src={userImageSrc}
+          onError={handleUserImageError}
+        />
       </div>
       <div className="flex flex-col justify-center items-start gap-10pxr self-stretch p-30pxr px-14pxr rounded-b-8pxr bg-gray000">
         <div className="flex flex-col items-start gap-4pxr self-stretch">

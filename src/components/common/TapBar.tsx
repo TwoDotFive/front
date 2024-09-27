@@ -1,5 +1,11 @@
 "use client";
-import { IconLeftArrow, IconRightArrow, IconUpload } from "@/public/icons";
+import {
+  IconLeftArrow,
+  IconPencil,
+  IconRightArrow,
+  IconTrashCan,
+  IconUpload,
+} from "@/public/icons";
 import { useRouter } from "next/navigation";
 import { Text } from "./Text";
 import useFanpoologStore from "@/store/fanpool-log/store";
@@ -8,14 +14,16 @@ type TapBarProps = {
   text: string;
   isNextButton?: boolean;
   type: "download" | "left" | "mid" | "edit" | "none";
-  onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 };
 
 export default function TapBar({
   text,
   isNextButton = false,
   type,
-  onClick,
+  onEdit,
+  onDelete,
 }: TapBarProps) {
   const router = useRouter();
   const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
@@ -61,7 +69,7 @@ export default function TapBar({
     );
   };
 
-  const renderRightSection = () => {
+  const renderRightSection: any = () => {
     if (type === "mid") {
       if (isNextButton)
         return (
@@ -75,10 +83,13 @@ export default function TapBar({
     if (type === "edit") {
       // 편집 버튼 생성 (누르면 팬풀로그 편집으로 이동)
       return (
-        <div className="flex items-center" onClick={onClick}>
-          <Text fontSize={16} fontWeight={700} color="gray700">
-            편집
-          </Text>
+        <div className="flex items-center gap-24pxr">
+          <button onClick={onEdit}>
+            <IconPencil />
+          </button>
+          <button onClick={onDelete}>
+            <IconTrashCan />
+          </button>
         </div>
       );
     }

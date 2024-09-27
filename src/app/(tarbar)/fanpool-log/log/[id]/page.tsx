@@ -92,6 +92,14 @@ export default function FanpoolLogDetailPage() {
     router.push(`/fanpool-log/create-log/step3`);
   };
 
+  const handleDeleteButton = () => {
+    deleteFanpoolLog(id.toString()).then((res) => {
+      if (res.status === 200) {
+        router.push("/fanpool-log");
+      }
+    });
+  };
+
   useEffect(() => {
     getFanpoolLog(id.toString()).then((res) => {
       setFanpoolLog(res.data);
@@ -113,7 +121,8 @@ export default function FanpoolLogDetailPage() {
           text=""
           type="edit"
           isNextButton={true}
-          onClick={handleEditButton}
+          onEdit={handleEditButton}
+          onDelete={handleDeleteButton}
         />
       ) : (
         <TapBar text="" type="left" />

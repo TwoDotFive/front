@@ -9,7 +9,10 @@ import LocationDeleteButton from "@/components/common/button/LocationDeleteButto
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import useFanpoologStore from "@/store/fanpool-log/store";
-import { getTourInfo } from "@/api/fanpool-log/create-log/step2";
+import {
+  getStadiumInfo,
+  getTourInfo,
+} from "@/api/fanpool-log/create-log/step2";
 
 interface TourInfoList {
   name: string;
@@ -44,6 +47,16 @@ export default function Page() {
     if (!stadiumPosition || !stadiumId) {
       router.replace("/fanpool-log/create-log/step1");
     } else {
+      if (schedules.length === 0) {
+        getStadiumInfo().then((res) => {
+          const stadium = res.data.stadiums.find(
+            (stadium: any) => stadium.id === stadiumId
+          );
+          if (stadium) setSelectedItems([stadium]);
+        });
+      } else {
+        setSelectedItems(schedules.map((schedule) => schedule.place));
+      }
       // API 호출
       getTourInfo(
         stadiumPosition!.y.toString(),

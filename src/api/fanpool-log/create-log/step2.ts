@@ -1,5 +1,12 @@
 import apiClient from "@/api/index";
 
+export const getStadiumInfo = async () => {
+  const response = await apiClient.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/tour/stadium/list`
+  );
+  return response;
+};
+
 export const getTourInfo = async (
   x: string,
   y: string,

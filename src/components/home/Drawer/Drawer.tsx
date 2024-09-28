@@ -4,26 +4,24 @@ import { Text } from '@/components/common/Text';
 import { IconClose } from '@/public/icons';
 import UserProfile from './UserProfile';
 import { useRouter } from 'next/navigation';
-import { useModalStore } from '@/store/modalStore'; // Import the modal store
-
+import { useModalStore } from '@/store/modalStore';
 interface DrawerProps {
 	isVisible: boolean;
 	onClose: () => void;
 }
 
-export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
+export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 	const router = useRouter();
-	const { openModal, closeModal } = useModalStore(); // Destructure modal methods
+	const { openModal, closeModal } = useModalStore();
 	const drawerClasses = isVisible ? 'translate-x-0' : '-translate-x-full';
 	const overlayClasses = isVisible
 		? 'opacity-50 pointer-events-auto'
 		: 'opacity-0 pointer-events-none';
 
 	const handleLogout = () => {
-		// Remove userId from localStorage
+		localStorage.removeItem('token');
 		localStorage.removeItem('userId');
 
-		// Close the modal and redirect to the home page
 		closeModal();
 		router.push('/');
 	};
@@ -96,7 +94,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
 							fontSize={14}
 							fontWeight={400}
 							className="cursor-pointer"
-							onClick={openLogoutConfirmModal} // Open the logout confirmation modal
+							onClick={openLogoutConfirmModal}
 						>
 							로그아웃
 						</Text>

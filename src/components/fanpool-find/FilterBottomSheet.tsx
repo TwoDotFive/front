@@ -29,7 +29,7 @@ interface FilterBottomSheetProps {
 	onDateSelect: (date: Date) => void;
 }
 
-const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
+const FilterBottomSheet = ({
 	isVisible,
 	selectedTeam,
 	selectedDate,
@@ -37,7 +37,7 @@ const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
 	onClose,
 	onTeamSelect,
 	onDateSelect,
-}) => {
+}: FilterBottomSheetProps) => {
 	const [localMonth, setLocalMonth] = useState(currentMonth);
 
 	const handlePrevMonth = () => {

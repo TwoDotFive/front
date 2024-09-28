@@ -12,11 +12,11 @@ interface MatchSelectBottomSheetProps {
 	onMatchSelect: (code: number[]) => void;
 }
 
-const MatchSelectBottomSheet: React.FC<MatchSelectBottomSheetProps> = ({
+const MatchSelectBottomSheet = ({
 	isVisible,
 	onClose,
 	onMatchSelect,
-}) => {
+}: MatchSelectBottomSheetProps) => {
 	const games = [
 		{
 			id: 1,

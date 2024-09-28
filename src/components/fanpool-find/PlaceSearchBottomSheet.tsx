@@ -10,11 +10,11 @@ interface PlaceSearchBottomSheetProps {
 	onSelectPlace: (place: { name: string; id: string }) => void;
 }
 
-export const PlaceSearchBottomSheet: React.FC<PlaceSearchBottomSheetProps> = ({
+export const PlaceSearchBottomSheet = ({
 	isVisible,
 	onClose,
 	onSelectPlace,
-}) => {
+}: PlaceSearchBottomSheetProps) => {
 	useKakaoLoader();
 
 	const [query, setQuery] = useState('');

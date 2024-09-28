@@ -13,9 +13,7 @@ interface FanpoolDetailProps {
 	fanpoolInformation: FanpoolInformation;
 }
 
-const FanpoolDetail: React.FC<FanpoolDetailProps> = ({
-	fanpoolInformation,
-}) => {
+const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 	useKakaoLoader();
 	const { x, y } = fanpoolInformation.departFrom;
 

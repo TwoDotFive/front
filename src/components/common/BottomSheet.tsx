@@ -1,19 +1,17 @@
-"use client";
-import React, { useEffect } from "react";
-import { Text } from "@/components/common/Text";
-import { IconClose } from "@/public/icons";
+'use client';
+import React, { useEffect } from 'react';
 
 interface BottomSheetProps {
-  isVisible: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
+	isVisible: boolean;
+	onClose: () => void;
+	children: React.ReactNode;
 }
 
-export const BottomSheet: React.FC<BottomSheetProps> = ({
-  isVisible,
-  onClose,
-  children,
-}) => {
+export const BottomSheet = ({
+	isVisible,
+	onClose,
+	children,
+}: BottomSheetProps) => {
 	const bottomSheetClasses = isVisible
 		? 'translate-y-0 -translate-x-1/2'
 		: 'translate-y-full -translate-x-1/2';
@@ -21,28 +19,28 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
 		? 'opacity-50 pointer-events-auto'
 		: 'opacity-0 pointer-events-none';
 
-  useEffect(() => {
-    const scrollContentsElement = document.querySelector(".scroll-contents");
+	useEffect(() => {
+		const scrollContentsElement = document.querySelector('.scroll-contents');
 
-    if (isVisible) {
-      document.body.style.overflow = "hidden";
-      if (scrollContentsElement) {
-        scrollContentsElement.classList.remove("scroll-contents");
-      }
-    } else {
-      document.body.style.overflow = "";
-      if (scrollContentsElement) {
-        scrollContentsElement.classList.add("scroll-contents");
-      }
-    }
+		if (isVisible) {
+			document.body.style.overflow = 'hidden';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.remove('scroll-contents');
+			}
+		} else {
+			document.body.style.overflow = '';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.add('scroll-contents');
+			}
+		}
 
-    return () => {
-      document.body.style.overflow = "";
-      if (scrollContentsElement) {
-        scrollContentsElement.classList.add("scroll-contents");
-      }
-    };
-  }, [isVisible]);
+		return () => {
+			document.body.style.overflow = '';
+			if (scrollContentsElement) {
+				scrollContentsElement.classList.add('scroll-contents');
+			}
+		};
+	}, [isVisible]);
 
 	return (
 		<>

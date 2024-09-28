@@ -30,6 +30,7 @@ import {
   uploadImageToS3,
 } from "@/api/fanpool-log/create-log/step3";
 import { reverseStadiumMap, stadiumMap } from "@/constants/stadium";
+import { useModalStore } from "@/store/modalStore";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -91,6 +92,7 @@ export default function Page() {
   const updateSchedule = useFanpoologStore((state) => state.updateSchedule);
   const removeSchedule = useFanpoologStore((state) => state.removeSchedule);
   const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
+  const { openModal, closeModal } = useModalStore();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -187,9 +189,15 @@ export default function Page() {
     router.push("/fanpool-log/create-log/step2");
   };
 
+  const openTitleErrorModal = () => {
+    openModal("error", {
+      confirmText: "로그 제목을 입력해주세요",
+    });
+  };
+
   const handleSubmit = async () => {
     if (!title.trim()) {
-      console.log("제목 입력 필요");
+      openTitleErrorModal();
     } else {
       // post 하기 전, 메모가 없는 것에는 memo:{content: "", images:[]} 를 추가
       const updatedSchedules = schedules.map((schedule) => {

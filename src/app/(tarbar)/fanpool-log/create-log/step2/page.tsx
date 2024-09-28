@@ -38,6 +38,7 @@ export default function Page() {
   const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<TourInfoList[]>([]);
   const [tourInfoList, setTourInfoList] = useState<TourInfoList[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const stadiumId = useFanpoologStore((state) => state.stadiumId);
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
@@ -66,6 +67,7 @@ export default function Page() {
       ).then((res) => {
         // TourInfoList 설정
         setTourInfoList(res);
+        setIsLoading(false);
       });
     }
   }, [selectedTagId]);
@@ -149,24 +151,30 @@ export default function Page() {
 
       {/* 장소 리스트 */}
       <div className="flex flex-col gap-12pxr mt-24pxr px-20pxr overflow-y-scroll flex-grow">
-        {tourInfoList.map((item, index) => (
-          <LocationInfoSearchCard
-            key={item.contentId}
-            image={
-              item.thumbnail === ""
-                ? "/images/empty_image_place.png"
-                : item.thumbnail
-            }
-            name={item.name}
-            location={item.address}
-            contentId={item.contentId}
-            contentType={item.contentType}
-            onClick={() => handleItemSelect(item)}
-            isSelected={selectedItems.some(
-              (selectedItem) => selectedItem.contentId === item.contentId
-            )}
-          />
-        ))}
+        {!isLoading && tourInfoList.length === 0 ? (
+          <div className="flex justify-center items-center h-full">
+            <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+          </div>
+        ) : (
+          tourInfoList.map((item) => (
+            <LocationInfoSearchCard
+              key={item.contentId}
+              image={
+                item.thumbnail === ""
+                  ? "/images/empty_image_place.png"
+                  : item.thumbnail
+              }
+              name={item.name}
+              location={item.address}
+              contentId={item.contentId}
+              contentType={item.contentType}
+              onClick={() => handleItemSelect(item)}
+              isSelected={selectedItems.some(
+                (selectedItem) => selectedItem.contentId === item.contentId
+              )}
+            />
+          ))
+        )}
       </div>
       <div className="mb-102pxr" />
       {/* 바텀 시트 */}

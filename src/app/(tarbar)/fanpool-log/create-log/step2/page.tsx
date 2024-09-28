@@ -8,125 +8,115 @@ import LocationInfoSearchCard from "@/components/card/LocationInfoSearchCard";
 import LocationDeleteButton from "@/components/common/button/LocationDeleteButton"; // Import LocationDeleteButton
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import useFanpoologStore from "@/store/fanpool-log/store";
+import {
+  getStadiumInfo,
+  getTourInfo,
+} from "@/api/fanpool-log/create-log/step2";
+
+interface TourInfoList {
+  name: string;
+  address: string;
+  thumbnail: string;
+  distance: number;
+  contentId: number;
+  contentType: string;
+  x: number;
+  y: number;
+}
 
 export default function Page() {
   const router = useRouter();
-  const tags = ["식당", "카페", "지역명소", "숙소", "쇼핑", "주차장"];
-
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [filteredItems, setFilteredItems] = useState<any[]>([]); // 필터링된 아이템
-  const [locationData, setLocationData] = useState<any[]>([]); // 더미 데이터 저장
-
-  // 더미 데이터
-  const dummyData = [
-    {
-      name: "피처캠프 신천점",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 25",
-      category: "식당",
-    },
-    {
-      name: "스타벅스 올림픽공원점",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 26",
-      category: "카페",
-    },
-    {
-      name: "올림픽공원",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 27",
-      category: "지역명소",
-    },
-    {
-      name: "올림픽파크텔",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 28",
-      category: "숙소",
-    },
-    {
-      name: "롯데월드몰",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 29",
-      category: "쇼핑",
-    },
-    {
-      name: "잠실종합운동장 주차장",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 30",
-      category: "주차장",
-    },
-    {
-      name: "피처캠프 신천점",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 25",
-      category: "식당",
-    },
-    {
-      name: "스타벅스 올림픽공원점",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 26",
-      category: "카페",
-    },
-    {
-      name: "올림픽공원",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 27",
-      category: "지역명소",
-    },
-    {
-      name: "올림픽파크텔",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 28",
-      category: "숙소",
-    },
-    {
-      name: "롯데월드몰",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 29",
-      category: "쇼핑",
-    },
-    {
-      name: "잠실종합운동장 주차장",
-      image: "/images/fanpool-log_ex.png",
-      location: "서울 송파구 올림픽로 30",
-      category: "주차장",
-    },
+  const tags = [
+    { id: "12", name: "관광지" },
+    { id: "14", name: "문화시설" },
+    { id: "32", name: "숙소" },
+    { id: "38", name: "쇼핑" },
+    { id: "39", name: "식당" },
   ];
 
-  useEffect(() => {
-    // 더미 데이터로 대체
-    setLocationData(dummyData);
-  }, []);
+  const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<TourInfoList[]>([]);
+  const [tourInfoList, setTourInfoList] = useState<TourInfoList[]>([]);
 
-  // 태그에 따라 아이템 필터링
+  const stadiumId = useFanpoologStore((state) => state.stadiumId);
+  const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
+  const schedules = useFanpoologStore((state) => state.schedules);
+
   useEffect(() => {
-    if (selectedTags.length === 0) {
-      setFilteredItems(locationData); // 태그가 선택되지 않았을 때 전체 표시
+    if (!stadiumPosition || !stadiumId) {
+      router.replace("/fanpool-log/create-log/step1");
     } else {
-      setFilteredItems(
-        locationData.filter((item) => selectedTags.includes(item.category))
-      );
+      if (schedules.length === 0) {
+        getStadiumInfo().then((res) => {
+          const stadium = res.data.stadiums.find(
+            (stadium: any) => stadium.id === stadiumId
+          );
+          if (stadium) setSelectedItems([stadium]);
+        });
+      } else {
+        setSelectedItems(schedules.map((schedule) => schedule.place));
+      }
+      // API 호출
+      getTourInfo(
+        stadiumPosition!.y.toString(),
+        stadiumPosition!.x.toString(),
+        selectedTagId,
+        1
+      ).then((res) => {
+        // TourInfoList 설정
+        setTourInfoList(res);
+      });
     }
-  }, [selectedTags, locationData]);
+  }, [selectedTagId]);
 
-  const handleTagSelect = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  useEffect(() => {
+    setSelectedItems(schedules.map((schedule) => schedule.place));
+  }, [schedules]);
+
+  const handleTagSelect = (selectedTagName: string) => {
+    const selectedTag = tags.find((tag) => tag.name === selectedTagName);
+    if (selectedTagId === selectedTag?.id) {
+      setSelectedTagId(null);
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      setSelectedTagId(selectedTag?.id || null);
     }
   };
 
-  const handleItemSelect = (item: string) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((i) => i !== item));
+  const handleItemSelect = (item: TourInfoList) => {
+    const isSelected = selectedItems.some(
+      (selectedItem) => selectedItem.contentId === item.contentId
+    );
+
+    if (isSelected) {
+      setSelectedItems(
+        selectedItems.filter(
+          (selectedItem) => selectedItem.contentId !== item.contentId
+        )
+      );
     } else {
       setSelectedItems([...selectedItems, item]);
     }
   };
 
   const handleNextPage = () => {
+    // 추후 경기장 정보도 추가해서 보내야함.
+    const schedules = selectedItems.map((item, index) => ({
+      place: {
+        name: item.name,
+        address: item.address,
+        thumbnail: item.thumbnail,
+        distance: item.distance,
+        contentId: item.contentId,
+        contentType: item.contentType,
+        x: item.x,
+        y: item.y,
+      },
+      day: 1,
+      sequence: index + 1,
+    }));
+
+    useFanpoologStore.setState({ schedules });
     router.push("/fanpool-log/create-log/step3");
   };
 
@@ -136,7 +126,7 @@ export default function Page() {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: "-100%", opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed flex flex-col h-screen w-full"
+      className="absolute flex flex-col h-screen w-full"
     >
       {/* 탭바 */}
       <div className="top-0 left-0 right-0 z-100 bg-white">
@@ -149,32 +139,47 @@ export default function Page() {
         </Text>
         {/* 태그 필터 */}
         <TagFilter
-          tags={tags}
-          selectedTags={selectedTags}
+          tags={tags.map((tag) => tag.name)}
+          selectedTags={[
+            tags.find((tag) => tag.id === selectedTagId)?.name || "",
+          ]}
           onTagSelect={handleTagSelect}
         />
       </div>
 
       {/* 장소 리스트 */}
       <div className="flex flex-col gap-12pxr mt-24pxr px-20pxr overflow-y-scroll flex-grow">
-        {filteredItems.map((item, index) => (
+        {tourInfoList.map((item, index) => (
           <LocationInfoSearchCard
-            key={index}
-            image={item.image} // 더미 데이터에 따른 이미지
-            name={item.name} // 더미 데이터에 따른 이름
-            location={item.location} // 더미 데이터에 따른 위치
-            onClick={() => handleItemSelect(item.name)} // 클릭 시 항목 선택
-            isSelected={selectedItems.includes(item.name)} // 선택 상태 반영
+            key={item.contentId}
+            image={
+              item.thumbnail === ""
+                ? "/images/empty_image_place.png"
+                : item.thumbnail
+            }
+            name={item.name}
+            location={item.address}
+            contentId={item.contentId}
+            contentType={item.contentType}
+            onClick={() => handleItemSelect(item)}
+            isSelected={selectedItems.some(
+              (selectedItem) => selectedItem.contentId === item.contentId
+            )}
           />
         ))}
       </div>
-
+      <div className="mb-102pxr" />
       {/* 바텀 시트 */}
       <div
         className={
-          "fixed w-full flex flex-col items-center justify-center gap-32pxr inset-x-0 bottom-0 bg-white rounded-t-20pxr p-20pxr pt-16pxr"
+          "max-w-399pxr fixed w-full flex flex-col items-center justify-center gap-32pxr inset-x-0 bottom-0 bg-white rounded-t-20pxr p-20pxr pt-16pxr"
         }
-        style={{ zIndex: 1000, boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)" }}
+        style={{
+          zIndex: 1000,
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          left: "50%",
+          transform: "translate(-50%)",
+        }}
       >
         {selectedItems.length > 0 ? (
           <>
@@ -182,9 +187,9 @@ export default function Page() {
               {selectedItems.map((item, index) => (
                 <LocationDeleteButton
                   key={index}
-                  image={"/images/fanpool-log_ex.png"} // 이미지 정보 전달
-                  name={item} // 이름 전달
-                  onClick={() => handleItemSelect(item)} // 클릭 시 선택 해제
+                  image={item.thumbnail}
+                  name={item.name}
+                  onClick={() => handleItemSelect(item)}
                 />
               ))}
             </div>

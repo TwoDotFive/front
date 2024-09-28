@@ -3,12 +3,17 @@ import React, { useEffect, useState } from "react";
 import { Text } from "@/components/common/Text";
 import BottomSheet from "@/components/common/BottomSheet";
 import { IconUpload, IconClose } from "@/public/icons";
+import { Memo } from "@/store/fanpool-log/store";
+import {
+  getPresignedUrl,
+  uploadImageToS3,
+} from "@/api/fanpool-log/create-log/step3";
 
 interface MemoBottomSheetProps {
   isVisible: boolean;
   onClose: () => void;
   isEditMode: boolean;
-  onSave: (content: string, images: string[]) => void; // 메모 저장 함수
+  onSave: (memo: Memo) => void; // 메모 저장 함수
   onDelete: () => void;
   initialMemo?: string;
   initialImages?: string[];
@@ -24,12 +29,13 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
   initialImages = [],
 }) => {
   const [memo, setMemo] = useState("");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   useEffect(() => {
     if (isEditMode && isVisible) {
       setMemo(initialMemo);
-      setImages(initialImages || []);
+      setImagePreviews(initialImages || []);
     }
   }, [isEditMode, isVisible, initialMemo, initialImages]);
 
@@ -39,19 +45,56 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const uploadedImages = Array.from(event.target.files).map((file) => {
+      const uploadedFiles = Array.from(event.target.files);
+      const newImagePreviews = uploadedFiles.map((file) => {
         return URL.createObjectURL(file);
       });
-      setImages((prevImages) => [...prevImages, ...uploadedImages].slice(0, 4)); // 최대 4개의 이미지만 허용
+      setImages((prevImages) => [...prevImages, ...uploadedFiles].slice(0, 4));
+      setImagePreviews((prevImages) =>
+        [
+          ...prevImages.filter((img) => !newImagePreviews.includes(img)),
+          ...newImagePreviews,
+        ].slice(0, 4)
+      ); // 최대 4개의 이미지만 허용
     }
   };
 
   const handleImageRemove = (index: number) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImagePreviews((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
-  const handleMemoSave = () => {
-    onSave(memo, images); // 메모와 이미지를 상위로 전달
+  const handleMemoSave = async () => {
+    const uploadedImageUrls: { sequence: number; url: string }[] = [];
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+      if (image instanceof File) {
+        try {
+          const presignedUrl = await getPresignedUrl();
+          await uploadImageToS3(presignedUrl.data.toString(), image);
+          const imageUrl = presignedUrl.data.toString().split("?")[0];
+          uploadedImageUrls.push({
+            sequence: uploadedImageUrls.length + 1,
+            url: imageUrl,
+          });
+        } catch (error) {
+          console.error("이미지 업로드에 실패했습니다.", error);
+        }
+      }
+    }
+    imagePreviews.forEach((preview, index) => {
+      // preview가 blob URL인 경우 push하지 않음
+      if (!preview.startsWith("blob")) {
+        uploadedImageUrls.push({
+          sequence: uploadedImageUrls.length + 1,
+          url: preview,
+        });
+      }
+    });
+    onSave({
+      content: memo,
+      images: uploadedImageUrls,
+    });
     onClose();
   };
 
@@ -86,7 +129,7 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
 
         {/* 이미지 추가 */}
         <div className="flex flex-wrap items-center gap-12pxr">
-          {images.map((image, index) => (
+          {imagePreviews.map((preview, index) => (
             <div key={index} className="relative w-60pxr h-60pxr">
               <button
                 onClick={() => handleImageRemove(index)}
@@ -96,13 +139,13 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
               </button>
               <img
                 className="w-full h-full object-cover rounded-lg"
-                src={image}
+                src={preview}
                 alt={`추가된 이미지 ${index}`}
               />
             </div>
           ))}
-          {images.length < 4 && (
-            <label className="w-60pxr h-60pxr rounded-lg border-2 border-dashed border-gray300 flex items-center justify-center cursor-pointer">
+          {imagePreviews.length < 4 && (
+            <label className="w-70pxr h-70pxr rounded-4pxr border-1 bg-gray050 border-gray050 flex items-center justify-center cursor-pointer">
               <input
                 type="file"
                 accept="image/*"

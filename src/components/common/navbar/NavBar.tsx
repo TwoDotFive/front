@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export default function NavBar() {
 	const pathname = usePathname();
 
-	if (/^\/fanpool-log\/create-log\/step[1-3]/.test(pathname)) return null;
+	if(/^\/fanpool-log\/create-log\/step[1-3]/.test(pathname)) return null;
 
 	return (
 		<div

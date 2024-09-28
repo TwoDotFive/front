@@ -10,7 +10,7 @@ type TravelLogAddCardProps = {
   location: string;
   description: string;
   userId: string; // 수정 필요
-  locationImage: string[];
+  locationImage?: string[];
   onClick: () => void;
   onRemove?: () => void;
   isEditing: boolean;
@@ -29,7 +29,7 @@ export default function TravelogAddCard({
 }: TravelLogAddCardProps) {
   // locationImage의 length에 따라 이미지를 보여주는 방식을 다르게 해야함
   // userId가 myUserId인 경우에만 메모 추가 버튼이 보여야함
-  const imgLength = locationImage.length;
+  const imgLength = locationImage?.length || 0;
 
   const getImageContainerClasses = () => {
     return classNames("flex", "gap-8pxr", {
@@ -54,14 +54,15 @@ export default function TravelogAddCard({
             {description}
           </Text>
           <div className={getImageContainerClasses()}>
-            {locationImage.map((imgSrc, index) => (
-              <img
-                key={index}
-                src={imgSrc}
-                className="rounded-4pxr w-full h-full"
-                alt={`location-${index}`}
-              />
-            ))}
+            {locationImage &&
+              locationImage.map((imgSrc, index) => (
+                <img
+                  key={index}
+                  src={imgSrc}
+                  className="rounded-4pxr w-full h-full"
+                  alt={`location-${index}`}
+                />
+              ))}
           </div>
           {userId === "myUserId" && !isEditing && (
             <Button

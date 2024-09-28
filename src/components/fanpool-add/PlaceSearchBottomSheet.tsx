@@ -32,16 +32,15 @@ export const PlaceSearchBottomSheet = ({
 		});
 	};
 
-	// query가 변경될 때마다 검색 실행
 	useEffect(() => {
 		if (query.trim()) {
 			const debounce = setTimeout(() => {
 				searchPlaces();
-			}, 300); // 300ms 딜레이를 추가하여 입력 중 검색을 방지
+			}, 300);
 
-			return () => clearTimeout(debounce); // clean up
+			return () => clearTimeout(debounce);
 		} else {
-			setPlaces([]); // query가 없을 때 결과 초기화
+			setPlaces([]);
 		}
 	}, [query]);
 
@@ -72,10 +71,13 @@ export const PlaceSearchBottomSheet = ({
 								<div
 									key={index}
 									onClick={() => handleSelectPlace(place)}
-									className="cursor-pointer py-4pxr underline"
+									className="cursor-pointer py-4pxr"
 								>
-									<Text fontSize={16} fontWeight={500}>
+									<Text fontSize={14} fontWeight={700} color="gray700">
 										{place.place_name}
+									</Text>
+									<Text fontSize={14} fontWeight={400} color="gray700">
+										{place.road_address_name}
 									</Text>
 								</div>
 							))}

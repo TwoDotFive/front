@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import { FanpoolSubmitButton } from './FanpoolSubmitButton';
 import { Text } from '../common/Text';
@@ -28,6 +28,7 @@ export default function FanpoolAddForm() {
 		setValue,
 		control,
 		formState: { errors },
+		watch,
 	} = useForm<FanpoolFormData>({
 		defaultValues: {
 			fanpoolType: null,
@@ -51,18 +52,46 @@ export default function FanpoolAddForm() {
 		y: string;
 	} | null>(null);
 
-	const fanpoolType = useWatch({
-		control,
-		name: 'fanpoolType',
-	});
+	const fanpoolType = useWatch({ control, name: 'fanpoolType' });
+	const collectCount = useWatch({ control, name: 'collectCount' });
+	const title = useWatch({ control, name: 'title' });
+	const hour = useWatch({ control, name: 'hour' });
+	const minute = useWatch({ control, name: 'minute' });
+	const datePeriod = useWatch({ control, name: 'datePeriod' });
+	const passengerCondition = useWatch({ control, name: 'passengerCondition' });
 
-	const collectCount = useWatch({
-		control,
-		name: 'collectCount',
-	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const checkIsSubmitting = () => {
+		if (
+			fanpoolType &&
+			hour &&
+			minute !== null &&
+			collectCount > 0 &&
+			passengerCondition &&
+			selectedPlace &&
+			title
+		) {
+			setIsSubmitting(true);
+		} else {
+			setIsSubmitting(false);
+		}
+	};
+
+	useEffect(() => {
+		checkIsSubmitting();
+	}, [
+		fanpoolType,
+		hour,
+		minute,
+		collectCount,
+		passengerCondition,
+		selectedPlace,
+		title,
+	]);
 
 	const onSubmit: SubmitHandler<FanpoolFormData> = (data) => {
-		console.log('데이터 : ', data);
+		console.log('입력 데이터: ', { ...data, selectedPlace });
 	};
 
 	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
@@ -307,7 +336,6 @@ export default function FanpoolAddForm() {
 						className="w-full h-full p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm"
 					/>
 				</div>
-
 				<div className="flex flex-col gap-8pxr">
 					<Text fontSize={18} fontWeight={700} color="gray700">
 						하고싶은 말
@@ -326,9 +354,8 @@ export default function FanpoolAddForm() {
 						className="w-full h-100pxr p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm resize-none"
 					/>
 				</div>
-
 				<div className="h-80pxr" />
-				<FanpoolSubmitButton isSubmitting={false} />
+				<FanpoolSubmitButton isSubmitting={isSubmitting} />
 			</form>
 
 			<FanpoolMatchBottomSheet

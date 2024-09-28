@@ -9,6 +9,8 @@ import Button from '../common/Button';
 import useKakaoLoader from './useKakaoLoader';
 import { Map } from 'react-kakao-maps-sdk';
 import { IconGPS } from '@/public/icons';
+import getAddress from '@/api/geo/getAddress';
+import postUserLocation from '@/api/user/postUserLocation';
 
 interface RegisterThirdProps {
 	register: UseFormRegister<any>;
@@ -33,13 +35,18 @@ export const RegisterThird = ({
 	const [isGeolocationEnabled, setIsGeolocationEnabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 
-	const getAddressFromCoords = (lat: number, lng: number) => {
+	const getAddressFromCoords = async (lat: number, lng: number) => {
 		const geocoder = new window.kakao.maps.services.Geocoder();
 		const coord = new window.kakao.maps.LatLng(lat, lng);
 
+		// getAddress API 호출
+		const response = await getAddress(lng, lat);
+		console.log('Address API Response:', response);
+
+		// 카카오 지도 API를 사용한 추가 처리
 		geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
 			if (status === window.kakao.maps.services.Status.OK) {
-				console.log(result[0]);
+				console.log('Kakao API Address:', result[0]);
 				setAddress(
 					result[0].address.region_1depth_name +
 						' ' +
@@ -85,6 +92,28 @@ export const RegisterThird = ({
 
 		setMapCenter({ lat, lng });
 		getAddressFromCoords(lat, lng);
+	};
+
+	const handleSubmitLocation = async () => {
+		try {
+			// 위도와 경도를 기반으로 주소 정보를 받아옴
+			const response = await getAddress(mapCenter.lng, mapCenter.lat);
+
+			// 받은 주소 정보에 대표 위치 설정 추가
+			const locationData = {
+				...response,
+				representative: true, // 대표 위치 설정
+			};
+
+			// 사용자 위치 정보를 서버로 전송
+			await postUserLocation(locationData);
+
+			// 성공 시 handleNext 호출
+			handleNext();
+		} catch (error) {
+			console.error('Error submitting location:', error);
+			alert('위치 정보를 저장하는 데 실패했습니다.');
+		}
 	};
 
 	return (
@@ -167,7 +196,7 @@ export const RegisterThird = ({
 					enabledBackgroundColor={'bg-primary'}
 					disabledTextColor={'text-gray300'}
 					disabledBackgroundColor={'bg-gray100'}
-					onClick={handleNext}
+					onClick={handleSubmitLocation} // 다음 버튼 클릭 시 위치 제출
 				/>
 			</div>
 		</section>

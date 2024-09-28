@@ -8,6 +8,9 @@ import { Text } from '../common/Text';
 import Button from '../common/Button';
 import { teams } from '@/constants/teams';
 import SelectTeamButton from '../common/button/SelectTeamButton';
+import getTeams from '@/api/baseball/getTeams';
+import { useUserStore } from '@/store/useUserStore';
+import patchUserProfile from '@/api/user/patchUserProfile';
 
 interface RegisterSecondProps {
 	register: UseFormRegister<any>;
@@ -21,10 +24,72 @@ export const RegisterSecond = ({
 	handleNext,
 	getValues,
 }: RegisterSecondProps) => {
-	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+	const { userProfile, setUserProfile } = useUserStore();
+	const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
 
-	const handleTeamSelect = (code: string) => {
-		setSelectedTeam(code);
+	// API에서 팀 데이터를 가져옴
+	useEffect(() => {
+		const fetchTeams = async () => {
+			try {
+				const response = await getTeams();
+				const mappedTeams = response.map((team) => {
+					const matchedTeam = teams.find(
+						(localTeam) => localTeam.id === team.id
+					);
+					return {
+						id: team.id,
+						code: matchedTeam ? matchedTeam.code : '',
+						name: team.name,
+						stadiumAliasName: team.stadiumAliasName,
+						stadiumName: team.stadiumName,
+						representativeImageUrl: team.representativeImageUrl,
+					};
+				});
+				setApiTeams(mappedTeams);
+			} catch (error) {
+				console.error('Error fetching teams:', error);
+			}
+		};
+
+		fetchTeams();
+	}, []);
+	const handleTeamSelect = (id: number) => {
+		setSelectedTeam(id);
+	};
+
+	// 선택한 팀 정보 저장 및 API 요청
+	const handleSelect = async () => {
+		const selectedTeamData = apiTeams.find(
+			(team) => team.code === selectedTeam?.toString()
+		);
+
+		if (selectedTeamData && userProfile) {
+			const updatedFavoriteTeam = {
+				id: selectedTeamData.id,
+				name: selectedTeamData.name,
+				stadiumAliasName: selectedTeamData.stadiumAliasName,
+				stadiumName: selectedTeamData.stadiumName,
+				representativeImageUrl: selectedTeamData.representativeImageUrl!,
+			};
+
+			// userProfile 업데이트
+			const updatedUserProfile = {
+				...userProfile,
+				favoriteTeam: updatedFavoriteTeam,
+			};
+
+			// 서버로 업데이트된 프로필 정보 전송
+			try {
+				const response = await patchUserProfile(updatedUserProfile);
+				console.log(response);
+				console.log('Favorite team updated successfully');
+				setUserProfile(updatedUserProfile);
+				handleNext();
+			} catch (error) {
+				console.error('Failed to update favorite team:', error);
+			}
+		}
 	};
 	return (
 		<section className="mt-16pxr px-20pxr">
@@ -53,8 +118,8 @@ export const RegisterSecond = ({
 						<div key={team.code} className="mb-8pxr">
 							<SelectTeamButton
 								code={team.code}
-								isSelected={selectedTeam === team.code}
-								onClick={() => handleTeamSelect(team.code)}
+								isSelected={selectedTeam === team.id}
+								onClick={() => handleTeamSelect(team.id)}
 							/>
 						</div>
 					))}
@@ -62,8 +127,8 @@ export const RegisterSecond = ({
 					<div key="none" className="mb-8pxr">
 						<SelectTeamButton
 							code=""
-							isSelected={selectedTeam === ''}
-							onClick={() => handleTeamSelect('')}
+							isSelected={selectedTeam === 0}
+							onClick={() => handleTeamSelect(0)}
 						/>
 					</div>
 				</div>
@@ -80,7 +145,7 @@ export const RegisterSecond = ({
 					enabledBackgroundColor={'bg-primary'}
 					disabledTextColor={'text-gray300'}
 					disabledBackgroundColor={'bg-gray100'}
-					onClick={handleNext}
+					onClick={handleSelect}
 				/>
 			</div>
 		</section>

@@ -85,7 +85,10 @@ export default function FanpoolAddForm() {
 	};
 
 	return (
-		<>
+		<section
+			className="overflow-y-scroll"
+			style={{ height: 'calc(100vh - 49px)' }}
+		>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-40pxr px-20pxr pt-17pxr"
@@ -293,6 +296,6 @@ export default function FanpoolAddForm() {
 				onClose={closeBottomSheet}
 				onSelectPlace={handlePlaceSelect}
 			/>
-		</>
+		</section>
 	);
 }

@@ -12,6 +12,7 @@ export interface Game {
 	homeTeam: Team;
 	startDate: string;
 	stadium: string;
+	state?: string;
 }
 
 export interface Location {

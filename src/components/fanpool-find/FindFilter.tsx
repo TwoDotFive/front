@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { format, isToday } from 'date-fns';
+import { format } from 'date-fns';
 import { Text } from '../common/Text';
-import { IconCheckNavy, IconFilter } from '@/public/icons';
+import { IconCheckNavy, IconDefaultPin, IconFilter } from '@/public/icons';
 import FilterBottomSheet from './FilterBottomSheet';
 import { teams } from '@/constants/teams';
-import InputWithIcon from '../common/input/InputWithIcon';
 import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
 import MatchSelectBottomSheet from './MatchSelectBottomSheet';
+import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 
 export default function FindFilter() {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
@@ -19,21 +19,54 @@ export default function FindFilter() {
 		useState(false);
 	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 
-	const [inputValue, setInputValue] = useState<string>('');
+	const [bottomSheet, setBottomSheet] = useState<{
+		visible: boolean;
+		type: 'date' | 'match' | 'place' | null;
+	}>({
+		visible: false,
+		type: null,
+	});
+
+	const [selectedPlace, setSelectedPlace] = useState<{
+		name: string;
+		x: string;
+		y: string;
+	} | null>(null);
+
 	const toggleBottomSheet = () => {
 		setIsBottomSheetVisible(!isBottomSheetVisible);
 	};
+
 	const toggleMatchBottomSheet = () => {
 		setIsMatchSelectBottomSheetVisible(!isMatchSelectBottomSheetVisible);
 	};
 
 	const handleTeamSelect = (code: string) => {
 		setSelectedTeam(code);
-	};
-	const handleMatchSelect = (code: number) => {
-		setSelectedMatch(0);
+		const teamName =
+			teams.find((team) => team.code === code)?.name || 'Unknown Team';
 	};
 
+	const handleMatchSelect = (matchId: number) => {
+		setSelectedMatch(matchId);
+	};
+
+	const handleDateSelect = (date: Date) => {
+		setSelectedDate(date);
+	};
+
+	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
+		setBottomSheet({ visible: true, type });
+	};
+
+	const closeBottomSheet = () => {
+		setBottomSheet({ visible: false, type: null });
+	};
+
+	const handlePlaceSelect = (place: { name: string; x: string; y: string }) => {
+		setSelectedPlace(place);
+		closeBottomSheet();
+	};
 	const formatDate = (date: Date) => {
 		return format(date, 'yy.MM.dd');
 	};
@@ -84,11 +117,17 @@ export default function FindFilter() {
 			<div onClick={toggleMatchBottomSheet}>
 				<FanpoolMatchSelectButton matchCount={13} />
 			</div>
-			<InputWithIcon
-				placeholder="여기 근처에서 출발!"
-				value={inputValue}
-				onChange={() => {}}
-			/>
+			<div
+				className="relative w-full h-40pxr cursor-pointer"
+				onClick={() => openBottomSheet('place')}
+			>
+				<IconDefaultPin className="absolute left-8pxr top-1/2 transform -translate-y-1/2" />
+				<div className="w-full h-full pl-40pxr pr-8pxr py-8pxr rounded-8pxr bg-gray050">
+					<Text fontSize={14} color="gray500">
+						{selectedPlace ? selectedPlace.name : '위치를 입력해주세요'}
+					</Text>
+				</div>
+			</div>
 			<div className="h-8pxr" />
 			<div className="flex justify-between">
 				<Text fontSize={12} fontWeight={500} color="gray400">
@@ -113,7 +152,12 @@ export default function FindFilter() {
 				currentMonth={selectedDate}
 				onClose={toggleBottomSheet}
 				onTeamSelect={handleTeamSelect}
-				onDateSelect={setSelectedDate}
+				onDateSelect={handleDateSelect}
+			/>
+			<PlaceSearchBottomSheet
+				isVisible={bottomSheet.visible && bottomSheet.type === 'place'}
+				onClose={closeBottomSheet}
+				onSelectPlace={handlePlaceSelect}
 			/>
 		</div>
 	);

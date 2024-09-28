@@ -35,6 +35,7 @@ import IconLink from "./icon_link.svg";
 import IconBookMark from "./icon_bookmark.svg";
 import IconBookMarkSelected from "./icon_bookmark_selected.svg";
 import IconTrashCan from "./icon_trash_can.svg";
+import IconBookMarkWhite from "./icon_bookmark_white.svg";
 
 export {
   IconCalender,
@@ -74,4 +75,5 @@ export {
   IconBookMark,
   IconBookMarkSelected,
   IconTrashCan,
+  IconBookMarkWhite,
 };

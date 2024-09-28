@@ -3,7 +3,7 @@ import Profile from '@/components/profile/Profile';
 import ProfileTabMenu from '@/components/profile/ProfileTabMenu';
 import ProfileTapbar from '@/components/profile/ProfileTapBar';
 
-export default function ProfilePage({ params }: { params?: { id?: string } }) {
+export default function ProfilePage() {
 	return (
 		<section>
 			<ProfileTapbar />

@@ -4,16 +4,18 @@ import { Text } from '../common/Text';
 import MakeFanpoolButton from '../common/button/MakeFanpoolButton';
 import MakeFanpoolLogButton from '../common/button/MakeFanpoolLogButton';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/useUserStore';
 
 interface ProfileTabMenuProps {
-	fanpoolCount?: number;
-	logCount?: number;
+	id?: string;
 }
 
-export default function ProfileTabMenu({
-	fanpoolCount = 0,
-	logCount = 0,
-}: ProfileTabMenuProps) {
+export default function ProfileTabMenu({ id }: ProfileTabMenuProps) {
+	const { userProfile } = useUserStore();
+	const searchId = id || userProfile?.id;
+	const fanpoolCount = 0;
+	console.log(searchId);
+	const logCount = 0;
 	const router = useRouter();
 	const [activeTab, setActiveTab] = useState<'tab1' | 'tab2'>('tab1');
 

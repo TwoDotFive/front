@@ -10,9 +10,9 @@ export default function ProfilePage({ params }: { params?: { id?: string } }) {
 		<section>
 			<ProfileTapbar />
 			<div className="px-20pxr">
-				<Profile /> {/* profileId로 해당 프로필 정보 전달 */}
+				<Profile />
 				<div className="h-30pxr" />
-				<ProfileTabMenu />
+				<ProfileTabMenu id={params?.id} />
 			</div>
 		</section>
 	);

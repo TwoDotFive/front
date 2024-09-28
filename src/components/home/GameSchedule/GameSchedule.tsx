@@ -1,13 +1,20 @@
 'use client';
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { format, addDays, subDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { Text } from '../../common/Text';
 import GameCard from './GameCard';
 import FanpoolButton from '../FanpoolButton';
+import { useUserStore } from '@/store/useUserStore';
+import getGame from '@/api/baseball/getGames';
+import { Game } from '@/types/types';
+import getFanpoolLatest from '@/api/fanpool/getFanpoolLastest';
 
 export default function GameSchedule() {
+	const { userProfile } = useUserStore();
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+	const [games, setGames] = useState<Game[]>(); // 경기 데이터를 저장할 상태
 
 	const dates = Array.from({ length: 7 }, (_, i) =>
 		addDays(subDays(new Date(), 1), i)
@@ -16,6 +23,22 @@ export default function GameSchedule() {
 	const handleDateClick = (date: Date) => {
 		setSelectedDate(date);
 	};
+
+	// userProfile.favoriteTeam.id로 API 호출
+	useEffect(() => {
+		const fetchGames = async () => {
+			if (userProfile?.favoriteTeam?.id) {
+				try {
+					const response = await getFanpoolLatest();
+					console.log('Fetched games:', response); // 경기 정보 출력
+				} catch (error) {
+					console.error('Error fetching games:', error);
+				}
+			}
+		};
+
+		fetchGames();
+	}, [userProfile]);
 
 	return (
 		<section className="w-full">

@@ -1,7 +1,7 @@
 'use client';
 import { useUserStore } from '@/store/useUserStore';
 import { Text } from '../common/Text';
-import { IconLeftArrow, IconPencilWhite } from '@/public/icons';
+import { IconDelete, IconLeftArrow, IconPencilWhite } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -9,11 +9,17 @@ import { useForm } from 'react-hook-form';
 import getUserLocation from '@/api/user/getUserLocation';
 import SelectTeamButton from '../common/button/SelectTeamButton';
 import Button from '../common/Button';
+import { Location } from '@/types/types';
 
 interface ProfileFormData {
 	nickname: string;
 	oneLiner: string;
 	location: string[];
+}
+interface LocationData {
+	id: number;
+	representative: boolean;
+	addressInformation: Location;
 }
 
 export default function ProfileEdit() {
@@ -22,9 +28,9 @@ export default function ProfileEdit() {
 	const [imgSrc, setImgSrc] = useState(
 		userProfile?.profileImageUrl || '/images/image_profile_default.png'
 	);
-	const [locations, setLocations] = useState<string[]>([]); // 사용자의 동네 정보를 저장할 상태
+	const [locations, setLocations] = useState<LocationData[]>([]); // 사용자의 동네 정보를 저장할 상태
 	const [locationError, setLocationError] = useState(false); // 장소 인증 에러 상태 관리
-
+	console.log(userProfile);
 	const handleBack = () => {
 		router.back();
 	};
@@ -33,7 +39,6 @@ export default function ProfileEdit() {
 		setImgSrc('/images/image_profile_default.png');
 	};
 
-	// React Hook Form을 사용하여 폼 관리
 	const {
 		register,
 		handleSubmit,
@@ -44,11 +49,14 @@ export default function ProfileEdit() {
 		defaultValues: {
 			nickname: userProfile?.nickname || '',
 			oneLiner: userProfile?.oneLiner || '',
-			location: [],
 		},
 	});
-
-	// 사용자 동네 정보를 API로 불러오기
+	useEffect(() => {
+		if (userProfile) {
+			setValue('nickname', userProfile.nickname);
+			setValue('oneLiner', userProfile.oneLiner);
+		}
+	}, [userProfile]);
 	useEffect(() => {
 		const fetchUserLocations = async () => {
 			try {
@@ -56,11 +64,41 @@ export default function ProfileEdit() {
 				const locationNames = locationResponse.authenticatedLocations.map(
 					(location) => location.addressInformation.dong
 				);
-				setLocations(locationNames);
-				setValue('location', locationNames);
+
+				setLocations(locationResponse.authenticatedLocations);
 				setLocationError(false);
 			} catch (error) {
 				setLocationError(true);
+				setLocations([
+					{
+						id: 1001,
+						representative: true,
+						addressInformation: {
+							fullText: '서울특별시 강남구 테헤란로 123',
+							zipNo: '06134',
+							sido: '서울특별시',
+							sigungu: '강남구',
+							dong: '역삼동',
+							dongCd: '11680101',
+							x: '127.028600',
+							y: '37.497942',
+						},
+					},
+					{
+						id: 1002,
+						representative: false,
+						addressInformation: {
+							fullText: '경기도 성남시 분당구 판교역로 240',
+							zipNo: '13529',
+							sido: '경기도',
+							sigungu: '성남시 분당구',
+							dong: '삼평동',
+							dongCd: '41220250',
+							x: '127.108690',
+							y: '37.402095',
+						},
+					},
+				]);
 				console.error('Failed to fetch user locations:', error);
 			}
 		};
@@ -68,7 +106,10 @@ export default function ProfileEdit() {
 		fetchUserLocations();
 	}, [setValue]);
 
-	// 폼 제출 시 호출되는 함수
+	const handleDeleteLocation = (location: LocationData, index: number) => {
+		// TODO: 동네 삭제
+	};
+
 	const onSubmit = (data: ProfileFormData) => {
 		console.log('Updated Data:', data);
 	};
@@ -121,7 +162,7 @@ export default function ProfileEdit() {
 							닉네임
 						</Text>
 						<input
-							{...register('nickname')} // nickname을 react-hook-form으로 관리
+							{...register('nickname')}
 							className="w-full h-full p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm"
 						/>
 					</div>
@@ -133,35 +174,71 @@ export default function ProfileEdit() {
 						<Text fontSize={18} fontWeight={700} color="gray700">
 							내 동네
 						</Text>
-						{locationError ? (
+						{locations.length === 1 && (
+							<div>
+								<Text fontSize={14} fontWeight={400} color="gray600">
+									{locations[0].addressInformation.dong}
+								</Text>
+								<Text
+									fontSize={14}
+									fontWeight={500}
+									color="kboBlue500"
+									className="cursor-pointer"
+									onClick={() => router.push('/profile/edit/dongne')}
+								>
+									동네 추가
+								</Text>
+							</div>
+						)}
+
+						{locations.length === 2 && (
+							<div className="flex gap-8pxr w-full">
+								{locations.map((location, index) => (
+									<div
+										className={`relative flex items-center justify-between w-full p-14pxr rounded-8pxr gap-10pxr ${
+											location.representative ? 'bg-kboBlue0' : 'bg-gray050'
+										}`}
+										key={index}
+									>
+										<div className="flex items-center gap-8pxr">
+											<Text
+												key={index}
+												fontSize={16}
+												fontWeight={500}
+												color="gray700"
+											>
+												{location.addressInformation.dong}
+											</Text>
+											{location.representative && (
+												<Text fontSize={14} fontWeight={700} color="kboBlue500">
+													대표
+												</Text>
+											)}
+										</div>
+										<div
+											className="cursor-pointer"
+											onClick={() => handleDeleteLocation(location, index)}
+										>
+											<IconDelete />
+										</div>
+									</div>
+								))}
+							</div>
+						)}
+
+						{locations.length === 0 && (
 							<Button
 								text="장소 등록하러 가기"
 								width="100%"
 								height="40px"
-								onClick={() => router.push('/profile/edit/dongne')}
+								onClick={(e) => {
+									e?.preventDefault();
+									router.push('/profile/edit/dongne');
+								}}
 								enabledBackgroundColor="bg-primary"
 								enabledTextColor="text-white"
 								borderRadius={8}
 							/>
-						) : (
-							<div>
-								{locations.length > 0 ? (
-									locations.map((location, index) => (
-										<Text
-											key={index}
-											fontSize={14}
-											fontWeight={400}
-											color="gray600"
-										>
-											{location}
-										</Text>
-									))
-								) : (
-									<Text fontSize={14} fontWeight={400} color="gray600">
-										등록된 동네가 없습니다.
-									</Text>
-								)}
-							</div>
 						)}
 						<Text fontSize={12} fontWeight={400} color="gray700">
 							클릭하여 대표 동네를 바꿀 수 있어요
@@ -176,7 +253,7 @@ export default function ProfileEdit() {
 							자기소개
 						</Text>
 						<textarea
-							{...register('oneLiner')} // oneLiner를 react-hook-form으로 관리
+							{...register('oneLiner')}
 							className="w-full h-100pxr p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm resize-none"
 						/>
 					</div>

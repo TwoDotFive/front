@@ -39,6 +39,7 @@ import IconBookMarkWhite from './icon_bookmark_white.svg';
 import IconUnChecked from './IconUnChecked.svg';
 import IconPencilWhite from './icon_pencil_white.svg';
 import IconFanpoolLog from './icon_fanpool_log.svg';
+import IconDelete from './icon_delete.svg';
 
 export {
 	IconCalender,
@@ -82,4 +83,5 @@ export {
 	IconUnChecked,
 	IconPencilWhite,
 	IconFanpoolLog,
+	IconDelete,
 };

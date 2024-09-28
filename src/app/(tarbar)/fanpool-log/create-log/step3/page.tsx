@@ -29,8 +29,9 @@ import {
   postFanoolLog,
   uploadImageToS3,
 } from "@/api/fanpool-log/create-log/step3";
-import { reverseStadiumMap, stadiumMap } from "@/constants/stadium";
+import { reverseStadiumMap } from "@/constants/stadium";
 import { useModalStore } from "@/store/modalStore";
+import ToastMessage from "@/components/common/ToastMessage";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -85,6 +86,7 @@ export default function Page() {
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState<
     number | null
   >(null); // 선택된 장소의 인덱스 (메모 추가할 때 사용)
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 
   const stadiumId = useFanpoologStore((state) => state.stadiumId);
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
@@ -92,7 +94,7 @@ export default function Page() {
   const updateSchedule = useFanpoologStore((state) => state.updateSchedule);
   const removeSchedule = useFanpoologStore((state) => state.removeSchedule);
   const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
-  const { openModal, closeModal } = useModalStore();
+  const { openModal } = useModalStore();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -230,16 +232,10 @@ export default function Page() {
             updatedSchedules
           );
           if (res.status === 200) {
-            // 전역 상태 모두 초기화 하고 페이지 이동
-            useFanpoologStore.setState({
-              title: "",
-              image: null,
-              stadiumId: null,
-              stadiumPosition: null,
-              schedules: [],
-              fanpoolLogId: null,
-            });
-            router.replace(`/fanpool-log/log/${fanpoolLogId}`);
+            setIsToastOpen(true);
+            setTimeout(() => {
+              router.replace(`/fanpool-log/log/${fanpoolLogId}`);
+            }, 2000);
           }
         } else {
           // 초기 생성
@@ -250,7 +246,11 @@ export default function Page() {
             updatedSchedules
           );
           if (res.status === 200) {
-            router.replace(`/fanpool-log/log/${res.data.id}`);
+            // 토스트 메시지가 사라지면 페이지 이동
+            setIsToastOpen(true);
+            setTimeout(() => {
+              router.replace(`/fanpool-log/log/${res.data.id}`);
+            }, 2000);
           }
         }
       } catch (e) {
@@ -566,6 +566,15 @@ export default function Page() {
         onClose={() => setIsDayBottomSheetVisible(false)}
         days={days}
         setDays={setDays}
+      />
+
+      {/* 토스트 메시지 */}
+      <ToastMessage
+        message="내가 쓴 로그가 업로드 되었어요!"
+        hasCheckBtn={true}
+        show={isToastOpen}
+        duration={2000}
+        onClose={() => setIsToastOpen(false)}
       />
     </div>
   );

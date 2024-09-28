@@ -2,40 +2,35 @@
 
 import { useEffect, useState } from "react";
 import TravelogCard from "../card/TravelogCard";
-import Button from "../common/Button";
 import { Text } from "../common/Text";
 import { getFanpoologList } from "@/api/fanpool-log/main";
+import { FanpoolLogList } from "@/types/types";
+import { getFanpoolLogAboutPlace } from "@/api/fanpool-log/place/main";
 
 type RecentFanpoolLogProps = {
   hasButton?: boolean;
+  contentId?: string;
+  contentType?: string;
 };
-
-interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  locations: string[];
-}
 
 export default function RecentFanpoolLog({
   hasButton = true,
+  contentId,
+  contentType,
 }: RecentFanpoolLogProps) {
   useEffect(() => {
-    const token = localStorage.getItem("userId");
-    if (!token) {
-      console.log("token is null");
+    if (hasButton) {
+      getFanpoologList().then((res) => {
+        if (res) {
+          const items = res.items;
+          setTravelLogData(items);
+        }
+      });
+    } else {
+      getFanpoolLogAboutPlace(contentId!, contentType!).then((res) => {
+        setTravelLogData(res.data.items);
+      });
     }
-    getFanpoologList(token!).then((res) => {
-      if (res) {
-        const items = res.items;
-        setTravelLogData(items);
-      }
-    });
   }, []);
 
   const [travelLogData, setTravelLogData] = useState<FanpoolLogList[]>([]);
@@ -51,7 +46,7 @@ export default function RecentFanpoolLog({
           이곳을 방문한 여행일정이에요
         </Text>
       )}
-      <div className="w-full flex gap-12pxr overflow-x-auto whitespace-nowrap py-20pxr">
+      <div className="w-full flex gap-12pxr overflow-x-auto whitespace-normal py-20pxr">
         {travelLogData.map((travelLog, index) => (
           <TravelogCard
             key={travelLog.id}
@@ -68,21 +63,6 @@ export default function RecentFanpoolLog({
           />
         ))}
       </div>
-      {hasButton && (
-        <div className="mx-auto">
-          <Button
-            width="320px"
-            height="50px"
-            text={"더보기"}
-            borderRadius={8}
-            enabledTextColor={"text-gray700"}
-            enabledBackgroundColor={"bg-gray100"}
-            disabledTextColor={"text-gray300"}
-            disabledBackgroundColor={"bg-primary"}
-            onClick={() => {}}
-          />
-        </div>
-      )}
     </section>
   );
 }

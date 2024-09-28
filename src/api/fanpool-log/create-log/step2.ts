@@ -13,8 +13,8 @@ export const getTourInfo = async (
   selectedTagId: string | null,
   pageNumber: number
 ) => {
-  const radius = "1000";
-  const pageSize = 10;
+  const radius = "2000";
+  const pageSize = 20;
 
   const response = await apiClient.get(
     `${process.env.NEXT_PUBLIC_API_URL}/tour/info`,

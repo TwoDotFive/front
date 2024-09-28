@@ -35,6 +35,7 @@ import IconLink from './icon_link.svg';
 import IconBookMark from './icon_bookmark.svg';
 import IconBookMarkSelected from './icon_bookmark_selected.svg';
 import IconTrashCan from './icon_trash_can.svg';
+import IconBookMarkWhite from './icon_bookmark_white.svg';
 import IconUnChecked from './IconUnChecked.svg';
 import IconPencilWhite from './icon_pencil_white.svg';
 import IconFanpoolLog from './icon_fanpool_log.svg';
@@ -77,6 +78,7 @@ export {
 	IconBookMark,
 	IconBookMarkSelected,
 	IconTrashCan,
+	IconBookMarkWhite,
 	IconUnChecked,
 	IconPencilWhite,
 	IconFanpoolLog,

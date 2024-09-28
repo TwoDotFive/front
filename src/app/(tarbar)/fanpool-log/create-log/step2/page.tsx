@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
 import Button from "@/components/common/Button";
@@ -38,6 +38,10 @@ export default function Page() {
   const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<TourInfoList[]>([]);
   const [tourInfoList, setTourInfoList] = useState<TourInfoList[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef<IntersectionObserver | null>(null);
 
   const stadiumId = useFanpoologStore((state) => state.stadiumId);
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
@@ -57,23 +61,48 @@ export default function Page() {
       } else {
         setSelectedItems(schedules.map((schedule) => schedule.place));
       }
-      // API 호출
-      getTourInfo(
-        stadiumPosition!.y.toString(),
-        stadiumPosition!.x.toString(),
-        selectedTagId,
-        1
-      ).then((res) => {
-        // TourInfoList 설정
-        setTourInfoList(res);
-      });
+      fetchTourInfo();
     }
-  }, [selectedTagId]);
+  }, [selectedTagId, page]);
+
+  const fetchTourInfo = async () => {
+    setIsLoading(true);
+    const res = await getTourInfo(
+      stadiumPosition!.y.toString(),
+      stadiumPosition!.x.toString(),
+      selectedTagId,
+      page
+    );
+    setTourInfoList((prev) => {
+      const newItems = res.filter(
+        (newItem: any) =>
+          !prev.some((prevItem) => prevItem.contentId === newItem.contentId)
+      );
+      return [...prev, ...newItems]; // 기존 데이터에 새로운 데이터만 추가
+    });
+    setHasMore(res.length > 0);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     setSelectedItems(schedules.map((schedule) => schedule.place));
   }, [schedules]);
 
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      console.log("lastElementRef");
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1); // 페이지 증가
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasMore]
+  );
   const handleTagSelect = (selectedTagName: string) => {
     const selectedTag = tags.find((tag) => tag.name === selectedTagName);
     if (selectedTagId === selectedTag?.id) {
@@ -81,6 +110,8 @@ export default function Page() {
     } else {
       setSelectedTagId(selectedTag?.id || null);
     }
+    setTourInfoList([]);
+    setPage(1);
   };
 
   const handleItemSelect = (item: TourInfoList) => {
@@ -100,23 +131,31 @@ export default function Page() {
   };
 
   const handleNextPage = () => {
-    // 추후 경기장 정보도 추가해서 보내야함.
-    const schedules = selectedItems.map((item, index) => ({
-      place: {
-        name: item.name,
-        address: item.address,
-        thumbnail: item.thumbnail,
-        distance: item.distance,
-        contentId: item.contentId,
-        contentType: item.contentType,
-        x: item.x,
-        y: item.y,
-      },
-      day: 1,
-      sequence: index + 1,
-    }));
+    const updatedSchedules = selectedItems.map((item, index) => {
+      // 이미 존재하는 스케줄을 찾음
+      const existingSchedule = schedules.find(
+        (schedule) => schedule.place.contentId === item.contentId
+      );
 
-    useFanpoologStore.setState({ schedules });
+      // 기존 스케줄이 존재하고 메모가 있으면 그 메모를 유지
+      return {
+        place: {
+          name: item.name,
+          address: item.address,
+          thumbnail: item.thumbnail,
+          distance: item.distance,
+          contentId: item.contentId,
+          contentType: item.contentType,
+          x: item.x,
+          y: item.y,
+        },
+        day: 1,
+        sequence: index + 1,
+        memo: existingSchedule?.memo || { content: "", images: [] }, // 기존 메모 유지 또는 기본값 설정
+      };
+    });
+
+    useFanpoologStore.setState({ schedules: updatedSchedules });
     router.push("/fanpool-log/create-log/step3");
   };
 
@@ -149,26 +188,33 @@ export default function Page() {
 
       {/* 장소 리스트 */}
       <div className="flex flex-col gap-12pxr mt-24pxr px-20pxr overflow-y-scroll flex-grow">
-        {tourInfoList.map((item, index) => (
-          <LocationInfoSearchCard
-            key={item.contentId}
-            image={
-              item.thumbnail === ""
-                ? "/images/empty_image_place.png"
-                : item.thumbnail
-            }
-            name={item.name}
-            location={item.address}
-            contentId={item.contentId}
-            contentType={item.contentType}
-            onClick={() => handleItemSelect(item)}
-            isSelected={selectedItems.some(
-              (selectedItem) => selectedItem.contentId === item.contentId
-            )}
-          />
-        ))}
+        {!isLoading && tourInfoList.length === 0 ? (
+          <div className="flex justify-center items-center h-full">
+            <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+          </div>
+        ) : (
+          tourInfoList.map((item, index) => (
+            <LocationInfoSearchCard
+              key={index}
+              image={
+                item.thumbnail === ""
+                  ? "/images/empty_image_place.png"
+                  : item.thumbnail
+              }
+              name={item.name}
+              location={item.address}
+              contentId={item.contentId}
+              contentType={item.contentType}
+              onClick={() => handleItemSelect(item)}
+              isSelected={selectedItems.some(
+                (selectedItem) => selectedItem.contentId === item.contentId
+              )}
+              ref={tourInfoList.length === index + 1 ? lastElementRef : null}
+            />
+          ))
+        )}
       </div>
-      <div className="mb-102pxr" />
+      <div className="mb-219pxr" />
       {/* 바텀 시트 */}
       <div
         className={

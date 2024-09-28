@@ -12,6 +12,7 @@ export interface Game {
   homeTeam: Team;
   startDate: string;
   stadium: string;
+  state?: string;
 }
 
 export interface Location {
@@ -27,12 +28,14 @@ export interface Location {
 
 export interface FanpoolInformation {
   id: number;
+  title: string;
   hostUserId: number;
   game: Game;
   departAt: string;
   departFrom: Location;
   fanpoolType: string;
   fanpoolTypeKor: string;
+  genderConstraint: string;
   numberOfPeople: number;
   currentNumberOfPeople: number;
 }

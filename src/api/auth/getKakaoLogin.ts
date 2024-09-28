@@ -1,13 +1,24 @@
 import apiClient from '..';
 
+interface getKakaoLoginResponse {
+	accessToken: string;
+	refreshToken: string;
+	userRole: string;
+}
+
 /**
- * 카카오 로그인을 처리하는 함수
+ * 카카오 로그인 후 토큰을 가져오는 함수
  *
- * @returns {Promise<any>} 카카오 로그인 응답
+ * @param {string} code 팬풀 ID
+ * @returns {Promise<getKakaoLoginResponse>} 해당 팬풀의 상세 정보 응답
  */
-const getKakaoLogin = async (): Promise<any> => {
-	const response = await apiClient.get('/auth/kakao/login');
+const getKakaoLoginToken = async (
+	code: string
+): Promise<getKakaoLoginResponse> => {
+	const response = await apiClient.get<getKakaoLoginResponse>(
+		`/kakao/login/redirect?code=${code}`
+	);
 	return response.data;
 };
 
-export default getKakaoLogin;
+export default getKakaoLoginToken;

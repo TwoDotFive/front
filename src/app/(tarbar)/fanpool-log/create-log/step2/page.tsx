@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
 import Button from "@/components/common/Button";
@@ -39,6 +39,9 @@ export default function Page() {
   const [selectedItems, setSelectedItems] = useState<TourInfoList[]>([]);
   const [tourInfoList, setTourInfoList] = useState<TourInfoList[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef<IntersectionObserver | null>(null);
 
   const stadiumId = useFanpoologStore((state) => state.stadiumId);
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
@@ -58,25 +61,48 @@ export default function Page() {
       } else {
         setSelectedItems(schedules.map((schedule) => schedule.place));
       }
-      // API 호출
-      getTourInfo(
-        stadiumPosition!.y.toString(),
-        stadiumPosition!.x.toString(),
-        selectedTagId,
-        1
-      ).then((res) => {
-        // TourInfoList 설정
-        setTourInfoList(res);
-        setIsLoading(false);
-      });
+      fetchTourInfo();
     }
-    console.log(schedules);
-  }, [selectedTagId]);
+  }, [selectedTagId, page]);
+
+  const fetchTourInfo = async () => {
+    setIsLoading(true);
+    const res = await getTourInfo(
+      stadiumPosition!.y.toString(),
+      stadiumPosition!.x.toString(),
+      selectedTagId,
+      page
+    );
+    setTourInfoList((prev) => {
+      const newItems = res.filter(
+        (newItem: any) =>
+          !prev.some((prevItem) => prevItem.contentId === newItem.contentId)
+      );
+      return [...prev, ...newItems]; // 기존 데이터에 새로운 데이터만 추가
+    });
+    setHasMore(res.length > 0);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     setSelectedItems(schedules.map((schedule) => schedule.place));
   }, [schedules]);
 
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      console.log("lastElementRef");
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1); // 페이지 증가
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasMore]
+  );
   const handleTagSelect = (selectedTagName: string) => {
     const selectedTag = tags.find((tag) => tag.name === selectedTagName);
     if (selectedTagId === selectedTag?.id) {
@@ -84,6 +110,8 @@ export default function Page() {
     } else {
       setSelectedTagId(selectedTag?.id || null);
     }
+    setTourInfoList([]);
+    setPage(1);
   };
 
   const handleItemSelect = (item: TourInfoList) => {
@@ -165,9 +193,9 @@ export default function Page() {
             <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
           </div>
         ) : (
-          tourInfoList.map((item) => (
+          tourInfoList.map((item, index) => (
             <LocationInfoSearchCard
-              key={item.contentId}
+              key={index}
               image={
                 item.thumbnail === ""
                   ? "/images/empty_image_place.png"
@@ -181,11 +209,12 @@ export default function Page() {
               isSelected={selectedItems.some(
                 (selectedItem) => selectedItem.contentId === item.contentId
               )}
+              ref={tourInfoList.length === index + 1 ? lastElementRef : null}
             />
           ))
         )}
       </div>
-      <div className="mb-102pxr" />
+      <div className="mb-219pxr" />
       {/* 바텀 시트 */}
       <div
         className={

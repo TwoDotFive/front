@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import { Text } from '../common/Text';
 import { useUserStore } from '@/store/useUserStore';
+import ProfileDongne from './ProfileDongne';
 
 export default function Profile() {
 	const { userProfile } = useUserStore();
@@ -23,18 +24,8 @@ export default function Profile() {
 					{userProfile?.nickname}
 				</Text>
 				<div className="h-2pxr" />
-				<div className="flex gap-4pxr">
-					<div className="px-10pxr py-4pxr rounded-44pxr bg-gray050">
-						<Text fontSize={14} fontWeight={400} color="gray400">
-							신촌동
-						</Text>
-					</div>
-					<div className="px-10pxr py-4pxr rounded-44pxr bg-gray050">
-						<Text fontSize={14} fontWeight={400} color="gray400">
-							방이동
-						</Text>
-					</div>
-				</div>
+
+				<ProfileDongne />
 				<div className="h-14pxr" />
 				<Text
 					fontSize={12}

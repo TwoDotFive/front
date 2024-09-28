@@ -90,7 +90,7 @@ export default function Page() {
             </button>
           </div>
           {/* 탭에 맞는 리스트 */}
-          <div className="flex flex-col items-start px-20pxr">
+          <div className="flex flex-col items-start px-20pxr gap-12pxr">
             {activeTab === "fanpool" ? renderFanpool() : renderFanpoolLogList()}
           </div>
         </>

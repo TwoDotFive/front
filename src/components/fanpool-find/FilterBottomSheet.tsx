@@ -21,11 +21,11 @@ import InfinityLine from '../common/InfinityLine';
 
 interface FilterBottomSheetProps {
 	isVisible: boolean;
-	selectedTeam: string;
+	selectedTeam: number;
 	selectedDate: Date;
 	currentMonth: Date;
 	onClose: () => void;
-	onTeamSelect: (code: string) => void;
+	onTeamSelect: (id: number) => void;
 	onDateSelect: (date: Date) => void;
 }
 
@@ -118,15 +118,15 @@ const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
 				<div className="flex flex-wrap gap-8pxr">
 					<SelectTeamNameButton
 						code=""
-						isSelected={selectedTeam === ''}
-						onClick={() => onTeamSelect('')}
+						isSelected={selectedTeam === 0}
+						onClick={() => onTeamSelect(0)}
 					/>
 					{teams.map((team) => (
 						<SelectTeamNameButton
 							key={team.code}
 							code={team.code}
-							isSelected={selectedTeam === team.code}
-							onClick={() => onTeamSelect(team.code)}
+							isSelected={selectedTeam === team.id}
+							onClick={() => onTeamSelect(team.id)}
 						/>
 					))}
 				</div>

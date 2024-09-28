@@ -4,14 +4,20 @@ import { teams } from '@/constants/teams';
 import Image from 'next/image';
 import { Text } from '../common/Text';
 import { IconHamburger, IconPerson } from '@/public/icons';
-import BottomSheet from './BottomSheet';
 import Drawer from './Drawer/Drawer';
+import SelectTeamBottomSheet from './SelectTeamBottomSheet';
+import { useUserStore } from '@/store/useUserStore';
+import { UserProfileResponse } from '@/types/types';
 
-interface TeamCodeProps {
-	teamCode?: string;
+interface TeamHeaderProps {
+	gameSchedule: { games: any[]; numberOfGame: number } | null;
+	userProfile: UserProfileResponse;
 }
 
-export default function TeamHeader({ teamCode }: TeamCodeProps) {
+export default function TeamHeader({
+	gameSchedule,
+	userProfile,
+}: TeamHeaderProps) {
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
@@ -19,12 +25,12 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 		setIsDrawerVisible(!isDrawerVisible);
 	};
 
-	const team = teams.find((team) => team.code === teamCode);
+	const team = teams.find((team) => team.id === userProfile?.favoriteTeam?.id);
 	const name = team ? team.name : '응원하는 팀이 <br /> 아직 없어요!';
 	const imageUrl = team
 		? `/images/${team.code}_bg.png`
 		: '/images/noteam_bg.png';
-	const count = team ? 2 : 0;
+	const count = gameSchedule ? gameSchedule.numberOfGame : 0; // gameSchedule에서 경기 수 가져오기
 
 	const handleButtonClick = () => {
 		setIsSheetOpen(true);
@@ -37,9 +43,6 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 	return (
 		<>
 			<section className="relative w-full">
-				{/**
-				 * Icon 영역
-				 */}
 				<section>
 					<div className="absolute top-55pxr left-20pxr cursor-pointer">
 						<IconHamburger onClick={toggleDrawer} />
@@ -48,9 +51,6 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 						<IconPerson />
 					</div>
 				</section>
-				{/**
-				 * Info 영역
-				 */}
 				<Image
 					src={imageUrl}
 					width={399}
@@ -79,9 +79,6 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 						<Text fontWeight={500} color="white" fontSize={24}>
 							{team ? `이번 주 경기 ${count}개` : ''}
 						</Text>
-						<Text fontWeight={500} color="white" fontSize={24}>
-							{team ? `이번 주 경기 ${count}개` : ''}
-						</Text>
 					</span>
 					<span>
 						<Text
@@ -97,9 +94,7 @@ export default function TeamHeader({ teamCode }: TeamCodeProps) {
 				</div>
 				<Drawer isVisible={isDrawerVisible} onClose={toggleDrawer} />
 			</section>
-			{isSheetOpen && (
-				<BottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
-			)}
+			<SelectTeamBottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
 		</>
 	);
 }

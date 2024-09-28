@@ -4,6 +4,7 @@ import IconLeftArrow from "./icon_left_arrow.svg";
 import IconRightArrow from "./icon_right_arrow.svg";
 import IconMoreMenu from "./icon_more_menu.svg";
 import IconPencil from "./icon_pencil.svg";
+import IconPencilGray from "./icon_pencil_gray.svg";
 import IconPlus from "./icon_plus.svg";
 import IconUpload from "./icon_upload.svg";
 import IconCheck from "./icon_check.svg";
@@ -22,6 +23,13 @@ import IconFavorite from "./icon_favorite.svg";
 import IconFilter from "./icon_filter.svg";
 import IconCheckNavy from "./icon_check_navy.svg";
 import IconChat from "./icon_chat.svg";
+import IconSplash from "./icon_splash.svg";
+import IconSplashEmpty from "./icon_splash_empty.svg";
+import IconKakao from "./icon_kakao.svg";
+import IconLeftArrowWhite from "./icon_left_arrow_white.svg";
+import IconBookmarkUnChecked from "./icon_bookmark_unchecked.svg";
+import IconBookmarkChecked from "./icon_bookmark_checked.svg";
+import IconCar from "./icon_car.svg";
 import IconShare from "./icon_share.svg";
 import IconLink from "./icon_link.svg";
 import IconBookMark from "./icon_bookmark.svg";
@@ -35,6 +43,7 @@ export {
   IconRightArrow,
   IconMoreMenu,
   IconPencil,
+	IconPencilGray,
   IconPlus,
   IconUpload,
   IconCheck,
@@ -53,6 +62,13 @@ export {
   IconFilter,
   IconCheckNavy,
   IconChat,
+ 	IconSplash,
+	IconSplashEmpty,
+	IconKakao,
+	IconLeftArrowWhite,
+	IconBookmarkUnChecked,
+	IconBookmarkChecked,
+	IconCar,
   IconShare,
   IconLink,
   IconBookMark,

@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import TravelogWideCard from "@/components/card/TravelogWideCard";
 import Button from "@/components/common/Button";
@@ -6,7 +7,7 @@ import { Text } from "@/components/common/Text";
 import HeaderBanner from "@/components/fanpool-log/HeaderBanner";
 import RecentFanpoolLog from "@/components/fanpool-log/RecentFanpoolLog";
 import { useRouter } from "next/navigation";
-import TagFilter from "@/components/fanpool-log/Create-log/TagFilter"; // TagFilter 컴포넌트 불러오기
+import TagFilter from "@/components/fanpool-log/Create-log/TagFilter";
 import { getFanpoologList } from "@/api/fanpool-log/main";
 
 // 지역 데이터

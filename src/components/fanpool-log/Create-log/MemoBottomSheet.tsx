@@ -8,7 +8,6 @@ import {
   getPresignedUrl,
   uploadImageToS3,
 } from "@/api/fanpool-log/create-log/step3";
-import { u } from "framer-motion/client";
 
 interface MemoBottomSheetProps {
   isVisible: boolean;
@@ -58,8 +57,6 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
         ].slice(0, 4)
       ); // 최대 4개의 이미지만 허용
     }
-    console.log(images);
-    console.log(imagePreviews);
   };
 
   const handleImageRemove = (index: number) => {
@@ -98,7 +95,6 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
       content: memo,
       images: uploadedImageUrls,
     });
-    console.log(uploadedImageUrls);
     onClose();
   };
 

@@ -110,7 +110,7 @@ export default function Page() {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-
+    
     if (!over) return; // 만약 over가 없으면 함수 종료
 
     const activeIndex = schedules.findIndex(

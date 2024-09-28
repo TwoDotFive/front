@@ -9,7 +9,7 @@ import SelectMatchButton from '../common/button/SelectMatchButton';
 interface MatchSelectBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onMatchSelect: (code: number) => void;
+	onMatchSelect: (code: number[]) => void;
 }
 
 const MatchSelectBottomSheet: React.FC<MatchSelectBottomSheetProps> = ({
@@ -190,7 +190,7 @@ const MatchSelectBottomSheet: React.FC<MatchSelectBottomSheetProps> = ({
 				? prevSelected.filter((matchId) => matchId !== id)
 				: [...prevSelected, id]
 		);
-		onMatchSelect(id);
+		onMatchSelect(selectedMatches);
 	};
 
 	return (
@@ -216,7 +216,7 @@ const MatchSelectBottomSheet: React.FC<MatchSelectBottomSheetProps> = ({
 			<div className="h-12pxr" />
 			<div
 				className="w-full py-11pxr px-14pxr bg-primary rounded-8pxr text-center cursor-pointer"
-				onClick={onClose}
+				onClick={() => onMatchSelect(selectedMatches)}
 			>
 				<Text fontSize={16} fontWeight={600} color="white">
 					{selectedMatches.length}개의 팬풀이 있어요

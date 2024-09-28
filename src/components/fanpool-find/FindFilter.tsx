@@ -1,42 +1,99 @@
 'use client';
-
-import { useState } from 'react';
-import { format, isToday } from 'date-fns';
+import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import { Text } from '../common/Text';
-import { IconCheckNavy, IconFilter } from '@/public/icons';
+import { IconCheckNavy, IconDefaultPin, IconFilter } from '@/public/icons';
 import FilterBottomSheet from './FilterBottomSheet';
 import { teams } from '@/constants/teams';
-import InputWithIcon from '../common/input/InputWithIcon';
 import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
 import MatchSelectBottomSheet from './MatchSelectBottomSheet';
+import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
+import getFanpoolFilter from '@/api/fanpool/getFanpoolFilter';
 
 export default function FindFilter() {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-	const [selectedTeam, setSelectedTeam] = useState<string>('');
+	const [selectedTeam, setSelectedTeam] = useState<number>(0);
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
+	const [isCheckDeadline, setIsCheckDeadLine] = useState<boolean>(true);
+	const [fanpoolData, setFanpoolData] = useState(null);
 	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
 		useState(false);
-	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 
-	const [inputValue, setInputValue] = useState<string>('');
+	const [bottomSheet, setBottomSheet] = useState<{
+		visible: boolean;
+		type: 'date' | 'match' | 'place' | null;
+	}>({
+		visible: false,
+		type: null,
+	});
+
+	const [selectedPlace, setSelectedPlace] = useState<{
+		name: string;
+		id: string;
+	} | null>(null);
+
 	const toggleBottomSheet = () => {
 		setIsBottomSheetVisible(!isBottomSheetVisible);
 	};
+
 	const toggleMatchBottomSheet = () => {
 		setIsMatchSelectBottomSheetVisible(!isMatchSelectBottomSheetVisible);
 	};
 
-	const handleTeamSelect = (code: string) => {
-		setSelectedTeam(code);
+	const handleTeamSelect = (id: number) => {
+		setSelectedTeam(id);
 	};
-	const handleMatchSelect = (code: number) => {
-		setSelectedMatch(0);
+
+	const handleMatchSelect = (matchIds: number[]) => {
+		setSelectedMatches(matchIds);
+	};
+
+	const handleDateSelect = (date: Date) => {
+		setSelectedDate(date);
+	};
+
+	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
+		setBottomSheet({ visible: true, type });
+	};
+
+	const closeBottomSheet = () => {
+		setBottomSheet({ visible: false, type: null });
+	};
+
+	const handlePlaceSelect = (place: { name: string; id: string }) => {
+		setSelectedPlace(place);
+		closeBottomSheet();
 	};
 
 	const formatDate = (date: Date) => {
 		return format(date, 'yy.MM.dd');
 	};
+
+	useEffect(() => {
+		const fetchFanpoolData = async () => {
+			try {
+				const response = await getFanpoolFilter({
+					teamId: selectedTeam ? selectedTeam : undefined,
+					dongCd: selectedPlace ? selectedPlace.id : undefined,
+					gameId: selectedMatches,
+					departAt: selectedDate ? selectedDate : undefined,
+					onlyGathering: isCheckDeadline,
+				});
+				console.log(response);
+			} catch (error) {
+				console.error('Failed to fetch fanpool data:', error);
+			}
+		};
+
+		fetchFanpoolData();
+	}, [
+		selectedMatches,
+		selectedDate,
+		selectedTeam,
+		selectedPlace,
+		isCheckDeadline,
+	]);
 
 	return (
 		<div className="flex flex-col gap-8pxr">
@@ -59,7 +116,7 @@ export default function FindFilter() {
 						className="whitespace-nowrap text-center"
 					>
 						{selectedTeam
-							? teams.find((team) => team.code === selectedTeam)?.name
+							? teams.find((team) => team.id === selectedTeam)?.name
 							: '모든 팀'}
 					</Text>
 				</div>
@@ -82,19 +139,28 @@ export default function FindFilter() {
 				</div>
 			</div>
 			<div onClick={toggleMatchBottomSheet}>
-				<FanpoolMatchSelectButton matchCount={13} />
+				<FanpoolMatchSelectButton matchCount={selectedMatches.length} />
 			</div>
-			<InputWithIcon
-				placeholder="여기 근처에서 출발!"
-				value={inputValue}
-				onChange={() => {}}
-			/>
+			<div
+				className="relative w-full h-40pxr cursor-pointer"
+				onClick={() => openBottomSheet('place')}
+			>
+				<IconDefaultPin className="absolute left-8pxr top-1/2 transform -translate-y-1/2" />
+				<div className="w-full h-full pl-40pxr pr-8pxr py-8pxr rounded-8pxr bg-gray050">
+					<Text fontSize={14} color="gray500">
+						{selectedPlace ? selectedPlace.name : '위치를 입력해주세요'}
+					</Text>
+				</div>
+			</div>
 			<div className="h-8pxr" />
 			<div className="flex justify-between">
 				<Text fontSize={12} fontWeight={500} color="gray400">
 					인기순
 				</Text>
-				<div className="flex gap-2pxr">
+				<div
+					className="flex gap-2pxr"
+					onClick={() => setIsCheckDeadLine((prev) => !prev)}
+				>
 					<Text fontSize={12} fontWeight={500} color="kboNavy">
 						마감된 팬풀 안보기
 					</Text>
@@ -113,7 +179,12 @@ export default function FindFilter() {
 				currentMonth={selectedDate}
 				onClose={toggleBottomSheet}
 				onTeamSelect={handleTeamSelect}
-				onDateSelect={setSelectedDate}
+				onDateSelect={handleDateSelect}
+			/>
+			<PlaceSearchBottomSheet
+				isVisible={bottomSheet.visible && bottomSheet.type === 'place'}
+				onClose={closeBottomSheet}
+				onSelectPlace={handlePlaceSelect}
 			/>
 		</div>
 	);

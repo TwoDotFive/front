@@ -14,6 +14,7 @@ type TapBarProps = {
   text: string;
   isNextButton?: boolean;
   type: "download" | "left" | "mid" | "edit" | "none";
+  isRigihtIconAction?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 };
@@ -22,6 +23,7 @@ export default function TapBar({
   text,
   isNextButton = false,
   type,
+  isRigihtIconAction,
   onEdit,
   onDelete,
 }: TapBarProps) {
@@ -78,7 +80,9 @@ export default function TapBar({
       else return <div className="w-25pxr" />;
     }
     if (type === "download") {
-      return <IconUpload className="cursor-pointer" />;
+      return (
+				<IconUpload className="cursor-pointer" onClick={isRigihtIconAction} />
+			);
     }
     if (type === "edit") {
       // 편집 버튼 생성 (누르면 팬풀로그 편집으로 이동)

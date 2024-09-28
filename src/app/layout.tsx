@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import ClientModals from './clientModal';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -14,7 +15,8 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<div className="w-full h-full relative">{children}</div>
+				<ClientModals />
+				<div className="w-full h-full relative overflow-hidden">{children}</div>
 			</body>
 		</html>
 	);

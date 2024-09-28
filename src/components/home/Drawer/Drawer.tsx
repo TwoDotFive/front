@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Text } from '@/components/common/Text';
 import { IconClose } from '@/public/icons';
 import UserProfile from './UserProfile';
+import { useRouter } from 'next/navigation';
+import { useModalStore } from '@/store/modalStore'; // Import the modal store
 
 interface DrawerProps {
 	isVisible: boolean;
@@ -10,13 +12,30 @@ interface DrawerProps {
 }
 
 export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
+	const router = useRouter();
+	const { openModal, closeModal } = useModalStore(); // Destructure modal methods
 	const drawerClasses = isVisible ? 'translate-x-0' : '-translate-x-full';
 	const overlayClasses = isVisible
 		? 'opacity-50 pointer-events-auto'
 		: 'opacity-0 pointer-events-none';
 
+	const handleLogout = () => {
+		// Remove userId from localStorage
+		localStorage.removeItem('userId');
+
+		// Close the modal and redirect to the home page
+		closeModal();
+		router.push('/');
+	};
+
+	const openLogoutConfirmModal = () => {
+		openModal('confirmUser', {
+			confirmText: '현재 게정에서 로그아웃할까요?',
+			confirmOnClick: handleLogout,
+		});
+	};
+
 	useEffect(() => {
-		// Prevent scrolling on body when drawer is visible
 		const scrollContentsElement = document.querySelector('.scroll-contents');
 
 		if (isVisible) {
@@ -64,17 +83,25 @@ export const Drawer: React.FC<DrawerProps> = ({ isVisible, onClose }) => {
 					/>
 					<div className="h-24pxr" />
 					<div className="flex flex-col gap-18pxr">
-						<Text fontSize={14} fontWeight={400}>
+						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
+							나의 관심 팬풀
+						</Text>
+						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
 							설정
 						</Text>
-						<Text fontSize={14} fontWeight={400}>
+						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
 							서비스 약관
 						</Text>
-						<Text fontSize={14} fontWeight={400}>
+						<Text
+							fontSize={14}
+							fontWeight={400}
+							className="cursor-pointer"
+							onClick={openLogoutConfirmModal} // Open the logout confirmation modal
+						>
 							로그아웃
 						</Text>
-						<Text fontSize={14} fontWeight={400}>
-							탈퇴
+						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
+							회원탈퇴
 						</Text>
 					</div>
 				</div>

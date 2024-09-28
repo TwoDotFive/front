@@ -35,5 +35,7 @@ const colors = {
 
 	fireRed100: '#FFDADE',
 	fireRed400: '#FF697A',
+
+	kakaoYellow: '#FEE500',
 };
 export default colors;

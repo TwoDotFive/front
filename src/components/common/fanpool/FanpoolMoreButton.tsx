@@ -8,11 +8,11 @@ export default function FanpoolMoreButton({
 }: FanpoolMoreButtonProps) {
 	return (
 		<section
-			className="w-full h-50pxr flex items-center justify-center bg-gray100 rounded-8pxr cursor-pointer"
+			className="w-full h-50pxr flex items-center justify-center rounded-8pxr cursor-pointer"
 			onClick={handleClick}
 		>
-			<Text fontSize={16} fontWeight={700} color="gray700">
-				더보기
+			<Text fontSize={16} fontWeight={500} color="gray500">
+				팬풀을 더 찾아볼까요?
 			</Text>
 		</section>
 	);

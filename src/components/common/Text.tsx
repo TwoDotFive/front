@@ -54,6 +54,9 @@ const getLineHeight = (fontWeight: number, fontSize: number): string => {
 		if (fontWeight === 400) return '150%';
 		if (fontWeight === 700) return 'auto';
 	}
+	if (fontSize === 38) {
+		if (fontWeight === 400) return '130%';
+	}
 	return '140%';
 };
 

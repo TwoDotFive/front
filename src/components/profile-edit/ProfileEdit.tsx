@@ -10,6 +10,7 @@ import getUserLocation from '@/api/user/getUserLocation';
 import SelectTeamButton from '../common/button/SelectTeamButton';
 import Button from '../common/Button';
 import { Location } from '@/types/types';
+import patchUserLocation from '@/api/user/patchUserLocation';
 
 interface ProfileFormData {
 	nickname: string;
@@ -107,7 +108,21 @@ export default function ProfileEdit() {
 	}, [setValue]);
 
 	const handleDeleteLocation = (location: LocationData, index: number) => {
-		// TODO: 동네 삭제
+		console.log('삭제');
+	};
+
+	const handleChangeDongne = async (location: LocationData, index: number) => {
+		if (location.representative) return;
+		if (
+			confirm(location.addressInformation.dong + '로 대표동네를 변경할까요?')
+		) {
+			try {
+				await patchUserLocation(location.id.toString());
+				// TODO: 성공 시 리로드
+			} catch (error) {
+				alert(error);
+			}
+		}
 	};
 
 	const onSubmit = (data: ProfileFormData) => {
@@ -199,6 +214,9 @@ export default function ProfileEdit() {
 											location.representative ? 'bg-kboBlue0' : 'bg-gray050'
 										}`}
 										key={index}
+										onClick={() => {
+											handleChangeDongne(location, index);
+										}}
 									>
 										<div className="flex items-center gap-8pxr">
 											<Text
@@ -217,7 +235,10 @@ export default function ProfileEdit() {
 										</div>
 										<div
 											className="cursor-pointer"
-											onClick={() => handleDeleteLocation(location, index)}
+											onClick={(e) => {
+												e.stopPropagation();
+												handleDeleteLocation(location, index);
+											}}
 										>
 											<IconDelete />
 										</div>

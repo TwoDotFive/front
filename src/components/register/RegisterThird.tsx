@@ -39,10 +39,6 @@ export const RegisterThird = ({
 		const geocoder = new window.kakao.maps.services.Geocoder();
 		const coord = new window.kakao.maps.LatLng(lat, lng);
 
-		// getAddress API 호출
-		const response = await getAddress(lng, lat);
-		console.log('Address API Response:', response);
-
 		// 카카오 지도 API를 사용한 추가 처리
 		geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
 			if (status === window.kakao.maps.services.Status.OK) {

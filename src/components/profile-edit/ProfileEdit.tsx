@@ -58,9 +58,9 @@ export default function ProfileEdit() {
 				);
 				setLocations(locationNames);
 				setValue('location', locationNames);
-				setLocationError(false); // 에러가 발생하지 않으면 에러 상태를 false로 설정
+				setLocationError(false);
 			} catch (error) {
-				setLocationError(true); // 에러가 발생하면 에러 상태를 true로 설정
+				setLocationError(true);
 				console.error('Failed to fetch user locations:', error);
 			}
 		};
@@ -84,7 +84,7 @@ export default function ProfileEdit() {
 					fontSize={15}
 					fontWeight={700}
 					color="gray200"
-					onClick={handleSubmit(onSubmit)} // 완료 버튼 클릭 시 제출
+					onClick={handleSubmit(onSubmit)}
 					className="cursor-pointer"
 				>
 					완료
@@ -138,7 +138,7 @@ export default function ProfileEdit() {
 								text="장소 등록하러 가기"
 								width="100%"
 								height="40px"
-								onClick={() => router.push('/location-register')}
+								onClick={() => router.push('/profile/edit/dongne')}
 								enabledBackgroundColor="bg-primary"
 								enabledTextColor="text-white"
 								borderRadius={8}

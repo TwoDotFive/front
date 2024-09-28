@@ -37,7 +37,7 @@ export default function Page() {
       setFanpoolLogList(res.data.bookmarks);
       setIsLoading(false);
     });
-  });
+  }, []);
 
   const renderFanpool = () => {
     return <></>;

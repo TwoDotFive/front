@@ -13,6 +13,7 @@ import Button from "@/components/common/Button";
 import InfinityLine from "@/components/common/InfinityLine";
 import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
+import ToastMessage from "@/components/common/ToastMessage";
 import FanpoologUser from "@/components/fanpool-log/FanpoologDetail/FanpoologUser";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
 import { stadiumMap } from "@/constants/stadium";
@@ -53,6 +54,7 @@ export default function FanpoolLogDetailPage() {
   const { id } = params;
 
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 
   // 전역 상태 설정
   const setFanpoolLogId = useFanpoologStore((state) => state.setFanpoolLogId);
@@ -103,6 +105,13 @@ export default function FanpoolLogDetailPage() {
       if (res.status === 200) {
         router.push("/fanpool-log");
       }
+    });
+  };
+
+  const handleShareButton = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setIsToastOpen(true);
     });
   };
 
@@ -294,7 +303,10 @@ export default function FanpoolLogDetailPage() {
           <button className="flex items-center jusitify-center p-8pxr">
             <IconShare />
           </button>
-          <button className="flex items-center jusitify-center p-8pxr">
+          <button
+            className="flex items-center jusitify-center p-8pxr"
+            onClick={handleShareButton}
+          >
             <IconLink />
           </button>
           <button
@@ -305,6 +317,13 @@ export default function FanpoolLogDetailPage() {
           </button>
         </div>
       </div>
+      <ToastMessage
+        message="링크가 복사되었어요!"
+        show={isToastOpen}
+        onClose={() => {
+          setIsToastOpen(false);
+        }}
+      />
     </div>
   );
 }

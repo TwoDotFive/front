@@ -8,15 +8,24 @@ export default function page() {
 
 	useEffect(() => {
 		const getUserToken = async (code: string) => {
-			const response = await getKakaoLoginToken(code);
-			console.log(response);
+			try {
+				const response = await getKakaoLoginToken(code);
+				console.log(response);
+				if (response.firstLogin === 'T') {
+					router.push('/register');
+				} else {
+					router.push('/home');
+				}
+			} catch (error) {
+				console.error('Error during Kakao login:', error);
+			}
 		};
+
 		const code = new URL(window.location.href).searchParams.get('code');
 		if (code) {
 			getUserToken(code);
-			// 이후 처리 로직 (예: 서버로 code 전송, 사용자 인증 처리 등)
 		}
-	}, []);
+	}, [router]);
 
 	return <div>카카오 로그인 처리 중...</div>;
 }

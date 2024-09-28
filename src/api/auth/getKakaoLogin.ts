@@ -4,6 +4,7 @@ interface getKakaoLoginResponse {
 	accessToken: string;
 	refreshToken: string;
 	userRole: string;
+	firstLogin: string;
 }
 
 /**

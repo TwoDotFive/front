@@ -6,11 +6,12 @@ import {
 } from 'react-hook-form';
 import { Text } from '../common/Text';
 import Button from '../common/Button';
+import postPhoneMessage from '@/api/auth/postPhoneMessage';
+import postPhoneVerify from '@/api/auth/postPhoneVerify'; // postPhoneVerify 임포트
 
 interface RegisterFirstProps {
 	register: UseFormRegister<any>;
 	handleNext: () => void;
-	setValue: UseFormSetValue<any>;
 	getValues: UseFormGetValues<any>;
 }
 
@@ -21,21 +22,43 @@ export const RegisterFirst = ({
 }: RegisterFirstProps) => {
 	const [isVerificationSent, setIsVerificationSent] = useState(false);
 	const [phoneNumberError, setPhoneNumberError] = useState('');
+	const [verificationCodeError, setVerificationCodeError] = useState('');
 	const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 	const [verificationCode, setVerificationCode] = useState('');
 
 	const validatePhoneNumber = (phone: string) => {
-		const phoneRegex = /^010-\d{4}-\d{4}$/;
+		const phoneRegex = /^010\d{8}$/;
 		return phoneRegex.test(phone);
 	};
 
-	const handleVerification = () => {
+	const handleVerification = async () => {
 		const phoneNumber = getValues('phoneNumber');
 		if (!validatePhoneNumber(phoneNumber)) {
 			setPhoneNumberError('올바른 형식의 전화번호가 아니에요.');
 		} else {
 			setPhoneNumberError('');
-			setIsVerificationSent(true);
+			try {
+				await postPhoneMessage(phoneNumber);
+				setIsVerificationSent(true);
+			} catch (error) {
+				console.error('Error sending phone verification message:', error);
+				setPhoneNumberError('인증 메시지 전송 중 오류가 발생했습니다.');
+			}
+		}
+	};
+
+	const handleCodeVerification = async () => {
+		const phoneNumber = getValues('phoneNumber');
+		const code = getValues('verificationCode');
+		try {
+			await postPhoneVerify(phoneNumber, code);
+			handleNext();
+		} catch (error: any) {
+			if (error.response && error.response.status === 400) {
+				setVerificationCodeError(error.response.data.message);
+			} else {
+				setVerificationCodeError('인증 코드 확인 중 오류가 발생했습니다.');
+			}
 		}
 	};
 
@@ -74,7 +97,7 @@ export const RegisterFirst = ({
 				<div className="relative w-full h-40pxr">
 					<input
 						type="text"
-						placeholder="휴대폰 번호를 입력해주세요"
+						placeholder="'-'없이 휴대폰 번호를 입력해주세요"
 						{...register('phoneNumber')}
 						className="w-full h-full px-8pxr py-8pxr rounded-8pxr bg-gray050 placeholder:text-gray300 text-sm"
 					/>
@@ -117,6 +140,11 @@ export const RegisterFirst = ({
 							className="w-full h-full px-8pxr py-8pxr rounded-8pxr bg-gray050 placeholder:text-gray300 text-sm"
 						/>
 					</div>
+					{verificationCodeError && (
+						<Text fontSize={14} fontWeight={500} color="fireRed400">
+							{verificationCodeError}
+						</Text>
+					)}
 					<Text
 						fontSize={14}
 						fontWeight={400}
@@ -127,7 +155,8 @@ export const RegisterFirst = ({
 					</Text>
 				</div>
 			)}
-			<div className="fixed bottom-40pxr left-0 right-0 px-20pxr">
+
+			<div className="max-w-399pxr w-full fixed bottom-40pxr left-1/2 -translate-x-1/2 right-0 px-20pxr">
 				<Button
 					width="100%"
 					height="50px"
@@ -138,7 +167,7 @@ export const RegisterFirst = ({
 					enabledBackgroundColor={'bg-primary'}
 					disabledTextColor={'text-gray300'}
 					disabledBackgroundColor={'bg-gray100'}
-					onClick={handleNext}
+					onClick={handleCodeVerification}
 				/>
 			</div>
 		</section>

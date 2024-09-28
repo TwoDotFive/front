@@ -27,8 +27,8 @@ interface ButtonProps {
 	borderRadius: number;
 	enabledTextColor: string;
 	enabledBackgroundColor: string;
-	disabledTextColor: string;
-	disabledBackgroundColor: string;
+	disabledTextColor?: string;
+	disabledBackgroundColor?: string;
 	disabled?: boolean;
 	isHover?: boolean;
 	onClick: () => void;

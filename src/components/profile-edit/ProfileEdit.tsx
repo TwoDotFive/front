@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import getUserLocation from '@/api/user/getUserLocation';
 import SelectTeamButton from '../common/button/SelectTeamButton';
+import Button from '../common/Button';
 
 interface ProfileFormData {
 	nickname: string;
@@ -22,6 +23,7 @@ export default function ProfileEdit() {
 		userProfile?.profileImageUrl || '/images/image_profile_default.png'
 	);
 	const [locations, setLocations] = useState<string[]>([]); // 사용자의 동네 정보를 저장할 상태
+	const [locationError, setLocationError] = useState(false); // 장소 인증 에러 상태 관리
 
 	const handleBack = () => {
 		router.back();
@@ -56,7 +58,9 @@ export default function ProfileEdit() {
 				);
 				setLocations(locationNames);
 				setValue('location', locationNames);
+				setLocationError(false); // 에러가 발생하지 않으면 에러 상태를 false로 설정
 			} catch (error) {
+				setLocationError(true); // 에러가 발생하면 에러 상태를 true로 설정
 				console.error('Failed to fetch user locations:', error);
 			}
 		};
@@ -129,7 +133,36 @@ export default function ProfileEdit() {
 						<Text fontSize={18} fontWeight={700} color="gray700">
 							내 동네
 						</Text>
-						{'Todo: 회원가입때 장소인증하고 불러오기'}
+						{locationError ? (
+							<Button
+								text="장소 등록하러 가기"
+								width="100%"
+								height="40px"
+								onClick={() => router.push('/location-register')}
+								enabledBackgroundColor="bg-primary"
+								enabledTextColor="text-white"
+								borderRadius={8}
+							/>
+						) : (
+							<div>
+								{locations.length > 0 ? (
+									locations.map((location, index) => (
+										<Text
+											key={index}
+											fontSize={14}
+											fontWeight={400}
+											color="gray600"
+										>
+											{location}
+										</Text>
+									))
+								) : (
+									<Text fontSize={14} fontWeight={400} color="gray600">
+										등록된 동네가 없습니다.
+									</Text>
+								)}
+							</div>
+						)}
 						<Text fontSize={12} fontWeight={400} color="gray700">
 							클릭하여 대표 동네를 바꿀 수 있어요
 						</Text>

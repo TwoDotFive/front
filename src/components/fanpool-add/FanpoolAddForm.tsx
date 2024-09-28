@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import { FanpoolSubmitButton } from './FanpoolSubmitButton';
-import { FanpoolDateBottomSheet } from './FanpoolDateBottomSheet';
 import { Text } from '../common/Text';
 import { FanpoolMatchBottomSheet } from './FanpoolMatchBottomSheet';
 import SelectHighlightButton from '../common/button/SelectHighlightButton';
@@ -14,21 +13,31 @@ import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 
 interface FanpoolFormData {
 	title: string;
-	date: Date;
+	datePeriod: '오전' | '오후';
+	hour: number;
+	minute: number;
 	fanpoolType: '차량공유' | '택시팟' | null;
 	collectCount: number;
 	passengerCondition: '남녀모두' | '남자만' | '여자만';
 }
 
 export default function FanpoolAddForm() {
-	const { register, handleSubmit, setValue, control } =
-		useForm<FanpoolFormData>({
-			defaultValues: {
-				fanpoolType: null,
-				collectCount: 1,
-				passengerCondition: '남녀모두',
-			},
-		});
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		control,
+		formState: { errors },
+	} = useForm<FanpoolFormData>({
+		defaultValues: {
+			fanpoolType: null,
+			collectCount: 1,
+			passengerCondition: '남녀모두',
+			datePeriod: '오전',
+			hour: 12,
+			minute: 0,
+		},
+	});
 	const [bottomSheet, setBottomSheet] = useState<{
 		visible: boolean;
 		type: 'date' | 'match' | 'place' | null;
@@ -36,7 +45,6 @@ export default function FanpoolAddForm() {
 		visible: false,
 		type: null,
 	});
-	const [selectedDate, setSelectedDate] = useState<Date | null>(null); // State to store selected date
 	const [selectedPlace, setSelectedPlace] = useState<{
 		name: string;
 		x: string;
@@ -55,12 +63,6 @@ export default function FanpoolAddForm() {
 
 	const onSubmit: SubmitHandler<FanpoolFormData> = (data) => {
 		console.log('데이터 : ', data);
-	};
-
-	const handleDateSelect = (date: Date) => {
-		setSelectedDate(date);
-		setValue('date', date);
-		setBottomSheet({ visible: false, type: null });
 	};
 
 	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
@@ -95,48 +97,6 @@ export default function FanpoolAddForm() {
 			>
 				<div className="flex flex-col gap-8pxr">
 					<Text fontSize={18} fontWeight={700} color="gray700">
-						제목
-					</Text>
-					<input
-						type="text"
-						placeholder="제목을 입력해주세요"
-						{...register('title', { required: '제목을 입력해주세요' })}
-						className="w-full h-full p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm"
-					/>
-				</div>
-
-				<div className="flex flex-col gap-8pxr">
-					<Text fontSize={18} fontWeight={700} color="gray700">
-						팬풀 날짜
-					</Text>
-					<div
-						className="w-full h-full p-12pxr rounded-8pxr bg-gray050 cursor-pointer"
-						onClick={() => openBottomSheet('date')}
-					>
-						<Text fontSize={14} fontWeight={400} color="gray400">
-							{selectedDate
-								? selectedDate.toLocaleDateString('ko-KR')
-								: '언제 팬풀할 예정이세요?'}
-						</Text>
-					</div>
-				</div>
-
-				<div className="flex flex-col gap-8pxr">
-					<Text fontSize={18} fontWeight={700} color="gray700">
-						경기
-					</Text>
-					<div
-						className="w-full h-full p-12pxr rounded-8pxr bg-kboBlue0 cursor-pointer text-center"
-						onClick={() => openBottomSheet('match')}
-					>
-						<Text fontSize={16} fontWeight={500} color="kboBlue500">
-							해당 날짜 경기 찾아보기
-						</Text>
-					</div>
-				</div>
-
-				<div className="flex flex-col gap-8pxr">
-					<Text fontSize={18} fontWeight={700} color="gray700">
 						팬풀 유형
 					</Text>
 					<div className="flex gap-8pxr">
@@ -155,13 +115,91 @@ export default function FanpoolAddForm() {
 
 				<div className="flex flex-col gap-8pxr">
 					<Text fontSize={18} fontWeight={700} color="gray700">
+						보러 갈 경기
+					</Text>
+					<div
+						className="w-full h-full p-12pxr rounded-8pxr bg-gray100 cursor-pointer text-center"
+						onClick={() => openBottomSheet('match')}
+					>
+						<Text fontSize={16} fontWeight={500} color="gray700">
+							경기 찾아보기
+						</Text>
+					</div>
+				</div>
+
+				<div className="flex flex-col gap-8pxr">
+					<Text fontSize={18} fontWeight={700} color="gray700">
+						출발 일시
+					</Text>
+					<div className="flex gap-40pxr">
+						{/* 오전/오후 선택 */}
+						<div className="flex items-center gap-12pxr">
+							<label className="flex gap-8pxr">
+								<input
+									type="radio"
+									value="오전"
+									{...register('datePeriod')}
+									defaultChecked
+								/>
+								<Text fontSize={16} fontWeight={500} color="gray700">
+									오전
+								</Text>
+							</label>
+							<label className="flex gap-8pxr">
+								<input type="radio" value="오후" {...register('datePeriod')} />
+								<Text fontSize={16} fontWeight={500} color="gray700">
+									오후
+								</Text>
+							</label>
+						</div>
+
+						{/* 시/분 입력 */}
+						<div className="flex items-center gap-8pxr">
+							<input
+								type="number"
+								{...register('hour', {
+									required: true,
+									min: 1,
+									max: 12,
+									valueAsNumber: true,
+								})}
+								placeholder="시"
+								className="w-40pxr h-40pxr rounded-8pxr border-none bg-gray050 p-2"
+							/>
+							<Text fontSize={16} fontWeight={500} color="gray600">
+								시
+							</Text>
+
+							<input
+								type="number"
+								{...register('minute', {
+									required: true,
+									min: 0,
+									max: 59,
+									valueAsNumber: true,
+								})}
+								placeholder="분"
+								className="w-40pxr h-40pxr rounded-8pxr border-none bg-gray050  p-2"
+							/>
+							<Text fontSize={16} fontWeight={500} color="gray600">
+								분
+							</Text>
+						</div>
+					</div>
+					{errors.hour && <p>시간을 올바르게 입력해주세요</p>}
+					{errors.minute && <p>분을 올바르게 입력해주세요</p>}
+				</div>
+
+				<div className="flex flex-col">
+					<Text fontSize={18} fontWeight={700} color="gray700">
 						모집 인원
 					</Text>
 					<div className="h-4pxr" />
-					<Text fontSize={14} fontWeight={400} color="gray700">
-						함께 이동할 인원수를 선택해주세요.
-					</Text>
 
+					<Text fontSize={14} fontWeight={400} color="gray700">
+						나를 제외하고 함께 이동할 인원 수를 선택해주세요.
+					</Text>
+					<div className="h-14pxr" />
 					<div className="flex justify-between items-center">
 						<MinusButton onClick={() => handleCollectCountChange(-1)} />
 						<div className="flex gap-2pxr items-center">
@@ -221,11 +259,11 @@ export default function FanpoolAddForm() {
 						</label>
 					</div>
 				</div>
+
 				<div className="flex flex-col gap-8pxr">
 					<Text fontSize={18} fontWeight={700} color="gray700">
 						출발 장소
 					</Text>
-					<div className="h-8pxr" />
 					<div
 						className="relative w-full h-40pxr cursor-pointer"
 						onClick={() => openBottomSheet('place')}
@@ -257,6 +295,19 @@ export default function FanpoolAddForm() {
 						</Map>
 					)}
 				</div>
+
+				<div className="flex flex-col gap-8pxr">
+					<Text fontSize={18} fontWeight={700} color="gray700">
+						제목
+					</Text>
+					<input
+						type="text"
+						placeholder="제목을 입력해주세요"
+						{...register('title', { required: '제목을 입력해주세요' })}
+						className="w-full h-full p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm"
+					/>
+				</div>
+
 				<div className="flex flex-col gap-8pxr">
 					<Text fontSize={18} fontWeight={700} color="gray700">
 						하고싶은 말
@@ -276,20 +327,13 @@ export default function FanpoolAddForm() {
 					/>
 				</div>
 
-				<div className="h-150pxr" />
+				<div className="h-80pxr" />
 				<FanpoolSubmitButton isSubmitting={false} />
 			</form>
-
-			<FanpoolDateBottomSheet
-				isVisible={bottomSheet.visible && bottomSheet.type === 'date'}
-				onClose={closeBottomSheet}
-				onDateSelect={handleDateSelect}
-			/>
 
 			<FanpoolMatchBottomSheet
 				isVisible={bottomSheet.visible && bottomSheet.type === 'match'}
 				onClose={closeBottomSheet}
-				onDateSelect={handleDateSelect}
 			/>
 			<PlaceSearchBottomSheet
 				isVisible={bottomSheet.visible && bottomSheet.type === 'place'}

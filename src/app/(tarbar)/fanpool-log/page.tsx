@@ -102,6 +102,11 @@ export default function Page() {
         </div>
 
         {/* 경기장 별 팬풀로그 리스트 */}
+        {filteredData.length === 0 && (
+          <div className="rounded-8pxr flex items-center justify-center">
+            <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+          </div>
+        )}
         <div className="flex flex-col justify-between items-start gap-16pxr">
           {filteredData.map((travelog) => (
             <TravelogWideCard

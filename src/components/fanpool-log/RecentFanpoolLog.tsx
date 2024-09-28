@@ -51,7 +51,7 @@ export default function RecentFanpoolLog({
           이곳을 방문한 여행일정이에요
         </Text>
       )}
-      <div className="w-full flex gap-12pxr overflow-x-auto whitespace-nowrap py-20pxr">
+      <div className="w-full flex gap-12pxr overflow-x-auto whitespace-normal py-20pxr">
         {travelLogData.map((travelLog, index) => (
           <TravelogCard
             key={travelLog.id}

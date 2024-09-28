@@ -43,3 +43,15 @@ export interface FanpoolInformation {
 export interface FanpoolType {
   fanpoolInformation: FanpoolInformation;
 }
+
+export interface FanpoolLogList {
+  id: string;
+  image: string;
+  title: string;
+  stadium: string;
+  profile: {
+    nickname: string;
+    image: string;
+  };
+  locations: string[];
+}

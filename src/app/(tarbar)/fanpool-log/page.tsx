@@ -9,6 +9,7 @@ import RecentFanpoolLog from "@/components/fanpool-log/RecentFanpoolLog";
 import { useRouter } from "next/navigation";
 import TagFilter from "@/components/fanpool-log/Create-log/TagFilter";
 import { getFanpoologList } from "@/api/fanpool-log/main";
+import { FanpoolLogList } from "@/types/types";
 
 // 지역 데이터
 const regions = [
@@ -22,18 +23,6 @@ const regions = [
   "대전",
   "고척",
 ];
-
-interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  locations: string[];
-}
 
 export default function Page() {
   const router = useRouter();

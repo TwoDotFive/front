@@ -70,6 +70,7 @@ export default function Page() {
         setIsLoading(false);
       });
     }
+    console.log(schedules);
   }, [selectedTagId]);
 
   useEffect(() => {
@@ -102,23 +103,31 @@ export default function Page() {
   };
 
   const handleNextPage = () => {
-    // 추후 경기장 정보도 추가해서 보내야함.
-    const schedules = selectedItems.map((item, index) => ({
-      place: {
-        name: item.name,
-        address: item.address,
-        thumbnail: item.thumbnail,
-        distance: item.distance,
-        contentId: item.contentId,
-        contentType: item.contentType,
-        x: item.x,
-        y: item.y,
-      },
-      day: 1,
-      sequence: index + 1,
-    }));
+    const updatedSchedules = selectedItems.map((item, index) => {
+      // 이미 존재하는 스케줄을 찾음
+      const existingSchedule = schedules.find(
+        (schedule) => schedule.place.contentId === item.contentId
+      );
 
-    useFanpoologStore.setState({ schedules });
+      // 기존 스케줄이 존재하고 메모가 있으면 그 메모를 유지
+      return {
+        place: {
+          name: item.name,
+          address: item.address,
+          thumbnail: item.thumbnail,
+          distance: item.distance,
+          contentId: item.contentId,
+          contentType: item.contentType,
+          x: item.x,
+          y: item.y,
+        },
+        day: 1,
+        sequence: index + 1,
+        memo: existingSchedule?.memo || { content: "", images: [] }, // 기존 메모 유지 또는 기본값 설정
+      };
+    });
+
+    useFanpoologStore.setState({ schedules: updatedSchedules });
     router.push("/fanpool-log/create-log/step3");
   };
 

@@ -72,8 +72,12 @@ export default function Page() {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [rImage, setRImage] = useState<File | string | null>(null); // 대표 이미지 상태
-  const [title, setTitle] = useState<string>(""); // 로그 제목 상태
+  const [rImage, setRImage] = useState<File | string | null>(
+    useFanpoologStore((state) => state.image)
+  ); // 대표 이미지 상태
+  const [title, setTitle] = useState<string>(
+    useFanpoologStore((state) => state.title)
+  ); // 로그 제목 상태
 
   const [isMemoBottomSheetVisible, setIsMemoBottomSheetVisible] =
     useState<boolean>(false); // 메모 편집 바텀 시트 상태
@@ -335,7 +339,10 @@ export default function Page() {
               placeholder="로그 제목을 입력해주세요"
               className="w-full h-24pxr focus:outline-none color-gray200 weight-700 text-20pxr"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                useFanpoologStore.setState({ title: e.target.value });
+              }}
             ></input>
           </div>
           <div className="flex flex-col items-start gap-8pxr w-full">

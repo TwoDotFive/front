@@ -59,7 +59,7 @@ export default function RecentFanpoolLog({
                 : travelLog.profile.image
             }
             title={travelLog.title}
-            locations={travelLog.locations}
+            locations={travelLog.places}
           />
         ))}
       </div>

@@ -8,7 +8,7 @@ type TravelogCardProps = {
   userName: string;
   userImage: string;
   title: string;
-  locations?: string[];
+  locations?: string;
 };
 
 export default function TravelogCard({
@@ -39,6 +39,8 @@ export default function TravelogCard({
   ) => {
     setUserImageSrc("/images/default_profile.png");
   };
+
+  const places = locations?.split(",");
 
   return (
     <div
@@ -73,13 +75,13 @@ export default function TravelogCard({
           <Text fontSize={16} fontWeight={700} color="gray800">
             {title}
           </Text>
-          {locations && (
+          {places && (
             <div className="flex items-center">
               <Text fontSize={14} fontWeight={600} color="gray600">
-                {locations[0]}
+                {places[0]}
               </Text>
               <Text fontSize={14} fontWeight={400} color="gray600">
-                외 {locations.length - 1}곳
+                외 {places.length - 1}곳
               </Text>
             </div>
           )}

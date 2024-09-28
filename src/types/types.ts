@@ -53,7 +53,7 @@ export interface FanpoolLogList {
     nickname: string;
     image: string;
   };
-  locations: string[];
+  places: string;
 }
 
 export interface PlaceContent {

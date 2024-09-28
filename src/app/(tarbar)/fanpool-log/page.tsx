@@ -110,7 +110,7 @@ export default function Page() {
               image={travelog.image}
               userName={travelog.profile.nickname}
               title={travelog.title}
-              locations={travelog.locations}
+              locations={travelog.places}
             />
           ))}
         </div>

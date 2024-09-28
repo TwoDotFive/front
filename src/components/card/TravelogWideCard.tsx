@@ -7,7 +7,7 @@ type TravelogWideCardProps = {
   image: string;
   userName: string;
   title: string;
-  locations?: string[];
+  locations?: string;
 };
 
 export default function TravelogWideCard({
@@ -31,14 +31,16 @@ export default function TravelogWideCard({
     setImageSrc("/images/empty_image_place.png");
   };
 
+  const places = locations?.split(",");
+
   // 장소가 1~3개일 경우와 4개 이상일 경우를 나누어서 렌더링
   const renderLocations = () => {
-    if (!locations) return;
-    if (locations.length <= 3) {
+    if (!places) return;
+    if (places.length <= 3) {
       // 장소가 1~3개일 경우
       return (
         <Text fontSize={14} fontWeight={600} color="gray600">
-          {locations.join(", ")}
+          {places.join(", ")}
         </Text>
       );
     } else {
@@ -46,10 +48,10 @@ export default function TravelogWideCard({
       return (
         <>
           <Text fontSize={14} fontWeight={600} color="gray600">
-            {locations[0]}, {locations[1]}, {locations[2]}
+            {places[0]}, {places[1]}, {places[2]}
           </Text>
           <Text fontSize={14} fontWeight={400} color="gray600">
-            외 {locations.length - 3}곳
+            외 {places.length - 3}곳
           </Text>
         </>
       );
@@ -74,7 +76,7 @@ export default function TravelogWideCard({
             {userName}
           </Text>
           <Text fontSize={12} fontWeight={500} color="gray600">
-            님의 팬풀로그 | 식당, 숙소 포함
+            님의 팬풀로그
           </Text>
         </div>
         <Text fontSize={16} fontWeight={700} color="gray800">

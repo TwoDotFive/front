@@ -35,6 +35,7 @@ export interface FanpoolInformation {
 	departFrom: Location;
 	fanpoolType: string;
 	fanpoolTypeKor: string;
+	genderConstraint: string;
 	numberOfPeople: number;
 	currentNumberOfPeople: number;
 }

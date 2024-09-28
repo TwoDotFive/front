@@ -1,21 +1,24 @@
 import { format } from 'date-fns';
-import { teams } from '@/constants/teams';
 import Image from 'next/image';
 import { Text } from '../common/Text';
 import { TagFanPool } from '../common/tag/TagFanPool';
+import { Game } from '@/types/types';
 
-export default function GameCard() {
-	/**
-	 * TODO 데이터 props로 옮기기
-	 */
-	const home = 'kiwoom';
-	const homeInfo = teams.find((team) => team.code === home)!;
-	const away = 'doosan';
-	const awayInfo = teams.find((team) => team.code === away)!;
+interface GameCardProps {
+	game: Game; // Game 정보를 props로 전달받음
+}
 
-	const placeName = '서울종합운동장 잠실야구장';
+export default function GameCard({ game }: GameCardProps) {
+	// 홈 팀과 원정 팀 정보
+	const homeInfo = game.homeTeam;
+	const awayInfo = game.awayTeam;
 
-	const date = format(new Date(), 'M월 d일 aaa h:mm').toUpperCase();
+	// 경기 장소와 시간
+	const placeName = game.stadium;
+	const formattedDate = format(
+		new Date(game.startDate),
+		'M월 d일 aaa h:mm'
+	).toUpperCase();
 
 	return (
 		<section className="w-full relative flex flex-col rounded-12pxr">
@@ -30,7 +33,7 @@ export default function GameCard() {
 						<div className="flex flex-col gap-8pxr items-center">
 							<div className="w-67pxr h-67pxr flex items-center justify-center bg-white rounded-full">
 								<Image
-									src={`/images/${homeInfo.code}.png`}
+									src={homeInfo.representativeImageUrl}
 									alt={homeInfo.name}
 									width={60}
 									height={60}
@@ -46,7 +49,7 @@ export default function GameCard() {
 						<div className="flex flex-col gap-8pxr items-center">
 							<div className="w-67pxr h-67pxr flex items-center justify-center bg-white rounded-full">
 								<Image
-									src={`/images/${awayInfo.code}.png`}
+									src={awayInfo.representativeImageUrl}
 									alt={awayInfo.name}
 									width={60}
 									height={60}
@@ -68,7 +71,7 @@ export default function GameCard() {
 					</Text>
 					<div className="flex gap-4pxr items-center">
 						<Text fontSize={14} fontWeight={500} color="white">
-							{date}
+							{formattedDate}
 						</Text>
 						<TagFanPool type="AWAY" />
 					</div>

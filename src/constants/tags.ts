@@ -20,13 +20,13 @@ export const tags = {
 		TEXT_COLOR: 'gray600',
 		BG_COLOR: 'gray100',
 	},
-	여성만: {
-		NAME: '여성만',
+	여자만: {
+		NAME: '여자만',
 		TEXT_COLOR: 'fireRed400',
 		BG_COLOR: 'fireRed100',
 	},
-	남성만: {
-		NAME: '남성만',
+	남자만: {
+		NAME: '남자만',
 		TEXT_COLOR: 'kboBlue500',
 		BG_COLOR: 'kboBlue0',
 	},

@@ -8,6 +8,7 @@ type TagProps = {
 };
 
 export const TagFanPool = ({ type }: TagProps) => {
+	console.log(type);
 	/**
 	 * 정의된 fanpoolType 가져오기
 	 */

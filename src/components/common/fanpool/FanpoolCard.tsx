@@ -3,6 +3,7 @@ import { ko } from 'date-fns/locale';
 import { Tags } from '@/constants/tags';
 import { TagFanPool } from '../tag/TagFanPool';
 import { Text } from '../Text';
+import { useRouter } from 'next/navigation';
 
 interface FanpoolCardProps {
 	fanpool:
@@ -29,11 +30,11 @@ interface FanpoolCardProps {
 				};
 				numberOfPeople: number;
 		  }
-		| undefined; // fanpool이 undefined일 가능성도 처리
+		| undefined;
 }
 
 export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
-	// fanpool이 존재하지 않으면 null을 반환해 컴포넌트 렌더링을 중단
+	const router = useRouter();
 	if (!fanpool) {
 		return null;
 	}
@@ -50,8 +51,14 @@ export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
 	const awayTeamShort = fanpool.game.awayTeam.name.split(' ')[0];
 	const homeTeamShort = fanpool.game.homeTeam.name.split(' ')[0];
 
+	const handleCardClick = () => {
+		router.push(`/fanpool-detail/${fanpool.id}`);
+	};
 	return (
-		<section className="w-full h-104pxr flex gap-12pxr cursor-pointer">
+		<section
+			className="w-full h-104pxr flex gap-12pxr cursor-pointer"
+			onClick={handleCardClick}
+		>
 			<div className="w-82pxr h-full">
 				{!fanpool.game.awayTeam.representativeImageUrl ? (
 					<div className="w-full h-full bg-gray100 rounded-9pxr"></div>
@@ -59,7 +66,7 @@ export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
 					<img
 						src={fanpool.game.awayTeam.representativeImageUrl}
 						alt={`${fanpool.game.awayTeam.name} 이미지`}
-						className="w-full h-full rounded-9pxr object-cover"
+						className="w-full h-full rounded-9pxr object-contain"
 					/>
 				)}
 			</div>

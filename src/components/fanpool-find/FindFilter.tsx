@@ -1,22 +1,29 @@
-'use client';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Text } from '../common/Text';
-import { IconCheckNavy, IconDefaultPin, IconFilter } from '@/public/icons';
+import {
+	IconCheckNavy,
+	IconDefaultPin,
+	IconFilter,
+	IconUnChecked,
+} from '@/public/icons';
 import FilterBottomSheet from './FilterBottomSheet';
 import { teams } from '@/constants/teams';
 import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
 import MatchSelectBottomSheet from './MatchSelectBottomSheet';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 import getFanpoolFilter from '@/api/fanpool/getFanpoolFilter';
+import { FanpoolInformation } from '@/types/types';
 
-export default function FindFilter() {
+interface FindFilterProps {
+	setFanpoolData: (fanpools: FanpoolInformation[]) => void;
+}
+export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 	const [selectedTeam, setSelectedTeam] = useState<number>(0);
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
 	const [isCheckDeadline, setIsCheckDeadLine] = useState<boolean>(true);
-	const [fanpoolData, setFanpoolData] = useState(null);
 	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
 		useState(false);
 
@@ -81,6 +88,7 @@ export default function FindFilter() {
 					onlyGathering: isCheckDeadline,
 				});
 				console.log(response);
+				setFanpoolData(response);
 			} catch (error) {
 				console.error('Failed to fetch fanpool data:', error);
 			}
@@ -158,13 +166,13 @@ export default function FindFilter() {
 					인기순
 				</Text>
 				<div
-					className="flex gap-2pxr"
+					className="flex gap-4pxr items-center"
 					onClick={() => setIsCheckDeadLine((prev) => !prev)}
 				>
 					<Text fontSize={12} fontWeight={500} color="kboNavy">
 						마감된 팬풀 안보기
 					</Text>
-					<IconCheckNavy />
+					{isCheckDeadline ? <IconCheckNavy /> : <IconUnChecked />}
 				</div>
 			</div>
 			<MatchSelectBottomSheet

@@ -15,7 +15,7 @@ export default function FanpoolDetailBottomBar({
 
 	return (
 		<section
-			className="fixed bottom-0 w-full h-86pxr bg-white px-20pxr pt-16pxr pb-20pxr rounded-16pxr flex gap-8pxr"
+			className="max-w-399pxr fixed bottom-0 w-full h-86pxr bg-white px-20pxr pt-16pxr pb-20pxr rounded-16pxr flex gap-8pxr"
 			style={{ boxShadow: '0px 0px 34px 0px rgba(0, 37, 97, 0.10)' }}
 		>
 			<Button

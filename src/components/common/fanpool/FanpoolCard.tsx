@@ -1,36 +1,14 @@
+'use client';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { Tags } from '@/constants/tags';
 import { TagFanPool } from '../tag/TagFanPool';
 import { Text } from '../Text';
 import { useRouter } from 'next/navigation';
+import { FanpoolInformation } from '@/types/types';
 
 interface FanpoolCardProps {
-	fanpool:
-		| {
-				id: number;
-				title: string;
-				fanpoolType: string;
-				departAt: string;
-				game: {
-					awayTeam: {
-						name: string;
-						representativeImageUrl: string;
-					};
-					homeTeam: {
-						name: string;
-						representativeImageUrl: string;
-					};
-					stadium: string;
-					startDate: string;
-				};
-				departFrom: {
-					fullText: string;
-					sigungu: string;
-				};
-				numberOfPeople: number;
-		  }
-		| undefined;
+	fanpool: FanpoolInformation;
 }
 
 export default function FanpoolCard({ fanpool }: FanpoolCardProps) {

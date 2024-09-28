@@ -2,7 +2,7 @@
 const nextConfig = {
 	reactStrictMode: false,
 	images: {
-		domains: ['lgcxydabfbch3774324.cdn.ntruss.com'],
+		domains: ['lgcxydabfbch3774324.cdn.ntruss.com', 'csct3434.org'],
 	},
 	webpack: (config) => {
 		config.module.rules.push({

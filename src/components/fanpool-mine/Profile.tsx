@@ -1,20 +1,26 @@
+'use client';
 import Image from 'next/image';
 import { Text } from '../common/Text';
+import { useUserStore } from '@/store/useUserStore';
 
 export default function Profile() {
+	const { userProfile } = useUserStore();
+	console.log(userProfile);
 	return (
 		<section>
 			<div className="h-14pxr" />
 			<div className="flex flex-col items-center">
 				<Image
-					src={'/images/image_profile_default.png'}
+					src={
+						userProfile?.profileImageUrl || '/images/image_profile_default.png'
+					}
 					width={80}
 					height={80}
 					alt={''}
 				/>
 				<div className="h-8pxr" />
 				<Text fontSize={16} fontWeight={700} color="gray700">
-					네임드호빵
+					{userProfile?.nickname}
 				</Text>
 				<div className="h-2pxr" />
 				<div className="flex gap-4pxr">
@@ -30,15 +36,24 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className="h-14pxr" />
-				<Text fontSize={12} fontWeight={500} color="gray600" className="w-full">
-					안녕하세요~~~ 키움 5년차 팬입니다~~ 최대 두 줄까지만 가능한 것으로
-					합시다 그렇다면 글자수가 몇자 제한이 될까요 한 번 세보도록하
+				<Text
+					fontSize={12}
+					fontWeight={500}
+					color="gray600"
+					className="w-full text-center"
+				>
+					{userProfile?.oneLiner}
 				</Text>
 				<div className="h-8pxr" />
 				<div className="flex gap-4pxr items-center">
-					<div className="w-26pxr h-26pxr bg-gray-400 rounded-full" />
+					<Image
+						src={userProfile?.favoriteTeam.representativeImageUrl!}
+						width={26}
+						height={26}
+						alt=""
+					/>
 					<Text fontSize={12} fontWeight={700}>
-						키움히어로즈
+						{userProfile?.favoriteTeam.name}
 						<Text fontSize={12} fontWeight={500} className="inline">
 							에 관심있어요
 						</Text>

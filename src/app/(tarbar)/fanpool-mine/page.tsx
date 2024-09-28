@@ -1,6 +1,6 @@
 import Profile from '@/components/fanpool-mine/Profile';
 import ProfileTabMenu from '@/components/fanpool-mine/ProfileTabMenu';
-import ProfileTapbar from '@/components/fanpool-mine/profileTapbar';
+import ProfileTapbar from '@/components/fanpool-mine/ProfileTapBar';
 
 export default function page() {
 	return (

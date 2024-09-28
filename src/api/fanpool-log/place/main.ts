@@ -15,3 +15,19 @@ export const getTourInfoDetail = async (
   );
   return response.data;
 };
+
+export const getFanpoolLogAboutPlace = async (
+  contentId: string,
+  contentType: string
+) => {
+  const response = await apiClient.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/tour/log/find-by-place`,
+    {
+      params: {
+        contentId,
+        contentTypeId: contentType,
+      },
+    }
+  );
+  return response;
+};

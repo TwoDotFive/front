@@ -4,33 +4,33 @@ import { useEffect, useState } from "react";
 import TravelogCard from "../card/TravelogCard";
 import { Text } from "../common/Text";
 import { getFanpoologList } from "@/api/fanpool-log/main";
+import { FanpoolLogList } from "@/types/types";
+import { getFanpoolLogAboutPlace } from "@/api/fanpool-log/place/main";
 
 type RecentFanpoolLogProps = {
   hasButton?: boolean;
+  contentId?: string;
+  contentType?: string;
 };
-
-interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  locations: string[];
-}
 
 export default function RecentFanpoolLog({
   hasButton = true,
+  contentId,
+  contentType,
 }: RecentFanpoolLogProps) {
   useEffect(() => {
-    getFanpoologList().then((res) => {
-      if (res) {
-        const items = res.items;
-        setTravelLogData(items);
-      }
-    });
+    if (hasButton) {
+      getFanpoologList().then((res) => {
+        if (res) {
+          const items = res.items;
+          setTravelLogData(items);
+        }
+      });
+    } else {
+      getFanpoolLogAboutPlace(contentId!, contentType!).then((res) => {
+        setTravelLogData(res.data.items);
+      });
+    }
   }, []);
 
   const [travelLogData, setTravelLogData] = useState<FanpoolLogList[]>([]);

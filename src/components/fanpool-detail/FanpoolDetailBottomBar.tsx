@@ -10,8 +10,8 @@ interface FanpoolDetailBottomBarProps {
 export default function FanpoolDetailBottomBar({
 	fanpoolInformation,
 }: FanpoolDetailBottomBarProps) {
-	// 현재 내가 호스트인지 확인 (임의로 설정)
-	const isHost = false; // 필요한 경우 실제 로직을 구현하세요
+	const isHost =
+		fanpoolInformation.hostUserId.toString() == localStorage.getItem('userId');
 
 	return (
 		<section

@@ -1,61 +1,43 @@
-'use client';
+"use client";
 
 import Image from "next/image";
-import { Text } from "../common/Text";
+import { IconBookMarkWhite } from "@/public/icons";
+import { useRouter } from "next/navigation";
 
 interface HeaderBannerProps {
-    imageUrl: string;
-    title: string;
-    description: string;
-    nickname: string;
-    userImgUrl: string;
+  imageUrl: string;
 }
 
-export default function HeaderBanner({imageUrl, title, description, nickname, userImgUrl}: HeaderBannerProps) {
-    return (
-        <>
-            <section className="relative w-full h-337pxr">
-                <Image
-                    src={imageUrl}
-                    width={399}
-                    height={0}
-                    alt={"kt"}
-                    className="w-full h-full object-cover"
-                />
-                <div
-                    className="absolute flex flex-col gap-[2vw]"
-                    style={{
-                        top: 'calc(50% + 100px)',
-                        padding: '0 20px',
-                        transform: 'translateY(-50%)',
-                    }}
-                >
-                        <Text fontWeight={700} color="white" fontSize={24}>
-                            {title}
-                        </Text>
-                        <Text fontWeight={400} color="white" fontSize={12}>
-                        {description}
-                        </Text>
-                    
-                    <div className="flex gap-4pxr">
-                        <Image
-                            src={userImgUrl}
-                            width={399}
-                            height={0}
-                            alt={"kt"}
-                            className="w-18pxr h-18pxr object-cover rounded-full"
-                        />
-                        <Text
-                            fontWeight={700}
-                            color="white"
-                            fontSize={12}
-                            className="cursor-pointer"
-                        >
-                            {nickname}
-                        </Text>
-                    </div>
-                </div>
-            </section>
-        </>
-    )
+export default function HeaderBanner({ imageUrl }: HeaderBannerProps) {
+  const router = useRouter();
+
+  const handleBookmarkButton = () => {
+    router.push("/bookmark");
+  };
+
+  return (
+    <>
+      <section className="relative w-full h-337pxr">
+        <Image
+          src={imageUrl}
+          width={399}
+          height={0}
+          alt={"kt"}
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute flex flex-col gap-18pxr"
+          style={{
+            top: "24px",
+            right: "12px",
+            transform: "translateY(-50%)",
+          }}
+        >
+          <button className="color-white" onClick={handleBookmarkButton}>
+            <IconBookMarkWhite />
+          </button>
+        </div>
+      </section>
+    </>
+  );
 }

@@ -81,8 +81,8 @@ export default function TapBar({
     }
     if (type === "download") {
       return (
-				<IconUpload className="cursor-pointer" onClick={isRigihtIconAction} />
-			);
+        <IconUpload className="cursor-pointer" onClick={isRigihtIconAction} />
+      );
     }
     if (type === "edit") {
       // 편집 버튼 생성 (누르면 팬풀로그 편집으로 이동)

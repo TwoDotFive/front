@@ -23,8 +23,8 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
   isVisible,
   onClose,
   isEditMode,
-  onSave, // 저장 함수 prop
-  onDelete, // 삭제 함수 prop
+  onSave,
+  onDelete,
   initialMemo = "",
   initialImages = [],
 }) => {
@@ -36,6 +36,7 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
     if (isEditMode && isVisible) {
       setMemo(initialMemo);
       setImagePreviews(initialImages || []);
+      setImages([]); // 이미 업로드된 이미지는 images에서 제외 (업로드된 이미지들은 따로 관리됨)
     }
   }, [isEditMode, isVisible, initialMemo, initialImages]);
 
@@ -49,7 +50,15 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
       const newImagePreviews = uploadedFiles.map((file) => {
         return URL.createObjectURL(file);
       });
-      setImages((prevImages) => [...prevImages, ...uploadedFiles].slice(0, 4));
+
+      setImages((prevImages) => {
+        // 중복되지 않도록 새 이미지 파일 추가
+        const newFiles = uploadedFiles.filter(
+          (file) => !prevImages.some((img) => img.name === file.name)
+        );
+        return [...prevImages, ...newFiles].slice(0, 4);
+      });
+
       setImagePreviews((prevImages) =>
         [
           ...prevImages.filter((img) => !newImagePreviews.includes(img)),
@@ -66,6 +75,18 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
 
   const handleMemoSave = async () => {
     const uploadedImageUrls: { sequence: number; url: string }[] = [];
+
+    // imagePreviews 중 blob URL이 아닌 이미지는 그대로 유지
+    imagePreviews.forEach((preview, index) => {
+      if (!preview.startsWith("blob")) {
+        uploadedImageUrls.push({
+          sequence: index + 1,
+          url: preview,
+        });
+      }
+    });
+
+    // 새로 추가된 이미지들 업로드
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       if (image instanceof File) {
@@ -82,15 +103,7 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
         }
       }
     }
-    imagePreviews.forEach((preview, index) => {
-      // preview가 blob URL인 경우 push하지 않음
-      if (!preview.startsWith("blob")) {
-        uploadedImageUrls.push({
-          sequence: uploadedImageUrls.length + 1,
-          url: preview,
-        });
-      }
-    });
+
     onSave({
       content: memo,
       images: uploadedImageUrls,
@@ -177,5 +190,3 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
     </BottomSheet>
   );
 };
-
-export default MemoBottomSheet;

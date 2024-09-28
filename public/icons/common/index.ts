@@ -35,6 +35,7 @@ import IconLink from "./icon_link.svg";
 import IconBookMark from "./icon_bookmark.svg";
 import IconBookMarkSelected from "./icon_bookmark_selected.svg";
 import IconTrashCan from "./icon_trash_can.svg";
+import IconBookMarkWhite from "./icon_bookmark_white.svg";
 
 export {
   IconCalender,
@@ -43,7 +44,7 @@ export {
   IconRightArrow,
   IconMoreMenu,
   IconPencil,
-	IconPencilGray,
+  IconPencilGray,
   IconPlus,
   IconUpload,
   IconCheck,
@@ -62,16 +63,17 @@ export {
   IconFilter,
   IconCheckNavy,
   IconChat,
- 	IconSplash,
-	IconSplashEmpty,
-	IconKakao,
-	IconLeftArrowWhite,
-	IconBookmarkUnChecked,
-	IconBookmarkChecked,
-	IconCar,
+  IconSplash,
+  IconSplashEmpty,
+  IconKakao,
+  IconLeftArrowWhite,
+  IconBookmarkUnChecked,
+  IconBookmarkChecked,
+  IconCar,
   IconShare,
   IconLink,
   IconBookMark,
   IconBookMarkSelected,
   IconTrashCan,
+  IconBookMarkWhite,
 };

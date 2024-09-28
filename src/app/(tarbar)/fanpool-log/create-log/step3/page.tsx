@@ -17,7 +17,7 @@ import { Text } from "@/components/common/Text";
 import { IconClose, IconDefaultPin, IconUpload } from "@/public/icons";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
 import Button from "@/components/common/Button";
-import MemoBottomSheet from "@/components/fanpool-log/Create-log/MemoBottomSheet";
+import { MemoBottomSheet } from "@/components/fanpool-log/Create-log/MemoBottomSheet";
 import DayBottomSheet from "@/components/fanpool-log/Create-log/DayBottomSheet";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
 import TravelogAddCard from "@/components/card/TravelogAddCard";
@@ -29,7 +29,9 @@ import {
   postFanoolLog,
   uploadImageToS3,
 } from "@/api/fanpool-log/create-log/step3";
-import { reverseStadiumMap, stadiumMap } from "@/constants/stadium";
+import { reverseStadiumMap } from "@/constants/stadium";
+import { useModalStore } from "@/store/modalStore";
+import ToastMessage from "@/components/common/ToastMessage";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -70,8 +72,12 @@ export default function Page() {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [rImage, setRImage] = useState<File | string | null>(null); // 대표 이미지 상태
-  const [title, setTitle] = useState<string>(""); // 로그 제목 상태
+  const [rImage, setRImage] = useState<File | string | null>(
+    useFanpoologStore((state) => state.image)
+  ); // 대표 이미지 상태
+  const [title, setTitle] = useState<string>(
+    useFanpoologStore((state) => state.title)
+  ); // 로그 제목 상태
 
   const [isMemoBottomSheetVisible, setIsMemoBottomSheetVisible] =
     useState<boolean>(false); // 메모 편집 바텀 시트 상태
@@ -84,6 +90,7 @@ export default function Page() {
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState<
     number | null
   >(null); // 선택된 장소의 인덱스 (메모 추가할 때 사용)
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 
   const stadiumId = useFanpoologStore((state) => state.stadiumId);
   const stadiumPosition = useFanpoologStore((state) => state.stadiumPosition);
@@ -91,6 +98,7 @@ export default function Page() {
   const updateSchedule = useFanpoologStore((state) => state.updateSchedule);
   const removeSchedule = useFanpoologStore((state) => state.removeSchedule);
   const fanpoolLogId = useFanpoologStore((state) => state.fanpoolLogId);
+  const { openModal } = useModalStore();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -110,7 +118,7 @@ export default function Page() {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    
+
     if (!over) return; // 만약 over가 없으면 함수 종료
 
     const activeIndex = schedules.findIndex(
@@ -187,9 +195,15 @@ export default function Page() {
     router.push("/fanpool-log/create-log/step2");
   };
 
+  const openTitleErrorModal = () => {
+    openModal("error", {
+      confirmText: "로그 제목을 입력해주세요",
+    });
+  };
+
   const handleSubmit = async () => {
     if (!title.trim()) {
-      console.log("제목 입력 필요");
+      openTitleErrorModal();
     } else {
       // post 하기 전, 메모가 없는 것에는 memo:{content: "", images:[]} 를 추가
       const updatedSchedules = schedules.map((schedule) => {
@@ -222,16 +236,10 @@ export default function Page() {
             updatedSchedules
           );
           if (res.status === 200) {
-            // 전역 상태 모두 초기화 하고 페이지 이동
-            useFanpoologStore.setState({
-              title: "",
-              image: null,
-              stadiumId: null,
-              stadiumPosition: null,
-              schedules: [],
-              fanpoolLogId: null,
-            });
-            router.replace(`/fanpool-log/log/${fanpoolLogId}`);
+            setIsToastOpen(true);
+            setTimeout(() => {
+              router.replace(`/fanpool-log/log/${fanpoolLogId}`);
+            }, 2000);
           }
         } else {
           // 초기 생성
@@ -242,7 +250,11 @@ export default function Page() {
             updatedSchedules
           );
           if (res.status === 200) {
-            router.replace(`/fanpool-log/log/${res.data.id}`);
+            // 토스트 메시지가 사라지면 페이지 이동
+            setIsToastOpen(true);
+            setTimeout(() => {
+              router.replace(`/fanpool-log/log/${res.data.id}`);
+            }, 2000);
           }
         }
       } catch (e) {
@@ -327,7 +339,10 @@ export default function Page() {
               placeholder="로그 제목을 입력해주세요"
               className="w-full h-24pxr focus:outline-none color-gray200 weight-700 text-20pxr"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                useFanpoologStore.setState({ title: e.target.value });
+              }}
             ></input>
           </div>
           <div className="flex flex-col items-start gap-8pxr w-full">
@@ -558,6 +573,15 @@ export default function Page() {
         onClose={() => setIsDayBottomSheetVisible(false)}
         days={days}
         setDays={setDays}
+      />
+
+      {/* 토스트 메시지 */}
+      <ToastMessage
+        message="내가 쓴 로그가 업로드 되었어요!"
+        hasCheckBtn={true}
+        show={isToastOpen}
+        duration={2000}
+        onClose={() => setIsToastOpen(false)}
       />
     </div>
   );

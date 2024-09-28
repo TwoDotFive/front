@@ -9,10 +9,12 @@ import {
 } from "@/api/fanpool-log/log/main";
 import TravelogAddCard from "@/components/card/TravelogAddCard";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
+import BottomSheet from "@/components/common/BottomSheet";
 import Button from "@/components/common/Button";
 import InfinityLine from "@/components/common/InfinityLine";
 import TapBar from "@/components/common/TapBar";
 import { Text } from "@/components/common/Text";
+import ToastMessage from "@/components/common/ToastMessage";
 import FanpoologUser from "@/components/fanpool-log/FanpoologDetail/FanpoologUser";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
 import { stadiumMap } from "@/constants/stadium";
@@ -20,6 +22,7 @@ import {
   IconBookMark,
   IconBookMarkSelected,
   IconDefaultPin,
+  IconKakao,
   IconLink,
   IconShare,
 } from "@/public/icons";
@@ -53,6 +56,8 @@ export default function FanpoolLogDetailPage() {
   const { id } = params;
 
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+  const [hasToken, setHasToken] = useState<boolean>(false);
 
   // 전역 상태 설정
   const setFanpoolLogId = useFanpoologStore((state) => state.setFanpoolLogId);
@@ -106,7 +111,22 @@ export default function FanpoolLogDetailPage() {
     });
   };
 
+  const handleShareButton = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setIsToastOpen(true);
+    });
+  };
+
+  const handleLogin = () => {
+    router.push("/");
+  };
+
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setHasToken(true);
+    else setHasToken(false);
+
     getFanpoolLog(id.toString()).then((res) => {
       setFanpoolLog(res.data);
       setFanpoolLogUserId(res.data.user.id);
@@ -131,17 +151,22 @@ export default function FanpoolLogDetailPage() {
 
   return (
     <div className="w-full">
-      {userId === fanpoolLogUserId ? (
-        <TapBar
-          text=""
-          type="edit"
-          isNextButton={true}
-          onEdit={handleEditButton}
-          onDelete={handleDeleteButton}
-        />
+      {hasToken ? (
+        userId === fanpoolLogUserId ? (
+          <TapBar
+            text=""
+            type="edit"
+            isNextButton={true}
+            onEdit={handleEditButton}
+            onDelete={handleDeleteButton}
+          />
+        ) : (
+          <TapBar text="" type="left" />
+        )
       ) : (
-        <TapBar text="" type="left" />
+        <div className="mt-49pxr" />
       )}
+
       {/* 팬풀 로그 타이틀 및 장소 */}
       <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
         {fanpoolLog.image && (
@@ -267,7 +292,8 @@ export default function FanpoolLogDetailPage() {
           </div>
         ))}
       </div>
-      <div className="mb-50pxr" />
+      {hasToken ? <div className="mb-50pxr" /> : <div className="mb-100pxr" />}
+
       {/* 바텀 시트 */}
       <div
         className={
@@ -279,32 +305,69 @@ export default function FanpoolLogDetailPage() {
           overflowY: "auto",
         }}
       >
-        <div className="flex justify-center items-center gap-8pxr">
-          <Button
-            width="170px"
-            height="50px"
-            text={"채팅방 공유"}
-            borderRadius={8}
-            enabledTextColor={"text-white"}
-            enabledBackgroundColor={"bg-primary"}
-            disabledTextColor={"text-[#5679A3]"}
-            disabledBackgroundColor={"bg-primary"}
-            onClick={() => {}}
-          />
-          <button className="flex items-center jusitify-center p-8pxr">
-            <IconShare />
-          </button>
-          <button className="flex items-center jusitify-center p-8pxr">
-            <IconLink />
-          </button>
-          <button
-            className="flex items-center jusitify-center p-8pxr"
-            onClick={handleBookMarkButton}
-          >
-            {isSelected ? <IconBookMarkSelected /> : <IconBookMark />}
-          </button>
-        </div>
+        {hasToken ? (
+          <div className="flex justify-center items-center gap-8pxr">
+            <Button
+              width="170px"
+              height="50px"
+              text={"채팅방 공유"}
+              borderRadius={8}
+              enabledTextColor={"text-white"}
+              enabledBackgroundColor={"bg-primary"}
+              disabledTextColor={"text-[#5679A3]"}
+              disabledBackgroundColor={"bg-primary"}
+              onClick={() => {}}
+            />
+            <button className="flex items-center jusitify-center p-8pxr">
+              <IconShare />
+            </button>
+            <button
+              className="flex items-center jusitify-center p-8pxr"
+              onClick={handleShareButton}
+            >
+              <IconLink />
+            </button>
+            <button
+              className="flex items-center jusitify-center p-8pxr"
+              onClick={handleBookMarkButton}
+            >
+              {isSelected ? <IconBookMarkSelected /> : <IconBookMark />}
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center gap-11pxr">
+            <Text fontSize={14} fontWeight={500} color="gray700">
+              팬풀의 회원이 되면 더 많은 컨텐츠를 이용할 수 있어요.
+            </Text>
+            <button
+              className="flex w-320pxr h-50pxr px-16pxr py-10pxr justify-center items-center gap-4pxr flex-shrink-0 rounded-12pxr bg-[#FEE500]"
+              onClick={handleLogin}
+            >
+              <div className="flex justify-center items-cetner gap-4pxr">
+                <IconKakao />
+                <Text fontSize={14} fontWeight={500} color="black">
+                  카카오톡으로 시작하기
+                </Text>
+              </div>
+            </button>
+            <div>
+              <Text fontSize={12} fontWeight={500} color="gray500">
+                이미 계정이 있으신가요?{" "}
+                <button className="text-primary" onClick={handleLogin}>
+                  로그인하기
+                </button>
+              </Text>
+            </div>
+          </div>
+        )}
       </div>
+      <ToastMessage
+        message="링크가 복사되었어요!"
+        show={isToastOpen}
+        onClose={() => {
+          setIsToastOpen(false);
+        }}
+      />
     </div>
   );
 }

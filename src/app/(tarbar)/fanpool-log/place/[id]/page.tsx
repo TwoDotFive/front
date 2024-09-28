@@ -117,7 +117,11 @@ export default function Page() {
             marginBottom="mb-32pxr"
           />
           {/* 방문 여행 일정 (추후 변경 필요) */}
-          <RecentFanpoolLog hasButton={false} />
+          <RecentFanpoolLog
+            hasButton={false}
+            contentId={id.toString()}
+            contentType={contentType!}
+          />
         </div>
       </section>
     </div>

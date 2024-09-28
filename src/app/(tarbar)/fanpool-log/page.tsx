@@ -9,6 +9,7 @@ import RecentFanpoolLog from "@/components/fanpool-log/RecentFanpoolLog";
 import { useRouter } from "next/navigation";
 import TagFilter from "@/components/fanpool-log/Create-log/TagFilter";
 import { getFanpoologList } from "@/api/fanpool-log/main";
+import { FanpoolLogList } from "@/types/types";
 
 // 지역 데이터
 const regions = [
@@ -22,18 +23,6 @@ const regions = [
   "대전",
   "고척",
 ];
-
-interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  locations: string[];
-}
 
 export default function Page() {
   const router = useRouter();
@@ -92,14 +81,8 @@ export default function Page() {
 
   return (
     <div className="w-full flex flex-col">
-      {/* 상단 배너 */}
-      <HeaderBanner
-        imageUrl="/images/fanpool-log_ex.png"
-        title="비오는날 경기 대신 서울나들이 ..."
-        description="최대 두줄까지만이라고 하려고 했는데 여기 들어가는 문구가 뭔지 정해지지 않은 것 같아"
-        nickname="네임드호빵"
-        userImgUrl="/images/kt.png"
-      />
+      {/* 상단 배너 변경 예정*/}
+      <HeaderBanner imageUrl="/images/fanpool-log_ex.png" />
       <div className="p-20pxr">
         {/* 최근 팬풀로그 */}
         <RecentFanpoolLog />

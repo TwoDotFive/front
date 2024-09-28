@@ -27,7 +27,7 @@ interface LocationResponse {
  */
 const getUserLocation = async (): Promise<LocationResponse> => {
 	// GET 요청으로 사용자 위치 정보를 가져옴
-	const response = await apiClient.get<LocationResponse>('/user/locations');
+	const response = await apiClient.get<LocationResponse>('/user/location');
 	return response.data;
 };
 

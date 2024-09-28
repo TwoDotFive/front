@@ -1,3 +1,5 @@
+'use client';
+
 import NavBar from '@/components/common/navbar/NavBar';
 import Profile from '@/components/profile/Profile';
 import ProfileTabMenu from '@/components/profile/ProfileTabMenu';
@@ -8,11 +10,10 @@ export default function ProfilePage({ params }: { params?: { id?: string } }) {
 		<section>
 			<ProfileTapbar />
 			<div className="px-20pxr">
-				<Profile />
+				<Profile /> {/* profileId로 해당 프로필 정보 전달 */}
 				<div className="h-30pxr" />
 				<ProfileTabMenu />
 			</div>
-			<NavBar />
 		</section>
 	);
 }

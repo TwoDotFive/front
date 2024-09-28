@@ -14,7 +14,7 @@ export const LoginCheckProvider = ({
 	const { fetchUserProfile } = useUserStore();
 	useEffect(() => {
 		const getUserToken = async () => {
-			if (!localStorage.getItem('token') || !localStorage.getItem('userId')) {
+			if (!localStorage.getItem('token')) {
 				alert('로그인이 필요한 서비스입니다.');
 				router.push('/');
 			} else {

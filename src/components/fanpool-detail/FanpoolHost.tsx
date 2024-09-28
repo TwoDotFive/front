@@ -25,7 +25,7 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 				setUserProfile(response);
 			} catch (err) {
 				console.error('Failed to fetch user profile:', err);
-				setError('사용자 정보를 불러오지 못했습니다.');
+				setError('');
 			} finally {
 				setLoading(false);
 			}

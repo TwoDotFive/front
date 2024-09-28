@@ -8,7 +8,7 @@ interface FindResultProps {
 export default function FindResult({ fanpoolDatas }: FindResultProps) {
 	return (
 		<section className="flex flex-col gap-12pxr">
-			{fanpoolDatas ? (
+			{fanpoolDatas.length !== 0 ? (
 				fanpoolDatas.map((fanpoolData, index) => (
 					<FanpoolCard fanpool={fanpoolData} />
 				))

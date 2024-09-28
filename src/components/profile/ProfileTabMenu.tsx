@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { Text } from '../common/Text';
 import MakeFanpoolButton from '../common/button/MakeFanpoolButton';
+import MakeFanpoolLogButton from '../common/button/MakeFanpoolLogButton';
+import { useRouter } from 'next/navigation';
 
 interface ProfileTabMenuProps {
 	fanpoolCount?: number;
@@ -12,10 +14,15 @@ export default function ProfileTabMenu({
 	fanpoolCount = 0,
 	logCount = 0,
 }: ProfileTabMenuProps) {
+	const router = useRouter();
 	const [activeTab, setActiveTab] = useState<'tab1' | 'tab2'>('tab1');
 
 	const handleTabClick = (tab: 'tab1' | 'tab2') => {
 		setActiveTab(tab);
+	};
+
+	const handleClick = () => {
+		router.push('/fanpool-add');
 	};
 
 	return (
@@ -69,13 +76,11 @@ export default function ProfileTabMenu({
 									color="gray500"
 									className="text-center"
 								>
-									모집한 핀풀이 없어요!
+									모집한 팬풀이 없어요!
 									<br />
 									새로운 팬풀을 모집해봐요!
 								</Text>
-								<MakeFanpoolButton
-									onClick={() => console.log('Button clicked!')}
-								/>
+								<MakeFanpoolButton onClick={handleClick} />
 							</div>
 						)}
 					</div>
@@ -98,7 +103,7 @@ export default function ProfileTabMenu({
 									<br />
 									지금 새 로그를 만들어 볼까요?
 								</Text>
-								<MakeFanpoolButton
+								<MakeFanpoolLogButton
 									onClick={() => console.log('Button clicked!')}
 								/>
 							</div>

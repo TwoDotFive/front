@@ -5,6 +5,7 @@ import { IconClose } from '@/public/icons';
 import UserProfile from './UserProfile';
 import { useRouter } from 'next/navigation';
 import { useModalStore } from '@/store/modalStore';
+import { useUserStore } from '@/store/useUserStore';
 interface DrawerProps {
 	isVisible: boolean;
 	onClose: () => void;
@@ -12,6 +13,7 @@ interface DrawerProps {
 
 export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 	const router = useRouter();
+	const { userProfile } = useUserStore();
 	const { openModal, closeModal } = useModalStore();
 	const drawerClasses = isVisible ? 'translate-x-0' : '-translate-x-full';
 	const overlayClasses = isVisible
@@ -75,8 +77,8 @@ export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 				</div>
 				<div className="flex-1 overflow-y-auto px-20pxr">
 					<UserProfile
-						name={'네임드호빵'}
-						fanpoolCount={3}
+						name={userProfile?.nickname || '아무개'}
+						fanpoolCount={userProfile?.hostedFanpoolNumber || 0}
 						fanpoolLogCount={4}
 					/>
 					<div className="h-24pxr" />

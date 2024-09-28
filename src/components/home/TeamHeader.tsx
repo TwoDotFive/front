@@ -8,6 +8,7 @@ import Drawer from './Drawer/Drawer';
 import SelectTeamBottomSheet from './SelectTeamBottomSheet';
 import { useUserStore } from '@/store/useUserStore';
 import { UserProfileResponse } from '@/types/types';
+import { useRouter } from 'next/navigation';
 
 interface TeamHeaderProps {
 	gameSchedule: { games: any[]; numberOfGame: number } | null;
@@ -18,6 +19,7 @@ export default function TeamHeader({
 	gameSchedule,
 	userProfile,
 }: TeamHeaderProps) {
+	const router = useRouter();
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
@@ -48,7 +50,9 @@ export default function TeamHeader({
 						<IconHamburger onClick={toggleDrawer} />
 					</div>
 					<div className="absolute top-55pxr right-20pxr cursor-pointer">
-						<IconPerson />
+						<div onClick={() => router.push('/profile')}>
+							<IconPerson />
+						</div>
 					</div>
 				</section>
 				<Image

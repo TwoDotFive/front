@@ -3,21 +3,28 @@ import Image from 'next/image';
 import { Text } from '../common/Text';
 import { useUserStore } from '@/store/useUserStore';
 import ProfileDongne from './ProfileDongne';
+import { useState } from 'react';
 
 export default function Profile() {
 	const { userProfile } = useUserStore();
-	console.log(userProfile);
+
+	const [imgSrc, setImgSrc] = useState(
+		userProfile?.profileImageUrl || '/images/image_profile_default.png'
+	);
+
+	const handleImageError = () => {
+		setImgSrc('/images/image_profile_default.png');
+	};
 	return (
 		<section>
 			<div className="h-14pxr" />
 			<div className="flex flex-col items-center">
 				<Image
-					src={
-						userProfile?.profileImageUrl || '/images/image_profile_default.png'
-					}
+					src={imgSrc}
 					width={80}
 					height={80}
 					alt={''}
+					onError={handleImageError}
 				/>
 				<div className="h-8pxr" />
 				<Text fontSize={16} fontWeight={700} color="gray700">

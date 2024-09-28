@@ -55,3 +55,19 @@ export interface FanpoolLogList {
   };
   locations: string[];
 }
+
+export interface PlaceContent {
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  contentId: number;
+  contentType: number;
+  fee: number | null;
+  firstMenu: string | null;
+  infoCenter: string | null;
+  openTime: string | null;
+  parking: string | null;
+  restDate: string | null;
+  reservervationPageUrl: string | null;
+  restroom: string | null;
+  treatMenu: string | null;
+}

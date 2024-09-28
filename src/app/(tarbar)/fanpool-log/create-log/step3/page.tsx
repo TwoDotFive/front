@@ -17,7 +17,7 @@ import { Text } from "@/components/common/Text";
 import { IconClose, IconDefaultPin, IconUpload } from "@/public/icons";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
 import Button from "@/components/common/Button";
-import MemoBottomSheet from "@/components/fanpool-log/Create-log/MemoBottomSheet";
+import { MemoBottomSheet } from "@/components/fanpool-log/Create-log/MemoBottomSheet";
 import DayBottomSheet from "@/components/fanpool-log/Create-log/DayBottomSheet";
 import useKakaoLoader from "@/components/fanpool-log/FanpoologDetail/useKakaoLoader";
 import TravelogAddCard from "@/components/card/TravelogAddCard";

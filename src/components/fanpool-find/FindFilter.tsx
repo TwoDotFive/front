@@ -1,6 +1,5 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Text } from '../common/Text';
 import { IconCheckNavy, IconDefaultPin, IconFilter } from '@/public/icons';
@@ -9,15 +8,17 @@ import { teams } from '@/constants/teams';
 import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
 import MatchSelectBottomSheet from './MatchSelectBottomSheet';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
+import getFanpoolFilter from '@/api/fanpool/getFanpoolFilter';
 
 export default function FindFilter() {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-	const [selectedTeam, setSelectedTeam] = useState<string>('');
+	const [selectedTeam, setSelectedTeam] = useState<number>(0);
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
+	const [isCheckDeadline, setIsCheckDeadLine] = useState<boolean>(true);
+	const [fanpoolData, setFanpoolData] = useState(null);
 	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
 		useState(false);
-	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 
 	const [bottomSheet, setBottomSheet] = useState<{
 		visible: boolean;
@@ -29,8 +30,7 @@ export default function FindFilter() {
 
 	const [selectedPlace, setSelectedPlace] = useState<{
 		name: string;
-		x: string;
-		y: string;
+		id: string;
 	} | null>(null);
 
 	const toggleBottomSheet = () => {
@@ -41,14 +41,12 @@ export default function FindFilter() {
 		setIsMatchSelectBottomSheetVisible(!isMatchSelectBottomSheetVisible);
 	};
 
-	const handleTeamSelect = (code: string) => {
-		setSelectedTeam(code);
-		const teamName =
-			teams.find((team) => team.code === code)?.name || 'Unknown Team';
+	const handleTeamSelect = (id: number) => {
+		setSelectedTeam(id);
 	};
 
-	const handleMatchSelect = (matchId: number) => {
-		setSelectedMatch(matchId);
+	const handleMatchSelect = (matchIds: number[]) => {
+		setSelectedMatches(matchIds);
 	};
 
 	const handleDateSelect = (date: Date) => {
@@ -63,13 +61,39 @@ export default function FindFilter() {
 		setBottomSheet({ visible: false, type: null });
 	};
 
-	const handlePlaceSelect = (place: { name: string; x: string; y: string }) => {
+	const handlePlaceSelect = (place: { name: string; id: string }) => {
 		setSelectedPlace(place);
 		closeBottomSheet();
 	};
+
 	const formatDate = (date: Date) => {
 		return format(date, 'yy.MM.dd');
 	};
+
+	useEffect(() => {
+		const fetchFanpoolData = async () => {
+			try {
+				const response = await getFanpoolFilter({
+					teamId: selectedTeam ? selectedTeam : undefined,
+					dongCd: selectedPlace ? selectedPlace.id : undefined,
+					gameId: selectedMatches,
+					departAt: selectedDate ? selectedDate : undefined,
+					onlyGathering: isCheckDeadline,
+				});
+				console.log(response);
+			} catch (error) {
+				console.error('Failed to fetch fanpool data:', error);
+			}
+		};
+
+		fetchFanpoolData();
+	}, [
+		selectedMatches,
+		selectedDate,
+		selectedTeam,
+		selectedPlace,
+		isCheckDeadline,
+	]);
 
 	return (
 		<div className="flex flex-col gap-8pxr">
@@ -92,7 +116,7 @@ export default function FindFilter() {
 						className="whitespace-nowrap text-center"
 					>
 						{selectedTeam
-							? teams.find((team) => team.code === selectedTeam)?.name
+							? teams.find((team) => team.id === selectedTeam)?.name
 							: '모든 팀'}
 					</Text>
 				</div>
@@ -115,7 +139,7 @@ export default function FindFilter() {
 				</div>
 			</div>
 			<div onClick={toggleMatchBottomSheet}>
-				<FanpoolMatchSelectButton matchCount={13} />
+				<FanpoolMatchSelectButton matchCount={selectedMatches.length} />
 			</div>
 			<div
 				className="relative w-full h-40pxr cursor-pointer"
@@ -133,7 +157,10 @@ export default function FindFilter() {
 				<Text fontSize={12} fontWeight={500} color="gray400">
 					인기순
 				</Text>
-				<div className="flex gap-2pxr">
+				<div
+					className="flex gap-2pxr"
+					onClick={() => setIsCheckDeadLine((prev) => !prev)}
+				>
 					<Text fontSize={12} fontWeight={500} color="kboNavy">
 						마감된 팬풀 안보기
 					</Text>

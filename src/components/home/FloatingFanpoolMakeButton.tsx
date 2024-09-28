@@ -10,7 +10,7 @@ export const FloatingFanpoolMakeButton = () => {
 	};
 	return (
 		<div
-			className="z-50 fixed bottom-80pxr right-20pxr w-fit h-fit py-14pxr px-12pxr gap-6pxr flex items-center justify-center bg-kboNavy rounded-30pxr cursor-pointer hover:brightness-75"
+			className="z-50 sticky bottom-80pxr left-260pxr w-fit h-fit py-14pxr px-12pxr gap-6pxr flex items-center justify-center bg-kboNavy rounded-30pxr cursor-pointer hover:brightness-75"
 			onClick={handleClick}
 		>
 			<IconCar />

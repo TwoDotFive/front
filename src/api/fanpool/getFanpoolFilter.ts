@@ -1,6 +1,17 @@
 import { FanpoolInformation } from '@/types/types';
 import apiClient from '..';
 
+const formatDateToISO8601 = (date: Date): string => {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	const seconds = String(date.getSeconds()).padStart(2, '0');
+
+	return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+};
+
 /**
  * 팬풀 필터링 정보 응답 인터페이스
  */
@@ -33,7 +44,7 @@ const getFanpoolFilter = async ({
 	teamId?: number;
 	dongCd?: string;
 	gameId?: number[];
-	departAt?: string;
+	departAt?: Date;
 	onlyGathering?: boolean;
 	page?: number;
 	size?: number;
@@ -45,7 +56,7 @@ const getFanpoolFilter = async ({
 				teamId,
 				dongCd,
 				gameId,
-				departAt,
+				departAt: departAt ? formatDateToISO8601(departAt) : undefined,
 				onlyGathering,
 				page,
 				size,

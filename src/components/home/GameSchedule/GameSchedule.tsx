@@ -1,20 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { format, addDays, subDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { Text } from '../../common/Text';
 import GameCard from './GameCard';
 import FanpoolButton from '../FanpoolButton';
-import { useUserStore } from '@/store/useUserStore';
-import getGame from '@/api/baseball/getGames';
 import { Game } from '@/types/types';
-import getFanpoolLatest from '@/api/fanpool/getFanpoolLastest';
 
-export default function GameSchedule() {
-	const { userProfile } = useUserStore();
+interface GameScheduleProps {
+	gameSchedule: { games: Game[]; numberOfGame: number } | null;
+}
+
+export default function GameSchedule({ gameSchedule }: GameScheduleProps) {
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-	const [games, setGames] = useState<Game[]>(); // 경기 데이터를 저장할 상태
 
 	const dates = Array.from({ length: 7 }, (_, i) =>
 		addDays(subDays(new Date(), 1), i)
@@ -24,21 +23,14 @@ export default function GameSchedule() {
 		setSelectedDate(date);
 	};
 
-	// userProfile.favoriteTeam.id로 API 호출
-	useEffect(() => {
-		const fetchGames = async () => {
-			if (userProfile?.favoriteTeam?.id) {
-				try {
-					const response = await getFanpoolLatest();
-					console.log('Fetched games:', response); // 경기 정보 출력
-				} catch (error) {
-					console.error('Error fetching games:', error);
-				}
-			}
-		};
-
-		fetchGames();
-	}, [userProfile]);
+	// 선택된 날짜에 해당하는 게임 필터링
+	const gamesForSelectedDate = gameSchedule
+		? gameSchedule.games.filter(
+				(game) =>
+					format(new Date(game.startDate), 'yyyy-MM-dd') ===
+					format(selectedDate, 'yyyy-MM-dd')
+		  )
+		: [];
 
 	return (
 		<section className="w-full">
@@ -86,20 +78,27 @@ export default function GameSchedule() {
 				))}
 			</div>
 			<div className="h-36pxr" />
-			<div
-				className="rounded-12pxr"
-				style={{ boxShadow: '0px 0px 11px 0px rgba(0, 0, 0, 0.11)' }}
-			>
-				{/**
-				 * 경기 보여주는 부분
-				 */}
-
-				<GameCard />
-				{/**
-				 * 팬풀 검색 버튼
-				 */}
-				<FanpoolButton />
-			</div>
+			{gamesForSelectedDate.length > 0 ? (
+				<div
+					className="rounded-12pxr"
+					style={{ boxShadow: '0px 0px 11px 0px rgba(0, 0, 0, 0.11)' }}
+				>
+					{/**
+					 * 경기 보여주는 부분
+					 */}
+					{gamesForSelectedDate.map((game) => (
+						<GameCard key={game.id} game={game} />
+					))}
+					{/**
+					 * 팬풀 검색 버튼
+					 */}
+					<FanpoolButton />
+				</div>
+			) : (
+				<Text fontSize={16} color="gray700">
+					선택된 날짜에 경기가 없습니다.
+				</Text>
+			)}
 		</section>
 	);
 }

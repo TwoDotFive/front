@@ -3,19 +3,23 @@ import { teams } from '@/constants/teams';
 import { Text } from '../../common/Text';
 import Image from 'next/image';
 import { TagFanPool } from '../../common/tag/TagFanPool';
+import { Game } from '@/types/types';
 
-export default function GameCard() {
-	/**
-	 * TODO 데이터 props로 옮기기
-	 */
-	const home = 'kiwoom';
-	const homeInfo = teams.find((team) => team.code === home)!;
-	const away = 'doosan';
-	const awayInfo = teams.find((team) => team.code === away)!;
+interface GameCardProps {
+	game: Game; // Game 객체를 props로 받음
+}
 
-	const placeName = '서울종합운동장 잠실야구장';
+export default function GameCard({ game }: GameCardProps) {
+	// 홈 팀과 원정 팀 정보
+	const homeInfo = game.homeTeam;
+	const awayInfo = game.awayTeam;
 
-	const date = format(new Date(), 'yyyy. MM. dd aaa HH:mm').toUpperCase();
+	// 경기 장소와 시간
+	const placeName = game.stadium;
+	const date = format(
+		new Date(game.startDate),
+		'yyyy. MM. dd aaa HH:mm'
+	).toUpperCase();
 
 	return (
 		<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden">
@@ -25,7 +29,7 @@ export default function GameCard() {
 			/>
 
 			{/**
-			 * 위치,시간 정보
+			 * 위치, 시간 정보
 			 */}
 			<section className="relative w-full flex flex-col items-center gap-4pxr pt-20pxr">
 				<Text fontSize={14} fontWeight={700} color="kboNavy">
@@ -39,6 +43,7 @@ export default function GameCard() {
 				</div>
 			</section>
 			<div className="h-12pxr" />
+
 			{/**
 			 * HOME VS AWAY
 			 */}
@@ -46,12 +51,11 @@ export default function GameCard() {
 				<section className="flex justify-center items-center gap-14pxr">
 					<div className="flex gap-2pxr items-center">
 						<Image
-							src={`/images/${homeInfo.code}.png`}
+							src={homeInfo.representativeImageUrl}
 							alt={homeInfo.name}
 							width={28}
 							height={28}
 						/>
-
 						<Text fontSize={18} fontWeight={800} color="kboNavy">
 							{homeInfo.name}
 						</Text>
@@ -64,7 +68,7 @@ export default function GameCard() {
 							{awayInfo.name}
 						</Text>
 						<Image
-							src={`/images/${awayInfo.code}.png`}
+							src={awayInfo.representativeImageUrl}
 							alt={awayInfo.name}
 							width={28}
 							height={28}

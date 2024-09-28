@@ -7,7 +7,7 @@ import useKakaoLoader from '../register/useKakaoLoader';
 interface PlaceSearchBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onSelectPlace: (place: { name: string; x: string; y: string }) => void;
+	onSelectPlace: (place: { name: string; id: string }) => void;
 }
 
 export const PlaceSearchBottomSheet: React.FC<PlaceSearchBottomSheetProps> = ({
@@ -37,16 +37,16 @@ export const PlaceSearchBottomSheet: React.FC<PlaceSearchBottomSheetProps> = ({
 		if (query.trim()) {
 			const debounce = setTimeout(() => {
 				searchPlaces();
-			}, 300); // 300ms 딜레이를 추가하여 입력 중 검색을 방지
+			}, 300);
 
-			return () => clearTimeout(debounce); // clean up
+			return () => clearTimeout(debounce);
 		} else {
-			setPlaces([]); // query가 없을 때 결과 초기화
+			setPlaces([]);
 		}
 	}, [query]);
 
 	const handleSelectPlace = (place: any) => {
-		onSelectPlace({ name: place.place_name, x: place.x, y: place.y });
+		onSelectPlace({ name: place.place_name, id: place.id });
 		onClose();
 	};
 

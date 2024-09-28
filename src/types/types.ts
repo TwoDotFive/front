@@ -28,6 +28,7 @@ export interface Location {
 
 export interface FanpoolInformation {
 	id: number;
+	title: string;
 	hostUserId: number;
 	game: Game;
 	departAt: string;

@@ -3,10 +3,9 @@ import { useState, useEffect } from 'react';
 import FanpoolCard from '@/components/common/fanpool/FanpoolCard';
 import FanpoolMoreButton from '@/components/common/fanpool/FanpoolMoreButton';
 import { Text } from '../../common/Text';
-import getFanpoolLatest, {
-	FanpoolInformation,
-} from '@/api/fanpool/getFanpoolLastest';
+import getFanpoolLatest from '@/api/fanpool/getFanpoolLastest';
 import { useRouter } from 'next/navigation';
+import { FanpoolInformation } from '@/types/types';
 
 export default function LiveFanPool() {
 	const router = useRouter();

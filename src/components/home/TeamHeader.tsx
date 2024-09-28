@@ -7,9 +7,17 @@ import { IconHamburger, IconPerson } from '@/public/icons';
 import Drawer from './Drawer/Drawer';
 import SelectTeamBottomSheet from './SelectTeamBottomSheet';
 import { useUserStore } from '@/store/useUserStore';
+import { UserProfileResponse } from '@/types/types';
 
-export default function TeamHeader() {
-	const { userProfile } = useUserStore();
+interface TeamHeaderProps {
+	gameSchedule: { games: any[]; numberOfGame: number } | null;
+	userProfile: UserProfileResponse;
+}
+
+export default function TeamHeader({
+	gameSchedule,
+	userProfile,
+}: TeamHeaderProps) {
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
@@ -17,13 +25,12 @@ export default function TeamHeader() {
 		setIsDrawerVisible(!isDrawerVisible);
 	};
 
-	// userProfile이 업데이트되면 해당 팀 찾기
 	const team = teams.find((team) => team.id === userProfile?.favoriteTeam?.id);
 	const name = team ? team.name : '응원하는 팀이 <br /> 아직 없어요!';
 	const imageUrl = team
 		? `/images/${team.code}_bg.png`
 		: '/images/noteam_bg.png';
-	const count = team ? 2 : 0;
+	const count = gameSchedule ? gameSchedule.numberOfGame : 0; // gameSchedule에서 경기 수 가져오기
 
 	const handleButtonClick = () => {
 		setIsSheetOpen(true);
@@ -36,9 +43,6 @@ export default function TeamHeader() {
 	return (
 		<>
 			<section className="relative w-full">
-				{/**
-				 * Icon 영역
-				 */}
 				<section>
 					<div className="absolute top-55pxr left-20pxr cursor-pointer">
 						<IconHamburger onClick={toggleDrawer} />
@@ -47,9 +51,6 @@ export default function TeamHeader() {
 						<IconPerson />
 					</div>
 				</section>
-				{/**
-				 * Info 영역
-				 */}
 				<Image
 					src={imageUrl}
 					width={399}

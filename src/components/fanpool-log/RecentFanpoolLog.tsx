@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import TravelogCard from "../card/TravelogCard";
-import Button from "../common/Button";
 import { Text } from "../common/Text";
 import { getFanpoologList } from "@/api/fanpool-log/main";
 
@@ -26,11 +25,7 @@ export default function RecentFanpoolLog({
   hasButton = true,
 }: RecentFanpoolLogProps) {
   useEffect(() => {
-    const token = localStorage.getItem("userId");
-    if (!token) {
-      console.log("token is null");
-    }
-    getFanpoologList(token!).then((res) => {
+    getFanpoologList().then((res) => {
       if (res) {
         const items = res.items;
         setTravelLogData(items);
@@ -68,21 +63,6 @@ export default function RecentFanpoolLog({
           />
         ))}
       </div>
-      {hasButton && (
-        <div className="mx-auto">
-          <Button
-            width="320px"
-            height="50px"
-            text={"더보기"}
-            borderRadius={8}
-            enabledTextColor={"text-gray700"}
-            enabledBackgroundColor={"bg-gray100"}
-            disabledTextColor={"text-gray300"}
-            disabledBackgroundColor={"bg-primary"}
-            onClick={() => {}}
-          />
-        </div>
-      )}
     </section>
   );
 }

@@ -10,17 +10,17 @@ import patchUserProfile from '@/api/user/patchUserProfile';
 interface BottomSheetProps {
 	isOpen: boolean;
 	onClose: () => void;
+	handleSelectTeam: (id: string) => void;
 }
 
 export default function SelectTeamBottomSheet({
 	isOpen,
 	onClose,
+	handleSelectTeam,
 }: BottomSheetProps) {
-	const { userProfile, setUserProfile } = useUserStore();
 	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
 
-	// API에서 팀 데이터를 가져옴
 	useEffect(() => {
 		const fetchTeams = async () => {
 			try {
@@ -48,8 +48,9 @@ export default function SelectTeamBottomSheet({
 	}, []);
 
 	// 팀 선택 시
-	const handleTeamSelect = (code: string) => {
+	const handleTeamSelect = (code: string, id: string) => {
 		setSelectedTeam(code);
+		handleSelectTeam(id);
 	};
 
 	// 선택한 팀 정보 저장 및 API 요청
@@ -59,35 +60,7 @@ export default function SelectTeamBottomSheet({
 			(team) => team.code === selectedTeam
 		);
 
-		if (selectedTeamData && userProfile) {
-			const updatedFavoriteTeam = {
-				id: selectedTeamData.id,
-				name: selectedTeamData.name,
-				stadiumAliasName: selectedTeamData.stadiumAliasName,
-				stadiumName: selectedTeamData.stadiumName,
-				representativeImageUrl: selectedTeamData.representativeImageUrl!,
-			};
-
-			// userProfile 업데이트
-			const updatedUserProfile = {
-				...userProfile,
-				favoriteTeam: updatedFavoriteTeam,
-			};
-			console.log(updatedUserProfile);
-			// 상태 업데이트
-			setUserProfile(updatedUserProfile);
-
-			// 서버로 업데이트된 프로필 정보 전송
-			try {
-				const response = await patchUserProfile(updatedUserProfile);
-				console.log(response);
-				console.log('Favorite team updated successfully');
-			} catch (error) {
-				console.error('Failed to update favorite team:', error);
-			}
-		}
-
-		onClose(); // 선택 완료 후 닫기
+		onClose();
 	};
 
 	return (
@@ -107,8 +80,8 @@ export default function SelectTeamBottomSheet({
 							<div key={team.code || `team-${index}`} className="mb-8pxr">
 								<SelectTeamButton
 									code={team.code}
-									isSelected={selectedTeam === team.code}
-									onClick={() => handleTeamSelect(team.code)}
+									isSelected={selectedTeam === team.id}
+									onClick={() => handleTeamSelect(team.code, team.id)}
 								/>
 							</div>
 						))}
@@ -117,7 +90,7 @@ export default function SelectTeamBottomSheet({
 							<SelectTeamButton
 								code=""
 								isSelected={selectedTeam === ''}
-								onClick={() => handleTeamSelect('')}
+								onClick={() => handleTeamSelect('', '')}
 							/>
 						</div>
 					</div>

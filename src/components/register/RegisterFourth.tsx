@@ -6,9 +6,7 @@ interface RegisterFourthProps {
 	handleNext: () => void;
 }
 
-export const RegisterFourth: React.FC<RegisterFourthProps> = ({
-	handleNext,
-}) => {
+export const RegisterFourth = ({ handleNext }: RegisterFourthProps) => {
 	return (
 		<section className="mt-16pxr px-20pxr">
 			<div className="flex flex-col items-center gap-4pxr">

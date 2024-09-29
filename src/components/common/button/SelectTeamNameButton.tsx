@@ -1,7 +1,6 @@
 import React from 'react';
 import { teams } from '@/constants/teams';
 import { Text } from '../Text';
-import { IconCheck } from '@/public/icons';
 
 type SelectTeamNameButtonProps = {
 	code: string;

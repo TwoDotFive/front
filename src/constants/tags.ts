@@ -30,6 +30,11 @@ export const tags = {
 		TEXT_COLOR: 'kboBlue500',
 		BG_COLOR: 'kboBlue0',
 	},
+	'성별 무관': {
+		NAME: '성별 무관',
+		TEXT_COLOR: 'kboBlue500',
+		BG_COLOR: 'kboBlue0',
+	},
 	AWAY: {
 		NAME: 'AWAY',
 		TEXT_COLOR: 'activeLylac600',

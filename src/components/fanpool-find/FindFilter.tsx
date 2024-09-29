@@ -1,22 +1,40 @@
-'use client';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { Text } from '../common/Text';
-import { IconCheckNavy, IconDefaultPin, IconFilter } from '@/public/icons';
+import {
+	IconCheckNavy,
+	IconDefaultPin,
+	IconFilter,
+	IconUnChecked,
+} from '@/public/icons';
 import FilterBottomSheet from './FilterBottomSheet';
 import { teams } from '@/constants/teams';
 import FanpoolMatchSelectButton from '../common/fanpool/FanpoolMatchSelectButton';
 import MatchSelectBottomSheet from './MatchSelectBottomSheet';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 import getFanpoolFilter from '@/api/fanpool/getFanpoolFilter';
+import { FanpoolInformation } from '@/types/types';
+import { useSearchStore } from '@/store/useSearchStore'; // Zustand 스토어 import
 
-export default function FindFilter() {
+interface FindFilterProps {
+	setFanpoolData: (fanpools: FanpoolInformation[]) => void;
+}
+
+export default function FindFilter({ setFanpoolData }: FindFilterProps) {
+	const {
+		selectedMatches,
+		selectedDate,
+		selectedTeam,
+		selectedPlace,
+		isCheckDeadline,
+		setSelectedMatches,
+		setSelectedDate,
+		setSelectedTeam,
+		setSelectedPlace,
+		toggleCheckDeadline,
+	} = useSearchStore();
+
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-	const [selectedTeam, setSelectedTeam] = useState<number>(0);
-	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
-	const [isCheckDeadline, setIsCheckDeadLine] = useState<boolean>(true);
-	const [fanpoolData, setFanpoolData] = useState(null);
 	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
 		useState(false);
 
@@ -28,11 +46,6 @@ export default function FindFilter() {
 		type: null,
 	});
 
-	const [selectedPlace, setSelectedPlace] = useState<{
-		name: string;
-		id: string;
-	} | null>(null);
-
 	const toggleBottomSheet = () => {
 		setIsBottomSheetVisible(!isBottomSheetVisible);
 	};
@@ -41,16 +54,16 @@ export default function FindFilter() {
 		setIsMatchSelectBottomSheetVisible(!isMatchSelectBottomSheetVisible);
 	};
 
-	const handleTeamSelect = (id: number) => {
-		setSelectedTeam(id);
+	const handleTeamSelect = (id: string) => {
+		setSelectedTeam(id); // 팀 선택시 상태 업데이트
 	};
 
 	const handleMatchSelect = (matchIds: number[]) => {
-		setSelectedMatches(matchIds);
+		setSelectedMatches(matchIds); // 경기 선택시 상태 업데이트
 	};
 
 	const handleDateSelect = (date: Date) => {
-		setSelectedDate(date);
+		setSelectedDate(date); // 날짜 선택시 상태 업데이트
 	};
 
 	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
@@ -62,7 +75,7 @@ export default function FindFilter() {
 	};
 
 	const handlePlaceSelect = (place: { name: string; id: string }) => {
-		setSelectedPlace(place);
+		setSelectedPlace(place); // 장소 선택시 상태 업데이트
 		closeBottomSheet();
 	};
 
@@ -81,6 +94,7 @@ export default function FindFilter() {
 					onlyGathering: isCheckDeadline,
 				});
 				console.log(response);
+				setFanpoolData(response.fanpools);
 			} catch (error) {
 				console.error('Failed to fetch fanpool data:', error);
 			}
@@ -93,6 +107,7 @@ export default function FindFilter() {
 		selectedTeam,
 		selectedPlace,
 		isCheckDeadline,
+		setFanpoolData,
 	]);
 
 	return (
@@ -102,17 +117,13 @@ export default function FindFilter() {
 					<IconFilter onClick={toggleBottomSheet} />
 				</div>
 				<div
-					className={`relative h-30pxr flex justify-center items-center rounded-4pxr px-10pxr cursor-pointer ${
-						selectedTeam
-							? 'bg-kboBlue0 border border-kboBlue400'
-							: 'bg-white border border-gray200'
-					}`}
+					className={`relative h-30pxr flex justify-center items-center rounded-4pxr px-10pxr cursor-pointer ${'bg-kboBlue0 border border-kboBlue400'}`}
 					onClick={toggleBottomSheet}
 				>
 					<Text
 						fontSize={14}
 						fontWeight={700}
-						color={selectedTeam ? 'kboBlue500' : 'gray600'}
+						color={'kboBlue500'}
 						className="whitespace-nowrap text-center"
 					>
 						{selectedTeam
@@ -158,13 +169,13 @@ export default function FindFilter() {
 					인기순
 				</Text>
 				<div
-					className="flex gap-2pxr"
-					onClick={() => setIsCheckDeadLine((prev) => !prev)}
+					className="flex gap-4pxr items-center"
+					onClick={toggleCheckDeadline}
 				>
 					<Text fontSize={12} fontWeight={500} color="kboNavy">
 						마감된 팬풀 안보기
 					</Text>
-					<IconCheckNavy />
+					{isCheckDeadline ? <IconCheckNavy /> : <IconUnChecked />}
 				</div>
 			</div>
 			<MatchSelectBottomSheet

@@ -8,7 +8,7 @@ export const FanpoolSubmitButton = ({
 	isSubmitting,
 }: FanpoolSubmitButtonProps) => {
 	return (
-		<div className="fixed bottom-20pxr left-0 right-0 px-20pxr">
+		<div className="max-w-399pxr w-full fixed bottom-20pxr left-1/2 -translate-x-1/2 right-0 px-20pxr z-50">
 			<Button
 				width="100%"
 				height="50px"

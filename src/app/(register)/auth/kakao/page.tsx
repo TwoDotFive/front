@@ -1,21 +1,31 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import getKakaoLoginToken from '@/api/auth/getKakaoLogin';
 
 export default function page() {
 	const router = useRouter();
 
 	useEffect(() => {
-		// URL에서 authorization code 추출
+		const getUserToken = async (code: string) => {
+			try {
+				const response = await getKakaoLoginToken(code);
+				console.log(response);
+				if (response.firstLogin === 'T') {
+					router.push('/register');
+				} else {
+					router.push('/home');
+				}
+			} catch (error) {
+				console.error('Error during Kakao login:', error);
+			}
+		};
+
 		const code = new URL(window.location.href).searchParams.get('code');
 		if (code) {
-			// 서버로 code를 보내거나 추가 작업 수행
-			console.log('카카오 로그인 코드:', code);
-
-			// 이후 처리 로직 (예: 서버로 code 전송, 사용자 인증 처리 등)
-			// router.push('/'); // 인증 후 리다이렉트 경로 설정
+			getUserToken(code);
 		}
-	}, []);
+	}, [router]);
 
 	return <div>카카오 로그인 처리 중...</div>;
 }

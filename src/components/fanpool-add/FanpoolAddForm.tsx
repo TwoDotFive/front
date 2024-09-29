@@ -10,6 +10,7 @@ import MinusButton from '../common/button/MinusButton';
 import { IconDefaultPin, IconPencilGray } from '@/public/icons';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
+import { Game } from '@/types/types';
 
 interface FanpoolFormData {
 	title: string;
@@ -62,6 +63,9 @@ export default function FanpoolAddForm() {
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
+	// 선택된 경기 정보를 관리하는 상태
+	const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+
 	const checkIsSubmitting = () => {
 		if (
 			fanpoolType &&
@@ -91,7 +95,7 @@ export default function FanpoolAddForm() {
 	]);
 
 	const onSubmit: SubmitHandler<FanpoolFormData> = (data) => {
-		console.log('입력 데이터: ', { ...data, selectedPlace });
+		console.log('입력 데이터: ', { ...data, selectedPlace, selectedGame });
 	};
 
 	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
@@ -112,6 +116,11 @@ export default function FanpoolAddForm() {
 
 	const handlePlaceSelect = (place: { name: string; x: string; y: string }) => {
 		setSelectedPlace(place);
+		closeBottomSheet();
+	};
+
+	const handleGameSelect = (game: Game | null) => {
+		setSelectedGame(game);
 		closeBottomSheet();
 	};
 
@@ -361,6 +370,7 @@ export default function FanpoolAddForm() {
 			<FanpoolMatchBottomSheet
 				isVisible={bottomSheet.visible && bottomSheet.type === 'match'}
 				onClose={closeBottomSheet}
+				onGameSelect={handleGameSelect}
 			/>
 			<PlaceSearchBottomSheet
 				isVisible={bottomSheet.visible && bottomSheet.type === 'place'}

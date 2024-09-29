@@ -22,15 +22,17 @@ import { formatDateTime } from '@/util/string';
 interface FanpoolMatchBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
+	onGameSelect: (game: Game | null) => void; // 선택된 경기 전달 함수
 }
 
 export const FanpoolMatchBottomSheet = ({
 	isVisible,
 	onClose,
+	onGameSelect,
 }: FanpoolMatchBottomSheetProps) => {
 	// 게임 목록을 저장할 상태
 	const [games, setGames] = useState<Game[]>([]);
-	const [selectedMatch, setSelectedMatch] = useState<number | null>(null); // 하나의 match만 관리
+	const [selectedMatch, setSelectedMatch] = useState<Game | null>(null); // 선택된 경기 관리
 
 	// 현재 월을 기준으로 캘린더를 설정
 	const [localMonth, setLocalMonth] = useState<Date>(new Date());
@@ -47,7 +49,6 @@ export const FanpoolMatchBottomSheet = ({
 
 	const handleDateSelect = (day: Date) => {
 		setSelectedDate(day);
-		onClose();
 	};
 
 	const renderDays = () => {
@@ -102,9 +103,11 @@ export const FanpoolMatchBottomSheet = ({
 		));
 	};
 
-	const handleMatchSelect = (id: number) => {
-		setSelectedMatch(id);
+	const handleMatchSelect = (game: Game) => {
+		setSelectedMatch(game);
+		onGameSelect(game); // 선택된 경기를 상위 컴포넌트로 전달
 	};
+
 	useEffect(() => {
 		const fetchGames = async () => {
 			try {
@@ -118,6 +121,7 @@ export const FanpoolMatchBottomSheet = ({
 		// API 호출
 		fetchGames();
 	}, [selectedDate]);
+
 	return (
 		<BottomSheet isVisible={isVisible} onClose={onClose}>
 			<section className="flex flex-col px-20pxr">
@@ -162,8 +166,8 @@ export const FanpoolMatchBottomSheet = ({
 							<SelectMatchButton
 								key={game.id}
 								game={game}
-								isSelected={selectedMatch === game.id}
-								onClick={() => handleMatchSelect(game.id)}
+								isSelected={selectedMatch?.id === game.id}
+								onClick={() => handleMatchSelect(game)}
 							/>
 						))
 					) : (

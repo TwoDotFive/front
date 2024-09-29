@@ -13,20 +13,10 @@ import apiClient from '..';
  * @param {number} [hostedFanpoolNumber] 사용자가 호스트한 팬풀 수 (선택적)
  */
 interface PatchUserProfileRequest {
-	email?: string;
 	nickname?: string;
 	profileImageUrl?: string;
-	name?: string;
 	oneLiner?: string;
-	userRole?: string;
-	favoriteTeam?: {
-		id?: number;
-		name?: string;
-		representativeImageUrl?: string;
-		stadiumName?: string;
-		stadiumAliasName?: string;
-	};
-	hostedFanpoolNumber?: number;
+	favoriteTeam?: string;
 }
 
 /**

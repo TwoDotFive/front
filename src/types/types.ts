@@ -54,7 +54,7 @@ export interface FanpoolType {
  * stadiumAliasName 경기장 별칭
  */
 export interface FavoriteTeam {
-	id: number;
+	id: string;
 	name: string;
 	representativeImageUrl: string;
 	stadiumName: string;

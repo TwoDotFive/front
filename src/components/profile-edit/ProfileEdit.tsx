@@ -136,9 +136,10 @@ export default function ProfileEdit() {
 
 	const onSubmit = async (data: ProfileFormData) => {
 		const updatedUserProfile = {
-			...userProfile,
 			nickname: data.nickname,
 			oneLiner: data.oneLiner,
+			profileImageUrl: userProfile?.profileImageUrl,
+			favoriteTeam: userProfile?.favoriteTeam.id,
 		};
 		console.log(updatedUserProfile);
 

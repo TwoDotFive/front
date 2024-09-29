@@ -18,6 +18,7 @@ import { Location } from '@/types/types';
 import patchUserLocation from '@/api/user/patchUserLocation';
 import SelectTeamBottomSheet from '../home/SelectTeamBottomSheet';
 import patchUserProfile from '@/api/user/patchUserProfile';
+import { teams } from '@/constants/teams';
 
 interface ProfileFormData {
 	nickname: string;
@@ -36,11 +37,13 @@ export default function ProfileEdit() {
 	const [imgSrc, setImgSrc] = useState(
 		userProfile?.profileImageUrl || '/images/image_profile_default.png'
 	);
-	const [locations, setLocations] = useState<LocationData[]>([]); // 사용자의 동네 정보를 저장할 상태
-	const [locationError, setLocationError] = useState(false); // 장소 인증 에러 상태 관리
+	const [locations, setLocations] = useState<LocationData[]>([]);
+	const [locationError, setLocationError] = useState(false);
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
-	const [isButtonActive, setIsButtonActive] = useState(false); // 완료 버튼 활성화 상태
-
+	const [isButtonActive, setIsButtonActive] = useState(false);
+	const [selectedTeam, setSelectedTeam] = useState<string>(
+		userProfile?.favoriteTeam.id || ''
+	);
 	const handleBack = () => {
 		router.back();
 	};
@@ -79,14 +82,18 @@ export default function ProfileEdit() {
 	useEffect(() => {
 		if (
 			userProfile?.nickname !== nicknameValue ||
-			userProfile?.oneLiner !== oneLinerValue
+			userProfile?.oneLiner !== oneLinerValue ||
+			userProfile?.favoriteTeam.id !== selectedTeam
 		) {
 			setIsButtonActive(true);
 		} else {
 			setIsButtonActive(false);
 		}
-	}, [nicknameValue, oneLinerValue, userProfile]);
+	}, [nicknameValue, oneLinerValue, selectedTeam]);
 
+	useEffect(() => {
+		setSelectedTeam(userProfile?.favoriteTeam.id || '');
+	}, [userProfile]);
 	useEffect(() => {
 		const fetchUserLocations = async () => {
 			try {
@@ -151,6 +158,7 @@ export default function ProfileEdit() {
 			console.error('Failed to update favorite team:', error);
 		}
 	};
+	const team = teams.find((team) => team.id === selectedTeam);
 
 	return (
 		<section>
@@ -163,7 +171,7 @@ export default function ProfileEdit() {
 					fontSize={15}
 					fontWeight={700}
 					color={isButtonActive ? 'kboBlue500' : 'gray200'}
-					onClick={isButtonActive ? handleSubmit(onSubmit) : undefined} // 버튼 활성화 시만 클릭 가능
+					onClick={isButtonActive ? handleSubmit(onSubmit) : undefined}
 					className={isButtonActive ? 'cursor-pointer' : 'cursor-not-allowed'}
 				>
 					완료
@@ -353,13 +361,17 @@ export default function ProfileEdit() {
 							</Text>
 						</div>
 						<div className="w-102pxr">
-							<SelectTeamButton code="kt" />
+							<SelectTeamButton code={team?.code || ''} />
 						</div>
 					</div>
 				</form>
 			</section>
 
-			<SelectTeamBottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
+			<SelectTeamBottomSheet
+				isOpen={isSheetOpen}
+				onClose={handleCloseSheet}
+				handleSelectTeam={setSelectedTeam}
+			/>
 		</section>
 	);
 }

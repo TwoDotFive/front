@@ -18,16 +18,17 @@ interface UserProfile {
 }
 
 export default function Profile({ id }: { id?: string }) {
+	const { setUserProfile } = useUserStore();
 	const searchId = id || useUserStore((state) => state.userProfile?.id);
-	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+	const [userProfile, setUserProfiles] = useState<UserProfile | null>(null);
 	const [imgSrc, setImgSrc] = useState('/images/image_profile_default.png');
 
 	useEffect(() => {
 		const getUserInfo = async () => {
 			try {
 				const response = await getUserProfile({ userId: searchId! });
+				setUserProfiles(response);
 				setUserProfile(response);
-				console.log(response.profileImageUrl);
 				setImgSrc(
 					response.profileImageUrl || '/images/image_profile_default.png'
 				);
@@ -47,12 +48,11 @@ export default function Profile({ id }: { id?: string }) {
 			<div className="h-14pxr" />
 			<div className="flex flex-col items-center">
 				{/* 프로필 이미지 */}
-				<Image
+				<img
 					src={imgSrc}
-					width={80}
-					height={80}
 					alt={'프로필 이미지'}
 					onError={handleImageError}
+					className="w-80pxr h-80pxr rounded-full"
 				/>
 				<div className="h-8pxr" />
 

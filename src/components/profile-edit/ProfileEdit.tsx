@@ -107,6 +107,9 @@ export default function ProfileEdit() {
 
 	useEffect(() => {
 		setSelectedTeam(userProfile?.favoriteTeam.id || '');
+		setImgSrc(
+			userProfile?.profileImageUrl || '/images/image_profile_default.png'
+		);
 	}, [userProfile]);
 	useEffect(() => {
 		const fetchUserLocations = async () => {
@@ -222,12 +225,11 @@ export default function ProfileEdit() {
 			>
 				<div className="h-14pxr" />
 				<div className="relative w-fit">
-					<Image
+					<img
 						src={imgSrc}
-						width={80}
-						height={80}
 						alt={'프로필 이미지'}
 						onError={handleImageError}
+						className="w-80pxr h-80pxr rounded-full"
 					/>
 					<div
 						className="absolute right-2pxr bottom-2pxr w-22pxr h-22pxr rounded-full bg-gray700 flex items-center justify-center cursor-pointer"

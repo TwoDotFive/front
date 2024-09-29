@@ -53,13 +53,9 @@ export default function RecentFanpoolLog({
             id={travelLog.id}
             image={travelLog.image}
             userName={travelLog.profile.nickname}
-            userImage={
-              travelLog.profile.image === ""
-                ? "/images/default_profile.png"
-                : travelLog.profile.image
-            }
+            userImage={travelLog.profile.image}
             title={travelLog.title}
-            locations={travelLog.locations}
+            locations={travelLog.places}
           />
         ))}
       </div>

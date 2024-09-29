@@ -8,7 +8,7 @@ type TravelogCardProps = {
   userName: string;
   userImage: string;
   title: string;
-  locations?: string[];
+  locations?: string;
 };
 
 export default function TravelogCard({
@@ -31,7 +31,9 @@ export default function TravelogCard({
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    setImageSrc("/images/empty_image_place.png");
+    setImageSrc(
+      `/images/fanpool_log_image_default_${(Number(id) % 5) + 1}.png`
+    );
   };
 
   const handleUserImageError = (
@@ -39,6 +41,8 @@ export default function TravelogCard({
   ) => {
     setUserImageSrc("/images/default_profile.png");
   };
+
+  const places = locations?.split(",");
 
   return (
     <div
@@ -55,7 +59,7 @@ export default function TravelogCard({
       </div>
       <div className="absolute top-150pxr left-10pxr w-40pxr h-40pxr rounded-full border-1pxr border-gray300 z-10">
         <img
-          className="w-full h-full"
+          className="w-full h-full rounded-full"
           src={userImageSrc}
           onError={handleUserImageError}
         />
@@ -70,17 +74,24 @@ export default function TravelogCard({
               님의 로그
             </Text>
           </div>
-          <Text fontSize={16} fontWeight={700} color="gray800">
+          <Text
+            fontSize={16}
+            fontWeight={700}
+            color="gray800"
+            className="line-clamp-1"
+          >
             {title}
           </Text>
-          {locations && (
+          {places && (
             <div className="flex items-center">
               <Text fontSize={14} fontWeight={600} color="gray600">
-                {locations[0]}
+                {places[0]}
               </Text>
-              <Text fontSize={14} fontWeight={400} color="gray600">
-                외 {locations.length - 1}곳
-              </Text>
+              {places.length > 1 && (
+                <Text fontSize={14} fontWeight={400} color="gray600">
+                  외 {places.length - 1}곳
+                </Text>
+              )}
             </div>
           )}
         </div>

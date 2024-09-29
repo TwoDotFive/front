@@ -119,7 +119,7 @@ export default function Page() {
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
 
-    if (!over) return; // 만약 over가 없으면 함수 종료
+    if (!over) return;
 
     const activeIndex = schedules.findIndex(
       (item) => item.place.contentId === active.id
@@ -128,38 +128,21 @@ export default function Page() {
       (item) => item.place.contentId === over.id
     );
 
-    if (activeIndex !== -1 && overIndex !== -1) {
-      const updatedSchedules = arrayMove(schedules, activeIndex, overIndex);
+    // 새로운 Day로 이동하는 경우 처리
+    const activeSchedule = schedules[activeIndex];
+    const overSchedule = schedules[overIndex];
 
-      // 드래그가 끝난 후 각 Day에 맞춰 schedules를 재배치
-      let currentDay = 1; // 첫 번째 Day부터 시작
-      let currentSequence = 1;
-
-      // groupedByDay 타입을 정의합니다.
-      const groupedByDay: { [key: number]: typeof updatedSchedules } =
-        updatedSchedules.reduce(
-          (acc: { [key: number]: typeof updatedSchedules }, schedule) => {
-            const day = schedule.day;
-            if (!acc[day]) {
-              acc[day] = [];
-            }
-            acc[day].push(schedule);
-            return acc;
-          },
-          {}
-        );
-
-      // Day별로 sequence 재정렬
-      Object.keys(groupedByDay).forEach((day) => {
-        groupedByDay[Number(day)].forEach((schedule: any, index: number) => {
-          schedule.sequence = index + 1;
-        });
+    if (activeSchedule.day !== overSchedule.day) {
+      const updatedSchedules = schedules.map((schedule) => {
+        if (schedule.place.contentId === activeSchedule.place.contentId) {
+          return { ...schedule, day: overSchedule.day };
+        }
+        return schedule;
       });
-
-      // schedules 업데이트
-      updatedSchedules.forEach((schedule, index) =>
-        updateSchedule(index, schedule)
-      );
+      useFanpoologStore.setState({ schedules: updatedSchedules });
+    } else {
+      const updatedSchedules = arrayMove(schedules, activeIndex, overIndex);
+      useFanpoologStore.setState({ schedules: updatedSchedules });
     }
   };
 
@@ -376,10 +359,15 @@ export default function Page() {
                 lat: schedule.place.y,
                 lng: schedule.place.x,
               }}
-              image={{
-                src: "/icons/map/icon_default_pin.svg",
-                size: { width: 28, height: 40 },
-              }}
+              image={
+                schedule.place.contentType === "28" ||
+                schedule.place.name === "고척스카이돔"
+                  ? undefined
+                  : {
+                      src: "/icons/map/icon_default_pin.svg",
+                      size: { width: 28, height: 40 },
+                    }
+              }
             />
           ))}
         </Map>
@@ -393,25 +381,23 @@ export default function Page() {
         {/* 장소 리스트 */}
         <div className="relative flex flex-col items-start px-20pxr">
           <DndContext
-            modifiers={[restrictToWindowEdges]} // 드래그 중 윈도우 경계로 제한
+            modifiers={[restrictToWindowEdges]}
             collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd} // 드래그 완료 후 처리 함수
+            onDragEnd={handleDragEnd}
           >
-            {days.map((day, dayIndex) => (
-              <SortableContext
-                key={dayIndex}
-                items={schedules
-                  .filter((schedule) => schedule.day === dayIndex + 1)
-                  .map((schedule) => schedule.place.contentId)}
-                strategy={verticalListSortingStrategy}
-              >
-                <div className="flex flex-col items-start justify-center w-full">
+            <SortableContext
+              items={schedules.map((schedule) => schedule.place.contentId)} // 전체를 하나의 컨텍스트로 처리
+              strategy={verticalListSortingStrategy}
+            >
+              {days.map((day, dayIndex) => (
+                <div
+                  key={dayIndex}
+                  className="flex flex-col items-start justify-center w-full"
+                >
                   <Text fontSize={18} fontWeight={700} color="gray800">
                     {`Day ${dayIndex + 1}`}
                   </Text>
                   <div className="mt-18pxr" />
-
-                  {/* Day에 해당하는 장소들 */}
                   {schedules
                     .filter((schedule) => schedule.day === dayIndex + 1)
                     .map((schedule, index) => (
@@ -435,43 +421,22 @@ export default function Page() {
                               </Text>
                             </span>
                           </div>
-                          {/* 장소 카드 */}
                           <div className="ml-16pxr w-full">
-                            {schedule.memo &&
-                            (schedule.memo.content ||
-                              (schedule.memo.images &&
-                                schedule.memo.images?.length > 0)) ? (
-                              <TravelogAddCard
-                                image={schedule.place.thumbnail}
-                                name={schedule.place.name}
-                                location={schedule.place.address}
-                                description={schedule.memo.content || ""}
-                                userId={"myUserId"}
-                                locationImage={
-                                  schedule.memo.images?.map((img) => img.url) ||
-                                  []
-                                }
-                                onClick={() => handleMemoOpen(index)}
-                                isEditing={isChangeMode}
-                                onRemove={() => handleRemoveLocation(index)}
-                              />
-                            ) : (
-                              <TravelogLocationCard
-                                image={schedule.place.thumbnail}
-                                name={schedule.place.name}
-                                location={schedule.place.address}
-                                isEditing={isChangeMode}
-                                onClick={() => handleMemoOpen(index)}
-                                onRemove={() => handleRemoveLocation(index)}
-                              />
-                            )}
+                            <TravelogLocationCard
+                              image={schedule.place.thumbnail}
+                              name={schedule.place.name}
+                              location={schedule.place.address}
+                              isEditing={isChangeMode}
+                              onClick={() => handleMemoOpen(index)}
+                              onRemove={() => handleRemoveLocation(index)}
+                            />
                           </div>
                         </div>
                       </SortableItem>
                     ))}
                 </div>
-              </SortableContext>
-            ))}
+              ))}
+            </SortableContext>
           </DndContext>
         </div>
 

@@ -82,7 +82,7 @@ export default function Page() {
   return (
     <div className="w-full flex flex-col">
       {/* 상단 배너 변경 예정*/}
-      <HeaderBanner imageUrl="/images/fanpool-log_ex.png" />
+      <HeaderBanner imageUrl="/images/fanpool_log_guide.png" />
       <div className="p-20pxr">
         {/* 최근 팬풀로그 */}
         <RecentFanpoolLog />
@@ -102,6 +102,11 @@ export default function Page() {
         </div>
 
         {/* 경기장 별 팬풀로그 리스트 */}
+        {filteredData.length === 0 && (
+          <div className="rounded-8pxr flex items-center justify-center">
+            <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+          </div>
+        )}
         <div className="flex flex-col justify-between items-start gap-16pxr">
           {filteredData.map((travelog) => (
             <TravelogWideCard
@@ -110,7 +115,7 @@ export default function Page() {
               image={travelog.image}
               userName={travelog.profile.nickname}
               title={travelog.title}
-              locations={travelog.locations}
+              locations={travelog.places}
             />
           ))}
         </div>

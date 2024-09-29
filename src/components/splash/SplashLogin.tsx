@@ -68,7 +68,15 @@ export default function SplashLogin() {
 					<div className="w-34pxr h-34pxr" />
 				</button>
 				<div className="flex gap-13pxr">
-					<Text fontSize={13} fontWeight={500} color="white">
+					<Text
+						fontSize={13}
+						fontWeight={500}
+						color="white"
+						onClick={() => {
+							window.location.href =
+								'https://aromatic-bull-390.notion.site/10f9c4b3a467806c93ded35db1ab9c6b';
+						}}
+					>
 						서비스 이용약관
 					</Text>
 					<Text fontSize={13} fontWeight={500} color="white">

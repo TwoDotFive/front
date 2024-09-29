@@ -8,7 +8,6 @@ import {
 	IconPencilWhite,
 } from '@/public/icons';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import getUserLocation from '@/api/user/getUserLocation';
@@ -16,13 +15,13 @@ import SelectTeamButton from '../common/button/SelectTeamButton';
 import Button from '../common/Button';
 import { Location } from '@/types/types';
 import patchUserLocation from '@/api/user/patchUserLocation';
-import SelectTeamBottomSheet from '../home/SelectTeamBottomSheet';
 import patchUserProfile from '@/api/user/patchUserProfile';
 import { teams } from '@/constants/teams';
 import {
 	getPresignedUrl,
 	uploadImageToS3,
 } from '@/api/fanpool-log/create-log/step3';
+import SelectTeamBottomSheet from '../profile/SelectTeamBotomSheet';
 
 interface ProfileFormData {
 	nickname: string;
@@ -186,12 +185,12 @@ export default function ProfileEdit() {
 			nickname: data.nickname,
 			oneLiner: data.oneLiner,
 			profileImageUrl: imgSrc,
-			favoriteTeam: userProfile?.favoriteTeam.id,
+			favoriteTeam: selectedTeam,
 		};
 		console.log(updatedUserProfile);
-
 		try {
 			const response = await patchUserProfile(updatedUserProfile);
+
 			console.log(response);
 			console.log('Favorite team updated successfully');
 			router.back();

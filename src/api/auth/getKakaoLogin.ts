@@ -17,7 +17,7 @@ const getKakaoLoginToken = async (
 	code: string
 ): Promise<getKakaoLoginResponse> => {
 	const response = await apiClient.get<getKakaoLoginResponse>(
-		`/kakao/login/redirect?code=${code}`
+		`/auth/kakao/login/redirect?code=${code}`
 	);
 	return response.data;
 };

@@ -18,10 +18,10 @@ interface UnblockUserRequest {
 const deleteUserBlock = async (
 	requestParameters: UnblockUserRequest
 ): Promise<void> => {
-	// DELETE 요청으로 targetUserId를 body에 전달
-	await apiClient.delete('/user/block', {
-		data: { targetUserId: requestParameters.targetUserId },
-	});
+	// DELETE 요청으로 targetUserId를 경로 파라미터로 전달
+	await apiClient.delete(
+		`/user/block?targetUserId=${requestParameters.targetUserId}`
+	);
 };
 
 export default deleteUserBlock;

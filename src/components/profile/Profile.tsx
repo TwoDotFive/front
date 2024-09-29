@@ -28,7 +28,7 @@ export default function Profile({ id }: { id?: string }) {
 			try {
 				const response = await getUserProfile({ userId: searchId! });
 				setUserProfiles(response);
-				setUserProfile(response);
+				if (id === undefined) setUserProfile(response);
 				setImgSrc(
 					response.profileImageUrl || '/images/image_profile_default.png'
 				);

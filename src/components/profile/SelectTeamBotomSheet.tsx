@@ -4,21 +4,21 @@ import SelectTeamButton from '../common/button/SelectTeamButton';
 import BottomSheet from '../common/BottomSheet';
 import { teams } from '@/constants/teams';
 import getTeams from '@/api/baseball/getTeams';
-import { useUserStore } from '@/store/useUserStore';
-import patchUserProfile from '@/api/user/patchUserProfile';
 
 interface BottomSheetProps {
 	isOpen: boolean;
 	onClose: () => void;
+	handleSelectTeam: (id: string) => void;
 }
 
 export default function SelectTeamBottomSheet({
 	isOpen,
 	onClose,
+	handleSelectTeam,
 }: BottomSheetProps) {
 	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
-	const { userProfile, fetchUserProfile } = useUserStore();
+
 	useEffect(() => {
 		const fetchTeams = async () => {
 			try {
@@ -48,26 +48,17 @@ export default function SelectTeamBottomSheet({
 	// 팀 선택 시
 	const handleTeamSelect = (code: string, id: string) => {
 		setSelectedTeam(code);
+		handleSelectTeam(id);
 	};
 
 	// 선택한 팀 정보 저장 및 API 요청
 	const handleSelect = async () => {
+		// 선택한 팀 데이터 가져오기
 		const selectedTeamData = apiTeams.find(
 			(team) => team.code === selectedTeam
 		);
-		const updatedUserProfile = {
-			nickname: userProfile?.nickname,
-			oneLiner: userProfile?.oneLiner,
-			profileImageUrl: userProfile?.profileImageUrl,
-			favoriteTeam: selectedTeamData?.id || '0',
-		};
-		try {
-			const response = await patchUserProfile(updatedUserProfile);
-			fetchUserProfile(userProfile?.id!);
-			onClose();
-		} catch (error) {
-			console.error('Failed to update favorite team:', error);
-		}
+
+		onClose();
 	};
 
 	return (

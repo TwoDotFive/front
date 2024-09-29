@@ -2,7 +2,11 @@
 const nextConfig = {
 	reactStrictMode: false,
 	images: {
-		domains: ['lgcxydabfbch3774324.cdn.ntruss.com', 'csct3434.org'],
+		domains: [
+			'lgcxydabfbch3774324.cdn.ntruss.com',
+			'csct3434.org',
+			'fanpool-image-bucket.s3.ap-northeast-2.amazonaws.com',
+		],
 	},
 	webpack: (config) => {
 		config.module.rules.push({

@@ -9,7 +9,7 @@ import {
 } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import getUserLocation from '@/api/user/getUserLocation';
 import SelectTeamButton from '../common/button/SelectTeamButton';
@@ -19,6 +19,10 @@ import patchUserLocation from '@/api/user/patchUserLocation';
 import SelectTeamBottomSheet from '../home/SelectTeamBottomSheet';
 import patchUserProfile from '@/api/user/patchUserProfile';
 import { teams } from '@/constants/teams';
+import {
+	getPresignedUrl,
+	uploadImageToS3,
+} from '@/api/fanpool-log/create-log/step3';
 
 interface ProfileFormData {
 	nickname: string;
@@ -35,7 +39,8 @@ export default function ProfileEdit() {
 	const router = useRouter();
 	const { userProfile } = useUserStore();
 	const [imgSrc, setImgSrc] = useState(
-		userProfile?.profileImageUrl || '/images/image_profile_default.png'
+		useUserStore((state) => state.userProfile?.profileImageUrl) ||
+			'/images/image_profile_default.png'
 	);
 	const [locations, setLocations] = useState<LocationData[]>([]);
 	const [locationError, setLocationError] = useState(false);
@@ -44,6 +49,8 @@ export default function ProfileEdit() {
 	const [selectedTeam, setSelectedTeam] = useState<string>(
 		userProfile?.favoriteTeam.id || ''
 	);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+
 	const handleBack = () => {
 		router.back();
 	};
@@ -54,6 +61,12 @@ export default function ProfileEdit() {
 
 	const handleImageError = () => {
 		setImgSrc('/images/image_profile_default.png');
+	};
+
+	const triggerFileInput = () => {
+		if (fileInputRef.current) {
+			fileInputRef.current.click();
+		}
 	};
 
 	const {
@@ -83,7 +96,8 @@ export default function ProfileEdit() {
 		if (
 			userProfile?.nickname !== nicknameValue ||
 			userProfile?.oneLiner !== oneLinerValue ||
-			userProfile?.favoriteTeam.id !== selectedTeam
+			userProfile?.favoriteTeam.id !== selectedTeam ||
+			userProfile?.profileImageUrl !== imgSrc
 		) {
 			setIsButtonActive(true);
 		} else {
@@ -127,6 +141,29 @@ export default function ProfileEdit() {
 		setIsSheetOpen(false);
 	};
 
+	// 파일 선택 핸들러
+	const handleFileChange = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const file = event.target.files?.[0];
+		if (file) {
+			try {
+				// Presigned URL 가져오기
+				const presignedUrlResponse = await getPresignedUrl();
+				const presignedUrl = presignedUrlResponse.data.toString();
+
+				// S3에 이미지 업로드
+				await uploadImageToS3(presignedUrl, file);
+
+				// 업로드된 이미지의 URL 가져오기
+				const uploadedImageUrl = presignedUrl.split('?')[0];
+				setImgSrc(uploadedImageUrl); // 업로드한 이미지의 URL을 imgSrc에 설정
+			} catch (error) {
+				console.error('Image upload failed:', error);
+			}
+		}
+	};
+
 	const handleChangeDongne = async (location: LocationData, index: number) => {
 		if (location.representative) return;
 		if (
@@ -145,7 +182,7 @@ export default function ProfileEdit() {
 		const updatedUserProfile = {
 			nickname: data.nickname,
 			oneLiner: data.oneLiner,
-			profileImageUrl: userProfile?.profileImageUrl,
+			profileImageUrl: imgSrc,
 			favoriteTeam: userProfile?.favoriteTeam.id,
 		};
 		console.log(updatedUserProfile);
@@ -154,6 +191,7 @@ export default function ProfileEdit() {
 			const response = await patchUserProfile(updatedUserProfile);
 			console.log(response);
 			console.log('Favorite team updated successfully');
+			router.back();
 		} catch (error) {
 			console.error('Failed to update favorite team:', error);
 		}
@@ -191,9 +229,19 @@ export default function ProfileEdit() {
 						alt={'프로필 이미지'}
 						onError={handleImageError}
 					/>
-					<div className="absolute right-2pxr bottom-2pxr w-22pxr h-22pxr rounded-full bg-gray700 flex items-center justify-center">
+					<div
+						className="absolute right-2pxr bottom-2pxr w-22pxr h-22pxr rounded-full bg-gray700 flex items-center justify-center cursor-pointer"
+						onClick={triggerFileInput}
+					>
 						<IconPencilWhite width={14} height={14} />
 					</div>
+					<input
+						type="file"
+						ref={fileInputRef}
+						style={{ display: 'none' }}
+						accept="image/*"
+						onChange={handleFileChange}
+					/>
 				</div>
 				<div className="h-45pxr" />
 				<form

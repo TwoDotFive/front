@@ -3,6 +3,7 @@ import { Text } from "@/components/common/Text";
 import Button from "@/components/common/Button";
 import { IconClose } from "@/public/icons";
 import BottomSheet from "@/components/common/BottomSheet";
+import useFanpoologStore from "@/store/fanpool-log/store";
 
 interface DayBottomSheetProps {
   isVisible: boolean;
@@ -17,12 +18,22 @@ export const DayBottomSheet: React.FC<DayBottomSheetProps> = ({
   days,
   setDays,
 }) => {
+  const schedules = useFanpoologStore((state) => state.schedules);
   // Day 추가 핸들러
   const handleAddDay = () => {
     setDays((prevDays) => {
       const newDay = `Day ${prevDays.length + 1}`;
       return [...prevDays, newDay];
     });
+    // Day 추가 시 schedules의 마지막 요소의 Day를 prev.length + 1로 변경
+    useFanpoologStore.setState((state) => ({
+      schedules: state.schedules.map(
+        (schedule, index) =>
+          index === state.schedules.length - 1
+            ? { ...schedule, day: days.length + 1, sequence: 1 } // 마지막 요소의 day만 업데이트
+            : schedule // 나머지는 그대로 유지
+      ),
+    }));
   };
 
   // Day 삭제 핸들러

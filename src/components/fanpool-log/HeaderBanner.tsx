@@ -15,6 +15,10 @@ export default function HeaderBanner({ imageUrl }: HeaderBannerProps) {
     router.push("/bookmark");
   };
 
+  const handleGuideButton = () => {
+    router.push("/fanpool-log/guide");
+  };
+
   return (
     <>
       <section className="relative w-full h-337pxr">
@@ -22,8 +26,9 @@ export default function HeaderBanner({ imageUrl }: HeaderBannerProps) {
           src={imageUrl}
           width={399}
           height={0}
-          alt={"kt"}
-          className="w-full h-full object-cover"
+          alt={"fanpool log guide"}
+          className="w-full h-full object-cover cursor-pointer"
+          onClick={handleGuideButton}
         />
         <div
           className="absolute flex flex-col gap-18pxr"

@@ -87,15 +87,15 @@ export interface UserProfileResponse {
 }
 
 export interface FanpoolLogList {
-	id: string;
-	image: string;
-	title: string;
-	stadium: string;
-	profile: {
-		nickname: string;
-		image: string;
-	};
-	locations: string[];
+  id: string;
+  image: string;
+  title: string;
+  stadium: string;
+  profile: {
+    nickname: string;
+    image: string;
+  };
+  places: string;
 }
 
 export interface PlaceContent {

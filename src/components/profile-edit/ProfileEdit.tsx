@@ -22,6 +22,7 @@ import {
 	uploadImageToS3,
 } from '@/api/fanpool-log/create-log/step3';
 import SelectTeamBottomSheet from '../profile/SelectTeamBotomSheet';
+import deleteUserLocation from '@/api/user/deleteUserLocation';
 
 interface ProfileFormData {
 	nickname: string;
@@ -29,7 +30,7 @@ interface ProfileFormData {
 	location: string[];
 }
 interface LocationData {
-	id: number;
+	id: string;
 	representative: boolean;
 	addressInformation: Location;
 }
@@ -135,8 +136,21 @@ export default function ProfileEdit() {
 		fetchUserLocations();
 	}, [setValue]);
 
-	const handleDeleteLocation = (location: LocationData, index: number) => {
-		console.log('삭제');
+	const handleDeleteLocation = async (
+		location: LocationData,
+		index: number
+	) => {
+		if (location.representative) {
+			alert('대표동네를 해제하고 삭제해주세요');
+			return;
+		}
+		try {
+			await deleteUserLocation(location.id);
+			alert('삭제되었습니다.');
+			window.location.reload();
+		} catch {
+			alert('삭제 중 오류가 발생하였습니다.');
+		}
 	};
 
 	const handleCloseSheet = () => {

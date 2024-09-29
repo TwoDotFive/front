@@ -21,15 +21,15 @@ import InfinityLine from '../common/InfinityLine';
 
 interface FilterBottomSheetProps {
 	isVisible: boolean;
-	selectedTeam: number;
+	selectedTeam: string | null;
 	selectedDate: Date;
 	currentMonth: Date;
 	onClose: () => void;
-	onTeamSelect: (id: number) => void;
+	onTeamSelect: (id: string) => void;
 	onDateSelect: (date: Date) => void;
 }
 
-const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
+const FilterBottomSheet = ({
 	isVisible,
 	selectedTeam,
 	selectedDate,
@@ -37,7 +37,7 @@ const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
 	onClose,
 	onTeamSelect,
 	onDateSelect,
-}) => {
+}: FilterBottomSheetProps) => {
 	const [localMonth, setLocalMonth] = useState(currentMonth);
 
 	const handlePrevMonth = () => {
@@ -118,8 +118,8 @@ const FilterBottomSheet: React.FC<FilterBottomSheetProps> = ({
 				<div className="flex flex-wrap gap-8pxr">
 					<SelectTeamNameButton
 						code=""
-						isSelected={selectedTeam === 0}
-						onClick={() => onTeamSelect(0)}
+						isSelected={selectedTeam === ''}
+						onClick={() => onTeamSelect('')}
 					/>
 					{teams.map((team) => (
 						<SelectTeamNameButton

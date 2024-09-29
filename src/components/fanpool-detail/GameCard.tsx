@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Text } from '../common/Text';
 import { TagFanPool } from '../common/tag/TagFanPool';
 import { Game } from '@/types/types';
+import { enAU } from 'date-fns/locale/en-AU';
 
 interface GameCardProps {
 	game: Game; // Game 정보를 props로 전달받음
@@ -14,21 +15,22 @@ export default function GameCard({ game }: GameCardProps) {
 	const awayInfo = game.awayTeam;
 
 	// 경기 장소와 시간
-	const placeName = game.stadium;
+	const placeName = homeInfo.stadiumName;
 	const formattedDate = format(
 		new Date(game.startDate),
-		'M월 d일 aaa h:mm'
-	).toUpperCase();
+		'yyyy. MM. dd a HH:mm', // 원하는 형식
+		{ locale: enAU } // 한국어 로케일 설정
+	).toUpperCase(); // AM/PM을 대문자로 표시
 
 	return (
 		<section className="w-full relative flex flex-col rounded-12pxr">
 			<div className="absolute inset-0 bg-primary opacity-50 rounded-12pxr" />
 
-			<div className="relative z-10 flex flex-col">
+			<div className="relative z-10 flex flex-col items-center">
 				{/**
 				 * HOME VS AWAY
 				 */}
-				<section className="w-full py-19pxr">
+				<section className="w-full py-16pxr">
 					<section className="flex justify-center items-center gap-16pxr">
 						<div className="flex flex-col gap-8pxr items-center">
 							<div className="w-67pxr h-67pxr flex items-center justify-center bg-white rounded-full">
@@ -39,11 +41,11 @@ export default function GameCard({ game }: GameCardProps) {
 									height={60}
 								/>
 							</div>
-							<Text fontSize={14} fontWeight={700} color="white">
+							<Text fontSize={16} fontWeight={700} color="white">
 								{homeInfo.name}
 							</Text>
 						</div>
-						<Text fontSize={14} fontWeight={700} color="white">
+						<Text fontSize={14} fontWeight={500} color="white">
 							VS
 						</Text>
 						<div className="flex flex-col gap-8pxr items-center">
@@ -61,7 +63,8 @@ export default function GameCard({ game }: GameCardProps) {
 						</div>
 					</section>
 				</section>
-				<div className="h-8pxr" />
+				<div className="w-278pxr h-1pxr opacity-50 bg-white" />
+				<div className="h-12pxr" />
 				{/**
 				 * 위치,시간 정보
 				 */}
@@ -73,7 +76,9 @@ export default function GameCard({ game }: GameCardProps) {
 						<Text fontSize={14} fontWeight={500} color="white">
 							{formattedDate}
 						</Text>
-						<TagFanPool type="AWAY" />
+						<TagFanPool
+							type={game.stadium === awayInfo.name ? 'AWAY' : 'HOME'}
+						/>
 					</div>
 				</section>
 			</div>

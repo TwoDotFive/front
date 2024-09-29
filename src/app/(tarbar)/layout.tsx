@@ -1,4 +1,5 @@
 import NavBar from '@/components/common/navbar/NavBar';
+import { LoginCheckProvider } from '@/provider/LoginCheckProvider';
 
 export default function TabBarLayout({
 	children,
@@ -6,10 +7,12 @@ export default function TabBarLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className="scroll-contents">
-			{children}
-			<div className="h-60pxr" />
-			<NavBar />
-		</div>
+		<LoginCheckProvider>
+			<div className="scroll-contents">
+				{children}
+				<div className="h-60pxr" />
+				<NavBar />
+			</div>
+		</LoginCheckProvider>
 	);
 }

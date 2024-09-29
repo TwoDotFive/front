@@ -20,7 +20,6 @@ type Team = {
 
 type Game = {
 	id: number;
-	code: string;
 	awayTeam: Team;
 	homeTeam: Team;
 	startDate: string;

@@ -36,7 +36,7 @@ export const navBarList: NavBarListTypes[] = [
 	},
 	{
 		name: '내 팬풀',
-		path: '/fanpool-mine',
+		path: '/profile',
 		defaultIcon: IconPeople,
 		activeIcon: IconPeopleActive,
 	},

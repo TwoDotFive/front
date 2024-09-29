@@ -13,13 +13,6 @@ const formatDateToISO8601 = (date: Date): string => {
 };
 
 /**
- * 팬풀 필터링 정보 응답 인터페이스
- */
-interface FanpoolFilterResponse {
-	result: FanpoolInformation[];
-}
-
-/**
  * 팬풀 필터링 정보를 가져오는 함수
  *
  * @param {number} [teamId] 팀 고유 아이디 (기본값: 전체)
@@ -32,6 +25,10 @@ interface FanpoolFilterResponse {
  *
  * @returns {Promise<FanpoolFilterResponse>} 팬풀 필터링 정보 응답
  */
+
+interface FanpoolFilterResponse {
+	fanpools: FanpoolInformation[];
+}
 const getFanpoolFilter = async ({
 	teamId,
 	dongCd,
@@ -41,7 +38,7 @@ const getFanpoolFilter = async ({
 	page = 0,
 	size = 10,
 }: {
-	teamId?: number;
+	teamId?: string;
 	dongCd?: string;
 	gameId?: number[];
 	departAt?: Date;

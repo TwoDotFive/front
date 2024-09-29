@@ -24,6 +24,7 @@ export const useUserStore = create<UserStore>((set) => ({
 	fetchUserProfile: async (userId: string) => {
 		try {
 			const response = await getUserProfile({ userId });
+			localStorage.setItem('userId', response.id);
 			set({ userProfile: response });
 		} catch (error) {
 			console.error('Failed to fetch user profile:', error);

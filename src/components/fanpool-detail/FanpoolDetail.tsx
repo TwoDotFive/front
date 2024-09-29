@@ -8,14 +8,14 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import SelectHighlightButton from '../common/button/SelectHighlightButton';
 import { FanpoolInformation } from '@/types/types';
+import CarShare from '../common/cardui/CarShare';
+import TaxiCard from '../common/cardui/TaxiCard';
 
 interface FanpoolDetailProps {
 	fanpoolInformation: FanpoolInformation;
 }
 
-const FanpoolDetail: React.FC<FanpoolDetailProps> = ({
-	fanpoolInformation,
-}) => {
+const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 	useKakaoLoader();
 	const { x, y } = fanpoolInformation.departFrom;
 
@@ -74,14 +74,12 @@ const FanpoolDetail: React.FC<FanpoolDetailProps> = ({
 				가는 방법
 			</Text>
 			<div className="h-8pxr" />
-			<div className="w-1/2">
-				<SelectHighlightButton
-					text={fanpoolInformation.fanpoolTypeKor}
-					isSelected={true}
-					onClick={() => {}}
-				/>
-			</div>
-			<div className="h-8pxr" />
+			{fanpoolInformation.fanpoolTypeKor === '택시팟' ? (
+				<CarShare />
+			) : (
+				<TaxiCard />
+			)}
+			<div className="h-12pxr" />
 			<div className="flex gap-8pxr">
 				<TagFanPool type={fanpoolInformation.genderConstraint as Tags} />
 				<Text fontSize={16} fontWeight={400} color="gray700">

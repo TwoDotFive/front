@@ -23,6 +23,7 @@ export default function Page({ params }: { params: { id: number } }) {
 				try {
 					const response = await getFanpoolDetail(Number(fanpoolId));
 					setFanpoolInformation(response.fanpoolInformation);
+					console.log(response);
 				} catch (error) {
 					console.error('Error fetching fanpool detail:', error);
 				} finally {

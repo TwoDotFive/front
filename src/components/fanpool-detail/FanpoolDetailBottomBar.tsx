@@ -10,12 +10,12 @@ interface FanpoolDetailBottomBarProps {
 export default function FanpoolDetailBottomBar({
 	fanpoolInformation,
 }: FanpoolDetailBottomBarProps) {
-	// 현재 내가 호스트인지 확인 (임의로 설정)
-	const isHost = false; // 필요한 경우 실제 로직을 구현하세요
+	const isHost =
+		fanpoolInformation.hostUserId.toString() == localStorage.getItem('userId');
 
 	return (
 		<section
-			className="fixed bottom-0 w-full h-86pxr bg-white px-20pxr pt-16pxr pb-20pxr rounded-16pxr flex gap-8pxr"
+			className="max-w-399pxr fixed bottom-0 w-full h-86pxr bg-white px-20pxr pt-16pxr pb-20pxr rounded-16pxr flex gap-8pxr"
 			style={{ boxShadow: '0px 0px 34px 0px rgba(0, 37, 97, 0.10)' }}
 		>
 			<Button

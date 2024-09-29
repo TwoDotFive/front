@@ -27,7 +27,7 @@ export default function TeamHeader({
 		setIsDrawerVisible(!isDrawerVisible);
 	};
 
-	const team = teams.find((team) => team.id === userProfile?.favoriteTeam?.id);
+	const team = teams.find((team) => team.id == userProfile?.favoriteTeam?.id);
 	const name = team ? team.name : '응원하는 팀이 <br /> 아직 없어요!';
 	const imageUrl = team
 		? `/images/${team.code}_bg.png`

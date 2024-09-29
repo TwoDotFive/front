@@ -5,7 +5,7 @@ import getUserProfile from '@/api/user/getUserProfile';
 import { UserProfileResponse } from '@/types/types';
 
 interface FanpoolHostProps {
-	hostUserId: number;
+	hostUserId: string;
 }
 
 export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {

@@ -7,7 +7,7 @@ export interface Team {
 }
 
 export interface Game {
-	id: number;
+	id: string;
 	awayTeam: Team;
 	homeTeam: Team;
 	startDate: string;
@@ -27,9 +27,9 @@ export interface Location {
 }
 
 export interface FanpoolInformation {
-	id: number;
+	id: string;
 	title: string;
-	hostUserId: number;
+	hostUserId: string;
 	game: Game;
 	departAt: string;
 	departFrom: Location;

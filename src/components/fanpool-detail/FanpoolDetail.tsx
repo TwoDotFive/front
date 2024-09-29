@@ -6,7 +6,6 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../register/useKakaoLoader';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import SelectHighlightButton from '../common/button/SelectHighlightButton';
 import { FanpoolInformation } from '@/types/types';
 import CarShare from '../common/cardui/CarShare';
 import TaxiCard from '../common/cardui/TaxiCard';
@@ -24,6 +23,7 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 		'MM/dd (EEE) a h:mm',
 		{ locale: ko }
 	);
+
 	return (
 		<section>
 			<div className="flex gap-6pxr">

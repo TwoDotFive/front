@@ -79,7 +79,7 @@ export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 					<UserProfile
 						name={userProfile?.nickname || '아무개'}
 						fanpoolCount={userProfile?.hostedFanpoolNumber || 0}
-						fanpoolLogCount={4}
+						fanpoolLogCount={userProfile?.hostedTourLogNumber || 0}
 					/>
 					<div className="h-24pxr" />
 					<div className="flex flex-col gap-18pxr">

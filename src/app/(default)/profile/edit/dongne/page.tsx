@@ -8,12 +8,14 @@ import useKakaoLoader from '@/components/fanpool-log/FanpoologDetail/useKakaoLoa
 import { Text } from '@/components/common/Text';
 import Button from '@/components/common/Button';
 import TapBar from '@/components/common/TapBar';
+import { useRouter } from 'next/navigation';
 
 interface PageProps {
 	isFirst: boolean;
 }
 
 export default function Page({ isFirst }: PageProps) {
+	const router = useRouter();
 	useKakaoLoader();
 
 	const [mapCenter, setMapCenter] = useState({
@@ -90,7 +92,7 @@ export default function Page({ isFirst }: PageProps) {
 			// 사용자 위치 정보를 서버로 전송
 			await postUserLocation(locationData);
 
-			console.log('위치 정보 제출 완료');
+			router.back();
 		} catch (error) {
 			console.error('Error submitting location:', error);
 			alert('위치 정보를 저장하는 데 실패했습니다.');

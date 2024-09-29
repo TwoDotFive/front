@@ -1,7 +1,12 @@
 'use client';
 import { useUserStore } from '@/store/useUserStore';
 import { Text } from '../common/Text';
-import { IconDelete, IconLeftArrow, IconPencilWhite } from '@/public/icons';
+import {
+	IconButtonPlus,
+	IconDelete,
+	IconLeftArrow,
+	IconPencilWhite,
+} from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -11,6 +16,8 @@ import SelectTeamButton from '../common/button/SelectTeamButton';
 import Button from '../common/Button';
 import { Location } from '@/types/types';
 import patchUserLocation from '@/api/user/patchUserLocation';
+import SelectTeamBottomSheet from '../home/SelectTeamBottomSheet';
+import patchUserProfile from '@/api/user/patchUserProfile';
 
 interface ProfileFormData {
 	nickname: string;
@@ -31,9 +38,15 @@ export default function ProfileEdit() {
 	);
 	const [locations, setLocations] = useState<LocationData[]>([]); // 사용자의 동네 정보를 저장할 상태
 	const [locationError, setLocationError] = useState(false); // 장소 인증 에러 상태 관리
-	console.log(userProfile);
+	const [isSheetOpen, setIsSheetOpen] = useState(false);
+	const [isButtonActive, setIsButtonActive] = useState(false); // 완료 버튼 활성화 상태
+
 	const handleBack = () => {
 		router.back();
+	};
+
+	const handleOpenSheet = () => {
+		setIsSheetOpen(true);
 	};
 
 	const handleImageError = () => {
@@ -44,7 +57,7 @@ export default function ProfileEdit() {
 		register,
 		handleSubmit,
 		setValue,
-		control,
+		watch,
 		formState: { errors },
 	} = useForm<ProfileFormData>({
 		defaultValues: {
@@ -52,54 +65,46 @@ export default function ProfileEdit() {
 			oneLiner: userProfile?.oneLiner || '',
 		},
 	});
+
+	const nicknameValue = watch('nickname');
+	const oneLinerValue = watch('oneLiner');
+
 	useEffect(() => {
 		if (userProfile) {
 			setValue('nickname', userProfile.nickname);
 			setValue('oneLiner', userProfile.oneLiner);
 		}
-	}, [userProfile]);
+	}, [userProfile, setValue]);
+
+	useEffect(() => {
+		if (
+			userProfile?.nickname !== nicknameValue ||
+			userProfile?.oneLiner !== oneLinerValue
+		) {
+			setIsButtonActive(true);
+		} else {
+			setIsButtonActive(false);
+		}
+	}, [nicknameValue, oneLinerValue, userProfile]);
+
 	useEffect(() => {
 		const fetchUserLocations = async () => {
 			try {
 				const locationResponse = await getUserLocation();
-				const locationNames = locationResponse.authenticatedLocations.map(
-					(location) => location.addressInformation.dong
+
+				const sortedLocations = locationResponse.authenticatedLocations.sort(
+					(a, b) =>
+						a.representative === b.representative
+							? 0
+							: a.representative
+							? -1
+							: 1
 				);
 
-				setLocations(locationResponse.authenticatedLocations);
+				setLocations(sortedLocations);
 				setLocationError(false);
 			} catch (error) {
 				setLocationError(true);
-				setLocations([
-					{
-						id: 1001,
-						representative: true,
-						addressInformation: {
-							fullText: '서울특별시 강남구 테헤란로 123',
-							zipNo: '06134',
-							sido: '서울특별시',
-							sigungu: '강남구',
-							dong: '역삼동',
-							dongCd: '11680101',
-							x: '127.028600',
-							y: '37.497942',
-						},
-					},
-					{
-						id: 1002,
-						representative: false,
-						addressInformation: {
-							fullText: '경기도 성남시 분당구 판교역로 240',
-							zipNo: '13529',
-							sido: '경기도',
-							sigungu: '성남시 분당구',
-							dong: '삼평동',
-							dongCd: '41220250',
-							x: '127.108690',
-							y: '37.402095',
-						},
-					},
-				]);
 				console.error('Failed to fetch user locations:', error);
 			}
 		};
@@ -111,6 +116,10 @@ export default function ProfileEdit() {
 		console.log('삭제');
 	};
 
+	const handleCloseSheet = () => {
+		setIsSheetOpen(false);
+	};
+
 	const handleChangeDongne = async (location: LocationData, index: number) => {
 		if (location.representative) return;
 		if (
@@ -118,15 +127,28 @@ export default function ProfileEdit() {
 		) {
 			try {
 				await patchUserLocation(location.id.toString());
-				// TODO: 성공 시 리로드
+				window.location.reload();
 			} catch (error) {
 				alert(error);
 			}
 		}
 	};
 
-	const onSubmit = (data: ProfileFormData) => {
-		console.log('Updated Data:', data);
+	const onSubmit = async (data: ProfileFormData) => {
+		const updatedUserProfile = {
+			...userProfile,
+			nickname: data.nickname,
+			oneLiner: data.oneLiner,
+		};
+		console.log(updatedUserProfile);
+
+		try {
+			const response = await patchUserProfile(updatedUserProfile);
+			console.log(response);
+			console.log('Favorite team updated successfully');
+		} catch (error) {
+			console.error('Failed to update favorite team:', error);
+		}
 	};
 
 	return (
@@ -139,9 +161,9 @@ export default function ProfileEdit() {
 				<Text
 					fontSize={15}
 					fontWeight={700}
-					color="gray200"
-					onClick={handleSubmit(onSubmit)}
-					className="cursor-pointer"
+					color={isButtonActive ? 'kboBlue500' : 'gray200'}
+					onClick={isButtonActive ? handleSubmit(onSubmit) : undefined} // 버튼 활성화 시만 클릭 가능
+					className={isButtonActive ? 'cursor-pointer' : 'cursor-not-allowed'}
 				>
 					완료
 				</Text>
@@ -190,19 +212,52 @@ export default function ProfileEdit() {
 							내 동네
 						</Text>
 						{locations.length === 1 && (
-							<div>
-								<Text fontSize={14} fontWeight={400} color="gray600">
-									{locations[0].addressInformation.dong}
-								</Text>
-								<Text
-									fontSize={14}
-									fontWeight={500}
-									color="kboBlue500"
-									className="cursor-pointer"
-									onClick={() => router.push('/profile/edit/dongne')}
+							<div className="w-full flex gap-8pxr">
+								<div
+									className={`relative flex items-center justify-between w-full p-14pxr rounded-8pxr gap-10pxr ${
+										locations[0].representative ? 'bg-kboBlue0' : 'bg-gray050'
+									}`}
+									onClick={() => {
+										handleChangeDongne(locations[0], 0);
+									}}
 								>
-									동네 추가
-								</Text>
+									<div className="flex items-center gap-8pxr">
+										<Text fontSize={16} fontWeight={500} color="gray700">
+											{locations[0].addressInformation.dong}
+										</Text>
+										{locations[0].representative && (
+											<Text fontSize={14} fontWeight={700} color="kboBlue500">
+												대표
+											</Text>
+										)}
+									</div>
+									<div
+										className="cursor-pointer"
+										onClick={(e) => {
+											e.stopPropagation();
+											handleDeleteLocation(locations[0], 0);
+										}}
+									>
+										<IconDelete />
+									</div>
+								</div>
+								<div
+									className={`relative flex items-center justify-between w-full p-14pxr rounded-8pxr gap-10pxr ${'bg-gray050'}`}
+									onClick={() => {
+										handleChangeDongne(locations[0], 0);
+									}}
+								>
+									<Text
+										fontSize={16}
+										fontWeight={500}
+										color="gray300"
+										className="cursor-pointer w-full text-center"
+										onClick={() => router.push('/profile/edit/dongne')}
+									>
+										동네 추가
+									</Text>
+									<IconButtonPlus />
+								</div>
 							</div>
 						)}
 
@@ -287,7 +342,12 @@ export default function ProfileEdit() {
 							<Text fontSize={18} fontWeight={700} color="gray700">
 								응원 팀
 							</Text>
-							<Text fontSize={14} fontWeight={400} color="gray700">
+							<Text
+								fontSize={14}
+								fontWeight={400}
+								color="gray700"
+								onClick={handleOpenSheet}
+							>
 								수정
 							</Text>
 						</div>
@@ -297,6 +357,8 @@ export default function ProfileEdit() {
 					</div>
 				</form>
 			</section>
+
+			<SelectTeamBottomSheet isOpen={isSheetOpen} onClose={handleCloseSheet} />
 		</section>
 	);
 }

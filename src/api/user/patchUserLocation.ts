@@ -7,7 +7,7 @@ import apiClient from '..';
  * @returns {Promise<void>} 요청 성공 여부
  */
 const patchUserLocation = async (locationId: string): Promise<void> => {
-	await apiClient.patch(`/location/${locationId}`);
+	await apiClient.patch(`/user/location/${locationId}`);
 };
 
 export default patchUserLocation;

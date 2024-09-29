@@ -83,6 +83,7 @@ export interface UserProfileResponse {
 	userRole: string;
 	favoriteTeam: FavoriteTeam;
 	hostedFanpoolNumber: number;
+	hostedTourLogNumber: number;
 }
 
 export interface FanpoolLogList {

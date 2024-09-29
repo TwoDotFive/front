@@ -26,7 +26,7 @@ const postUserLocation = async (
 ): Promise<void> => {
 	try {
 		// POST 요청을 보내기
-		await apiClient.post('/auth/location', locationData);
+		await apiClient.post('/user/location', locationData);
 	} catch (error) {
 		console.error('Error sending user location:', error);
 		throw error;

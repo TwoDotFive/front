@@ -68,6 +68,7 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 						</Text>
 						<Text fontSize={12} fontWeight={400} color="gray700">
 							{userProfile.hostedFanpoolNumber}개의 팬풀 |{' '}
+							{userProfile.hostedTourLogNumber}개의 여행기
 							{userProfile.userRole === 'host' ? '호스트' : '사용자'}
 						</Text>
 					</div>

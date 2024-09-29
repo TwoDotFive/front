@@ -28,7 +28,9 @@ export default function TravelogWideCard({
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    setImageSrc("/images/empty_image_place.png");
+    setImageSrc(
+      `/images/fanpool_log_image_default_${(Number(id) % 5) + 1}.png`
+    );
   };
 
   const places = locations?.split(",");

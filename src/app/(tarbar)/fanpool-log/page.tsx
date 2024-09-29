@@ -82,7 +82,7 @@ export default function Page() {
   return (
     <div className="w-full flex flex-col">
       {/* 상단 배너 변경 예정*/}
-      <HeaderBanner imageUrl="/images/fanpool-log_ex.png" />
+      <HeaderBanner imageUrl="/images/fanpool_log_guide.png" />
       <div className="p-20pxr">
         {/* 최근 팬풀로그 */}
         <RecentFanpoolLog />

@@ -25,6 +25,10 @@ const formatDateToISO8601 = (date: Date): string => {
  *
  * @returns {Promise<FanpoolFilterResponse>} 팬풀 필터링 정보 응답
  */
+
+interface FanpoolFilterResponse {
+	fanpools: FanpoolInformation[];
+}
 const getFanpoolFilter = async ({
 	teamId,
 	dongCd,
@@ -34,15 +38,15 @@ const getFanpoolFilter = async ({
 	page = 0,
 	size = 10,
 }: {
-	teamId?: number;
+	teamId?: string;
 	dongCd?: string;
 	gameId?: number[];
 	departAt?: Date;
 	onlyGathering?: boolean;
 	page?: number;
 	size?: number;
-}): Promise<FanpoolInformation[]> => {
-	const response = await apiClient.get<FanpoolInformation[]>(
+}): Promise<FanpoolFilterResponse> => {
+	const response = await apiClient.get<FanpoolFilterResponse>(
 		'/fanpool/filter',
 		{
 			params: {

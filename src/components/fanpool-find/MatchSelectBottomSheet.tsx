@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconCheckNavy } from '@/public/icons';
 import BottomSheet from '../common/BottomSheet';
 import { Text } from '../common/Text';
 import SelectMatchButton from '../common/button/SelectMatchButton';
+import { useSearchStore } from '@/store/useSearchStore';
+import { Game } from '@/types/types';
+import getGame from '@/api/baseball/getGames';
+import { formatDateTime } from '@/util/string';
 
 interface MatchSelectBottomSheetProps {
 	isVisible: boolean;
@@ -17,172 +21,29 @@ const MatchSelectBottomSheet = ({
 	onClose,
 	onMatchSelect,
 }: MatchSelectBottomSheetProps) => {
-	const games = [
-		{
-			id: 1,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 2,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 3,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 4,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 5,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 6,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 7,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-		{
-			id: 8,
-			code: 'game1',
-			awayTeam: {
-				id: 2,
-				name: '키움 히어로즈',
-				representativeImageUrl: 'https://example.com/kiwoom.png',
-				stadiumName: '구로 고척 스카이돔',
-				stadiumAliasName: '고척',
-			},
-			homeTeam: {
-				id: 1,
-				name: '삼성 라이온즈',
-				representativeImageUrl: 'https://example.com/samsung.png',
-				stadiumName: '수원 위즈 파크',
-				stadiumAliasName: '수원',
-			},
-			startDate: '2024-09-01T15:00:00',
-			stadium: '수원 위즈 파크',
-		},
-	];
+	const { selectedDate, selectedTeam } = useSearchStore();
 
-	const [selectedMatches, setSelectedMatches] = useState<number[]>(
-		games.map((game) => game.id)
-	);
+	// 게임 목록을 저장할 상태
+	const [games, setGames] = useState<Game[]>([]);
+	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
+
+	// API 호출을 통해 게임 데이터를 가져오는 함수
+	useEffect(() => {
+		const fetchGames = async () => {
+			const formattedDate = formatDateTime(selectedDate);
+			console.log(formattedDate);
+			try {
+				const fetchedGames = await getGame(selectedTeam, formattedDate);
+				console.log(fetchedGames);
+				setGames(fetchedGames);
+			} catch (error) {
+				console.error('Failed to fetch games:', error);
+			}
+		};
+
+		// API 호출
+		fetchGames();
+	}, [selectedTeam, selectedDate]);
 
 	const handleMatchSelect = (id: number) => {
 		setSelectedMatches((prevSelected) =>
@@ -203,15 +64,21 @@ const MatchSelectBottomSheet = ({
 			</section>
 			<div className="h-12pxr" />
 			<div className="h-330pxr overflow-scroll flex flex-col gap-12pxr">
-				{/* 경기 선택 버튼들 렌더링 */}
-				{games.map((game) => (
-					<SelectMatchButton
-						key={game.id}
-						game={game}
-						isSelected={selectedMatches.includes(game.id)}
-						onClick={() => handleMatchSelect(game.id)}
-					/>
-				))}
+				{/* 게임 목록을 렌더링 */}
+				{games.length > 0 ? (
+					games.map((game) => (
+						<SelectMatchButton
+							key={game.id}
+							game={game}
+							isSelected={selectedMatches.includes(game.id)}
+							onClick={() => handleMatchSelect(game.id)}
+						/>
+					))
+				) : (
+					<Text fontSize={14} fontWeight={400} color="gray500">
+						경기가 없습니다.
+					</Text>
+				)}
 			</div>
 			<div className="h-12pxr" />
 			<div

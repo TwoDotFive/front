@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	format,
 	isSameDay,
@@ -14,6 +14,10 @@ import {
 import BottomSheet from '../common/BottomSheet';
 import { Text } from '../common/Text';
 import { IconShiftLeft, IconShiftRight } from '@/public/icons';
+import getGame from '@/api/baseball/getGames';
+import { Game } from '@/types/types';
+import SelectMatchButton from '../common/button/SelectMatchButton';
+import { formatDateTime } from '@/util/string';
 
 interface FanpoolMatchBottomSheetProps {
 	isVisible: boolean;
@@ -24,6 +28,10 @@ export const FanpoolMatchBottomSheet = ({
 	isVisible,
 	onClose,
 }: FanpoolMatchBottomSheetProps) => {
+	// 게임 목록을 저장할 상태
+	const [games, setGames] = useState<Game[]>([]);
+	const [selectedMatch, setSelectedMatch] = useState<number | null>(null); // 하나의 match만 관리
+
 	// 현재 월을 기준으로 캘린더를 설정
 	const [localMonth, setLocalMonth] = useState<Date>(new Date());
 	// 기본적으로 오늘 날짜를 선택
@@ -39,8 +47,7 @@ export const FanpoolMatchBottomSheet = ({
 
 	const handleDateSelect = (day: Date) => {
 		setSelectedDate(day);
-		console.log('선택한 날짜:', format(day, 'yyyy-MM-dd'));
-		// onClose();
+		onClose();
 	};
 
 	const renderDays = () => {
@@ -95,6 +102,22 @@ export const FanpoolMatchBottomSheet = ({
 		));
 	};
 
+	const handleMatchSelect = (id: number) => {
+		setSelectedMatch(id);
+	};
+	useEffect(() => {
+		const fetchGames = async () => {
+			try {
+				const fetchedGames = await getGame('', formatDateTime(selectedDate));
+				setGames(fetchedGames);
+			} catch (error) {
+				console.error('Failed to fetch games:', error);
+			}
+		};
+
+		// API 호출
+		fetchGames();
+	}, [selectedDate]);
 	return (
 		<BottomSheet isVisible={isVisible} onClose={onClose}>
 			<section className="flex flex-col px-20pxr">
@@ -127,10 +150,28 @@ export const FanpoolMatchBottomSheet = ({
 				</div>
 			</section>
 			<div className="h-40pxr" />
-			<section className="flex items-center gap-4pxr px-20pxr">
+			<section className="flex flex-col gap-4pxr px-20pxr">
 				<Text fontSize={16} fontWeight={700}>
-					경기({3})
+					경기({games.length})
 				</Text>
+
+				<div className="h-330pxr overflow-scroll flex flex-col gap-12pxr">
+					{/* 게임 목록을 렌더링 */}
+					{games.length > 0 ? (
+						games.map((game) => (
+							<SelectMatchButton
+								key={game.id}
+								game={game}
+								isSelected={selectedMatch === game.id}
+								onClick={() => handleMatchSelect(game.id)}
+							/>
+						))
+					) : (
+						<Text fontSize={14} fontWeight={400} color="gray500">
+							경기가 없습니다.
+						</Text>
+					)}
+				</div>
 			</section>
 		</BottomSheet>
 	);

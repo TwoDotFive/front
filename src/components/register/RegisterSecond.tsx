@@ -11,6 +11,7 @@ import SelectTeamButton from '../common/button/SelectTeamButton';
 import getTeams from '@/api/baseball/getTeams';
 import { useUserStore } from '@/store/useUserStore';
 import patchUserProfile from '@/api/user/patchUserProfile';
+import getUserProfile from '@/api/user/getUserProfile';
 
 interface RegisterSecondProps {
 	register: UseFormRegister<any>;
@@ -24,8 +25,7 @@ export const RegisterSecond = ({
 	handleNext,
 	getValues,
 }: RegisterSecondProps) => {
-	const { userProfile, setUserProfile } = useUserStore();
-	const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 	const [apiTeams, setApiTeams] = useState<typeof teams>([]);
 
 	// API에서 팀 데이터를 가져옴
@@ -51,40 +51,28 @@ export const RegisterSecond = ({
 				console.error('Error fetching teams:', error);
 			}
 		};
-
 		fetchTeams();
 	}, []);
-	const handleTeamSelect = (id: number) => {
+	const handleTeamSelect = (id: string) => {
 		setSelectedTeam(id);
 	};
 
 	// 선택한 팀 정보 저장 및 API 요청
 	const handleSelect = async () => {
 		const selectedTeamData = apiTeams.find(
-			(team) => team.code === selectedTeam?.toString()
+			(team) => team.id === selectedTeam?.toString()
 		);
+		if (selectedTeamData) {
+			const response = await getUserProfile({ userId: '0' });
 
-		if (selectedTeamData && userProfile) {
-			const updatedFavoriteTeam = {
-				id: selectedTeamData.id,
-				name: selectedTeamData.name,
-				stadiumAliasName: selectedTeamData.stadiumAliasName,
-				stadiumName: selectedTeamData.stadiumName,
-				representativeImageUrl: selectedTeamData.representativeImageUrl!,
-			};
-
-			// userProfile 업데이트
 			const updatedUserProfile = {
-				...userProfile,
-				favoriteTeam: updatedFavoriteTeam,
+				nickname: response.nickname,
+				oneLiner: response.oneLiner,
+				profileImageUrl: response.profileImageUrl,
+				favoriteTeam: selectedTeamData.id,
 			};
-
-			// 서버로 업데이트된 프로필 정보 전송
 			try {
 				const response = await patchUserProfile(updatedUserProfile);
-				console.log(response);
-				console.log('Favorite team updated successfully');
-				setUserProfile(updatedUserProfile);
 				handleNext();
 			} catch (error) {
 				console.error('Failed to update favorite team:', error);
@@ -127,8 +115,8 @@ export const RegisterSecond = ({
 					<div key="none" className="mb-8pxr">
 						<SelectTeamButton
 							code=""
-							isSelected={selectedTeam === 0}
-							onClick={() => handleTeamSelect(0)}
+							isSelected={selectedTeam === ''}
+							onClick={() => handleTeamSelect('')}
 						/>
 					</div>
 				</div>

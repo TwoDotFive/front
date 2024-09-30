@@ -17,6 +17,7 @@ const getFanpoolDetail = async (
 	const response = await apiClient.get<FanpoolDetailResponse>(
 		`/fanpool/${fanpoolId}`
 	);
+	console.log(response.data.fanpoolInformation);
 	return response.data;
 };
 

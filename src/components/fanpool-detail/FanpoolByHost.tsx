@@ -4,7 +4,7 @@ import { getFanpoolLogsByUser } from '@/api/fanpool-log/log/main';
 import TravelogWideCard from '../card/TravelogWideCard';
 
 interface FanpoolByHostProps {
-	hostUserId: string;
+	hostUserId: BigInt;
 }
 
 interface FanpoolLogResponse {

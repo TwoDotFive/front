@@ -29,7 +29,7 @@ export interface Location {
 export interface FanpoolInformation {
 	id: string;
 	title: string;
-	hostUserId: string;
+	hostUserId: BigInt;
 	game: Game;
 	departAt: string;
 	departFrom: Location;
@@ -87,15 +87,15 @@ export interface UserProfileResponse {
 }
 
 export interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  places: string;
+	id: string;
+	image: string;
+	title: string;
+	stadium: string;
+	profile: {
+		nickname: string;
+		image: string;
+	};
+	places: string;
 }
 
 export interface PlaceContent {

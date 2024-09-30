@@ -21,9 +21,9 @@ export default function Page({ params }: { params: { id: number } }) {
 		if (fanpoolId) {
 			const fetchFanpoolDetail = async () => {
 				try {
-					const response = await getFanpoolDetail(Number(fanpoolId));
-					setFanpoolInformation(response.fanpoolInformation);
+					const response = await getFanpoolDetail(fanpoolId);
 					console.log(response);
+					setFanpoolInformation(response.fanpoolInformation);
 				} catch (error) {
 					console.error('Error fetching fanpool detail:', error);
 				} finally {

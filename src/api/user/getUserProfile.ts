@@ -7,7 +7,7 @@ import apiClient from '..';
  * @param {string} userId 사용자 ID
  */
 interface UserProfileRequest {
-	userId: string;
+	userId: string | BigInt;
 }
 
 /**
@@ -23,7 +23,7 @@ const getUserProfile = async (
 	const response = await apiClient.get<UserProfileResponse>(
 		`/user/profile/${requestParameters.userId || 0} `
 	);
-
+	console.log(response.data);
 	return response.data;
 };
 

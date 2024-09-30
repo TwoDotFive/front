@@ -23,7 +23,6 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 		'MM/dd (EEE) a h:mm',
 		{ locale: ko }
 	);
-
 	return (
 		<section>
 			<div className="flex gap-6pxr">

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-
+import BigInt from 'json-bigint';
 /**
  * Axios 인스턴스 생성
  */
@@ -7,6 +7,9 @@ const apiClient: AxiosInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL,
 	headers: {
 		'Content-Type': 'application/json',
+	},
+	transformResponse: function (response) {
+		return BigInt().parse(response);
 	},
 });
 

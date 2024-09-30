@@ -5,7 +5,7 @@ import getUserProfile from '@/api/user/getUserProfile';
 import { UserProfileResponse } from '@/types/types';
 
 interface FanpoolHostProps {
-	hostUserId: string;
+	hostUserId: BigInt;
 }
 
 export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
@@ -20,7 +20,7 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 			try {
 				// hostUserId를 이용하여 사용자 프로필 조회
 				const response = await getUserProfile({
-					userId: hostUserId.toString(),
+					userId: hostUserId,
 				});
 				setUserProfile(response);
 			} catch (err) {

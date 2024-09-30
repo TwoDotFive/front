@@ -11,6 +11,7 @@ import { IconDefaultPin, IconPencilGray } from '@/public/icons';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 import { Game } from '@/types/types';
+import FanpoolMatchItem from './FanpoolMatchItem';
 
 interface FanpoolFormData {
 	title: string;
@@ -155,14 +156,18 @@ export default function FanpoolAddForm() {
 					<Text fontSize={18} fontWeight={700} color="gray700">
 						보러 갈 경기
 					</Text>
-					<div
-						className="w-full h-full p-12pxr rounded-8pxr bg-gray100 cursor-pointer text-center"
-						onClick={() => openBottomSheet('match')}
-					>
-						<Text fontSize={16} fontWeight={500} color="gray700">
-							경기 찾아보기
-						</Text>
-					</div>
+					{!selectedGame ? (
+						<div
+							className="w-full h-full p-12pxr rounded-8pxr bg-gray100 cursor-pointer text-center"
+							onClick={() => openBottomSheet('match')}
+						>
+							<Text fontSize={16} fontWeight={500} color="gray700">
+								경기 찾아보기
+							</Text>
+						</div>
+					) : (
+						<FanpoolMatchItem game={selectedGame} />
+					)}
 				</div>
 
 				<div className="flex flex-col gap-8pxr">

@@ -63,7 +63,6 @@ export default function SelectTeamBottomSheet({
 		};
 		try {
 			const response = await patchUserProfile(updatedUserProfile);
-			console.log(userProfile?.id!);
 			fetchUserProfile(userProfile?.id!);
 
 			onClose();

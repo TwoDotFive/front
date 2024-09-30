@@ -83,13 +83,20 @@ export default function Page({ isFirst }: PageProps) {
 
 	const handleSubmitLocation = async () => {
 		try {
-			const locationResponse = await getUserLocation();
+			let isFirst;
+			try {
+				await getUserLocation();
+				isFirst = false;
+			} catch {
+				isFirst = true;
+			}
 			const response = await getAddress(mapCenter.lng, mapCenter.lat);
 
 			const locationData = {
 				...response,
-				representative: locationResponse.authenticatedLocations.length === 0,
+				representative: isFirst,
 			};
+
 			await postUserLocation(locationData);
 			router.back();
 		} catch (error) {

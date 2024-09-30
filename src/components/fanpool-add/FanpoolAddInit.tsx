@@ -65,7 +65,7 @@ export default function FanpoolAddInit({
 			</Text>
 			<Text fontSize={16} fontWeight={400} color="gray700">
 				다른 팬과 함께 직관까지 동행하는 것을 말해요. 보고 싶은 경기를 선택하고,
-				함께 응원할 팬들을 만나 즐거운 여정을 나눠보세요!
+				함께 응원할 갈 팬들을 찾아 즐거운 여정을 나눠보세요!
 			</Text>
 			<div className="h-60pxr" />
 

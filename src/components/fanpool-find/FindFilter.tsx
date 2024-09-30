@@ -75,12 +75,14 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 		setBottomSheet({ visible: false, type: null });
 	};
 
-	const handlePlaceSelect = (place: {
-		name: string;
-		id: string;
-		x: string;
-		y: string;
-	}) => {
+	const handlePlaceSelect = (
+		place: {
+			name: string;
+			id: string;
+			x: string;
+			y: string;
+		} | null
+	) => {
 		setSelectedPlace(place); // 장소 선택시 상태 업데이트
 		closeBottomSheet();
 	};

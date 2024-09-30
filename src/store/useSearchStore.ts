@@ -9,12 +9,14 @@ interface SearchStore {
 	setSelectedMatches: (matches: string[]) => void; // 선택된 경기 설정
 	setSelectedDate: (date: Date) => void; // 선택된 날짜 설정
 	setSelectedTeam: (teamId: string) => void; // 선택된 팀 설정
-	setSelectedPlace: (place: {
-		name: string;
-		id: string;
-		x: string;
-		y: string;
-	}) => void; // 선택된 장소 설정
+	setSelectedPlace: (
+		place: {
+			name: string;
+			id: string;
+			x: string;
+			y: string;
+		} | null
+	) => void; // 선택된 장소 설정
 	toggleCheckDeadline: () => void; // 마감된 팬풀 숨기기 토글
 	resetFilters: () => void; // 필터 초기화
 }

@@ -7,12 +7,14 @@ import useKakaoLoader from '../register/useKakaoLoader';
 interface PlaceSearchBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onSelectPlace: (place: {
-		name: string;
-		id: string;
-		x: string;
-		y: string;
-	}) => void;
+	onSelectPlace: (
+		place: {
+			name: string;
+			id: string;
+			x: string;
+			y: string;
+		} | null
+	) => void;
 }
 
 export const PlaceSearchBottomSheet = ({
@@ -51,7 +53,6 @@ export const PlaceSearchBottomSheet = ({
 	}, [query]);
 
 	const handleSelectPlace = (place: any) => {
-		console.log(place);
 		onSelectPlace({
 			name: place.place_name,
 			id: place.id,
@@ -95,8 +96,15 @@ export const PlaceSearchBottomSheet = ({
 							))}
 						</ul>
 					) : (
-						<Text fontSize={14} color="gray600">
-							검색 결과가 없습니다.
+						<Text
+							fontSize={14}
+							color="gray600"
+							onClick={() => {
+								onSelectPlace(null);
+							}}
+							className="cursor-pointer"
+						>
+							검색 결과가 없애기
 						</Text>
 					)}
 				</div>

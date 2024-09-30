@@ -50,8 +50,8 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 
 			<Map
 				center={{
-					lat: Number(x),
-					lng: Number(y),
+					lat: Number(y),
+					lng: Number(x),
 				}}
 				style={{ width: '100%', height: '129px' }}
 				level={3}

@@ -22,6 +22,7 @@ export default function FindResult({ fanpoolDatas }: FindResultProps) {
 					</Text>
 				</div>
 			)}
+			<div className="h-50pxr" />
 		</section>
 	);
 }

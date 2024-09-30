@@ -18,6 +18,7 @@ interface AddressResponse {
  * 팬풀 추가 요청 파라미터
  */
 interface AddFanpoolRequest {
+	title: string;
 	departAt: string; // 출발 시간 (ISO 8601 형식)
 	gameId: string; // 경기 ID
 	numberOfPeople: number; // 모집 인원 수
@@ -38,6 +39,7 @@ const postAddFanpool = async (
 ): Promise<void> => {
 	// POST 요청으로 팬풀 정보를 body에 전달
 	await apiClient.post('/fanpool', {
+		title: requestParameters.title,
 		departAt: requestParameters.departAt,
 		gameId: requestParameters.gameId,
 		numberOfPeople: requestParameters.numberOfPeople,

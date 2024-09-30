@@ -50,7 +50,7 @@ export default function FanpoolByHost({ hostUserId }: FanpoolByHostProps) {
 				주최자가 등록한 팬풀로그에요!
 			</Text>
 			{/* 팬풀로그 화면들 구현 */}
-			<div className="flex flex-col gap-12pxr">
+			<div className="flex flex-col gap-12pxr mt-20pxr">
 				{fanpoolLogList.map((fanpoolLog) => (
 					<TravelogWideCard
 						key={fanpoolLog.id}

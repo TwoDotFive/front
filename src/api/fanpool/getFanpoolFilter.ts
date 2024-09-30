@@ -36,7 +36,7 @@ const getFanpoolFilter = async ({
 	gameId = [],
 	onlyGathering,
 	page = 0,
-	size = 10,
+	size = 20,
 }: {
 	teamId?: string;
 	dongCd?: string;

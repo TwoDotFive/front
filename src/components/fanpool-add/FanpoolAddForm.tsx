@@ -301,7 +301,11 @@ export default function FanpoolAddForm() {
 					</Text>
 					<div className="h-14pxr" />
 					<div className="flex justify-between items-center">
-						<MinusButton onClick={() => handleCollectCountChange(-1)} />
+						<MinusButton
+							onClick={() => {
+								handleCollectCountChange(-1);
+							}}
+						/>
 						<div className="flex gap-2pxr items-center">
 							<Text fontSize={18} fontWeight={700} color="gray700">
 								{collectCount}명

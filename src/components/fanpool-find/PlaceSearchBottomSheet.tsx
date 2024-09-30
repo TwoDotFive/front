@@ -29,6 +29,7 @@ export const PlaceSearchBottomSheet = ({
 	const searchPlaces = () => {
 		const ps = new window.kakao.maps.services.Places();
 		ps.keywordSearch(query, (data: any, status: any) => {
+			console.log(data);
 			if (status === window.kakao.maps.services.Status.OK) {
 				setPlaces(data);
 			} else {
@@ -50,6 +51,7 @@ export const PlaceSearchBottomSheet = ({
 	}, [query]);
 
 	const handleSelectPlace = (place: any) => {
+		console.log(place);
 		onSelectPlace({
 			name: place.place_name,
 			id: place.id,

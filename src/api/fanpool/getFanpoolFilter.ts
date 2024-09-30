@@ -1,3 +1,4 @@
+import qs from 'qs';
 import { FanpoolInformation } from '@/types/types';
 import apiClient from '..';
 
@@ -33,7 +34,6 @@ const getFanpoolFilter = async ({
 	teamId,
 	dongCd,
 	gameId = [],
-	departAt,
 	onlyGathering,
 	page = 0,
 	size = 10,
@@ -41,7 +41,6 @@ const getFanpoolFilter = async ({
 	teamId?: string;
 	dongCd?: string;
 	gameId?: string[];
-	departAt?: Date;
 	onlyGathering?: boolean;
 	page?: number;
 	size?: number;
@@ -53,10 +52,12 @@ const getFanpoolFilter = async ({
 				teamId,
 				dongCd,
 				gameId,
-				departAt: departAt ? formatDateToISO8601(departAt) : undefined,
 				onlyGathering,
 				page,
 				size,
+			},
+			paramsSerializer: (params) => {
+				return qs.stringify(params, { arrayFormat: 'repeat' });
 			},
 		}
 	);

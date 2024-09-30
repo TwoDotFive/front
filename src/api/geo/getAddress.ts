@@ -21,7 +21,7 @@ interface AddressResponse {
  * @param {number} y 위도
  * @returns {Promise<AddressResponse>} 주소 정보 응답
  */
-const getAddress = async (x: number, y: number): Promise<AddressResponse> => {
+const getAddress = async (x: string, y: string): Promise<AddressResponse> => {
 	const response = await apiClient.get<AddressResponse>(
 		`/geo/coord2address?x=${x}&y=${y}` // 예시 URL 경로, 실제 API 경로에 맞춰 수정 필요
 	);

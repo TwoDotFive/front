@@ -31,10 +31,10 @@ const MatchSelectBottomSheet = ({
 	useEffect(() => {
 		const fetchGames = async () => {
 			const formattedDate = formatDateTime(selectedDate);
-			console.log(formattedDate);
 			try {
 				const fetchedGames = await getGame(selectedTeam, formattedDate);
 				setGames(fetchedGames);
+				setSelectedMatches([]);
 			} catch (error) {
 				console.error('Failed to fetch games:', error);
 			}
@@ -45,12 +45,13 @@ const MatchSelectBottomSheet = ({
 	}, [selectedTeam, selectedDate]);
 
 	const handleMatchSelect = (id: string) => {
-		setSelectedMatches((prevSelected) =>
-			prevSelected.includes(id)
-				? prevSelected.filter((matchId) => matchId !== id)
-				: [...prevSelected, id]
-		);
-		onMatchSelect(selectedMatches);
+		const updatedSelectedMatches = selectedMatches.includes(id)
+			? selectedMatches.filter((matchId) => matchId !== id)
+			: [...selectedMatches, id];
+
+		setSelectedMatches(updatedSelectedMatches);
+
+		onMatchSelect(updatedSelectedMatches);
 	};
 
 	return (

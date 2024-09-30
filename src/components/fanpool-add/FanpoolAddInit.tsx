@@ -17,11 +17,12 @@ export default function FanpoolAddInit({
 			<div className="w-full flex flex-col">
 				<div className="flex justify-center">
 					<Image
-						width={191}
-						height={191}
+						width={0}
+						height={0}
 						alt=""
+						sizes="100vw"
 						src={'/images/image_carshare_big.png'}
-						className="select-none"
+						className="w-full h-auto"
 					/>
 				</div>
 				<div className="h-14pxr" />
@@ -30,16 +31,19 @@ export default function FanpoolAddInit({
 				</Text>
 				<div className="h-2pxr" />
 				<Text fontSize={16} fontWeight={400} color="gray700">
-					차량을 제공하여 이동 비용을 절약할 수 있어요
+					차량을 제공하여 이동 비용을 절약할 수 있어요. 모집글에 함께하고 싶은
+					팬에 대해 작성하고 원하는 카풀 방식(비용), 직관 빈도, 응원 스타일 등을
+					공유하면 더 나와 맞는 팬들을 찾기 쉬워져요.
 				</Text>
 				<div className="h-60pxr" />
 				<div className="flex justify-center">
 					<Image
-						width={191}
-						height={191}
+						width={0}
+						height={0}
 						alt=""
+						sizes="100vw"
 						src={'/images/image_taxi_big.png'}
-						className="select-none "
+						className="w-full h-auto"
 					/>
 				</div>
 				<div className="h-14pxr" />
@@ -48,7 +52,8 @@ export default function FanpoolAddInit({
 				</Text>
 				<div className="h-2pxr" />
 				<Text fontSize={16} fontWeight={400} color="gray700">
-					택시비를 1/N으로 나눠 비용 부담을 줄일 수 있어요
+					경기 지연으로 시간이 늦어지면, 경기 전후 함께 택시로 이동할 인원을
+					모을 수 있어요. 목적지까지 방향이 비슷한 팬들을 모아 이동할 수 있어요.
 				</Text>
 			</div>
 		);

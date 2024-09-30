@@ -9,6 +9,7 @@ import { Text } from '@/components/common/Text';
 import Button from '@/components/common/Button';
 import TapBar from '@/components/common/TapBar';
 import { useRouter } from 'next/navigation';
+import getUserLocation from '@/api/user/getUserLocation';
 
 interface PageProps {
 	isFirst: boolean;
@@ -82,16 +83,14 @@ export default function Page({ isFirst }: PageProps) {
 
 	const handleSubmitLocation = async () => {
 		try {
+			const locationResponse = await getUserLocation();
 			const response = await getAddress(mapCenter.lng, mapCenter.lat);
 
 			const locationData = {
 				...response,
-				representative: isFirst,
+				representative: locationResponse.authenticatedLocations.length === 0,
 			};
-
-			// 사용자 위치 정보를 서버로 전송
 			await postUserLocation(locationData);
-
 			router.back();
 		} catch (error) {
 			console.error('Error submitting location:', error);

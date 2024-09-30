@@ -63,7 +63,9 @@ export default function SelectTeamBottomSheet({
 		};
 		try {
 			const response = await patchUserProfile(updatedUserProfile);
+			console.log(userProfile?.id!);
 			fetchUserProfile(userProfile?.id!);
+
 			onClose();
 		} catch (error) {
 			console.error('Failed to update favorite team:', error);

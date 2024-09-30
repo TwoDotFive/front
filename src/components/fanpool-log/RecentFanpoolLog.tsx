@@ -51,7 +51,12 @@ export default function RecentFanpoolLog({
           <TravelogCard
             key={travelLog.id}
             id={travelLog.id}
-            image={travelLog.image}
+            image={
+              travelLog.image ||
+              `/images/fanpool_log_image_default_${
+                (Number(travelLog.id) % 5) + 1
+              }.png`
+            }
             userName={travelLog.profile.nickname}
             userImage={travelLog.profile.image}
             title={travelLog.title}

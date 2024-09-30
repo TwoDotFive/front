@@ -33,7 +33,6 @@ export default function Page({ isFirst }: PageProps) {
 
 		geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
 			if (status === window.kakao.maps.services.Status.OK) {
-				console.log('Kakao API Address:', result[0]);
 				setAddress(
 					result[0].address.region_1depth_name +
 						' ' +
@@ -90,7 +89,10 @@ export default function Page({ isFirst }: PageProps) {
 			} catch {
 				isFirst = true;
 			}
-			const response = await getAddress(mapCenter.lng, mapCenter.lat);
+			const response = await getAddress(
+				mapCenter.lng.toString(),
+				mapCenter.lat.toString()
+			);
 
 			const locationData = {
 				...response,

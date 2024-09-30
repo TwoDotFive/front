@@ -22,7 +22,7 @@ const getFanpool = async ({
 	page = 0,
 	size = 10,
 }: {
-	userId: string;
+	userId: string | BigInt;
 	page?: number;
 	size?: number;
 }): Promise<FanpoolResponse> => {

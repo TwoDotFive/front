@@ -201,12 +201,8 @@ export default function ProfileEdit() {
 			profileImageUrl: imgSrc,
 			favoriteTeam: selectedTeam,
 		};
-		console.log(updatedUserProfile);
 		try {
 			const response = await patchUserProfile(updatedUserProfile);
-
-			console.log(response);
-			console.log('Favorite team updated successfully');
 			router.back();
 		} catch (error) {
 			console.error('Failed to update favorite team:', error);

@@ -103,7 +103,6 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 						selectedPlace.y
 					);
 					dongCd = addressResponse.dongCd;
-					console.log(dongCd);
 				} catch (error) {
 					console.error('Failed to fetch address:', error);
 				}
@@ -118,7 +117,6 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 					gameId: selectedMatches,
 					onlyGathering: isCheckDeadline,
 				});
-				console.log(fanpoolResponse);
 				setFanpoolData(fanpoolResponse.fanpools);
 			} catch (error) {
 				console.error('Failed to fetch fanpool data:', error);

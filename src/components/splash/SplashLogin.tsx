@@ -19,7 +19,6 @@ export default function SplashLogin() {
 			// const response = await getKakaoLogin();
 
 			// URL로 리다이렉트
-			console.log(INITIAL_URL_BASE_FULL);
 			window.location.href = INITIAL_URL_BASE_FULL;
 		} catch (error) {
 			console.error('로그인 처리 중 오류 발생:', error);

@@ -17,8 +17,8 @@ interface AddressResponse {
 /**
  * 좌표를 통해 주소 정보를 가져오는 함수
  *
- * @param {number} x 경도
- * @param {number} y 위도
+ * @param {string} x 경도
+ * @param {string} y 위도
  * @returns {Promise<AddressResponse>} 주소 정보 응답
  */
 const getAddress = async (x: string, y: string): Promise<AddressResponse> => {

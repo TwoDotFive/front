@@ -23,7 +23,6 @@ const getUserProfile = async (
 	const response = await apiClient.get<UserProfileResponse>(
 		`/user/profile/${requestParameters.userId || 0} `
 	);
-	console.log(response.data);
 	return response.data;
 };
 

@@ -12,7 +12,7 @@ import { FanpoolInformation } from '@/types/types';
 import FanpoolCard from '../common/fanpool/FanpoolCard';
 
 interface ProfileTabMenuProps {
-	id?: string;
+	id?: string | BigInt;
 }
 interface FanpoolLogResponse {
 	items: {
@@ -76,6 +76,9 @@ export default function ProfileTabMenu({ id }: ProfileTabMenuProps) {
 	const handleClick = () => {
 		router.push('/fanpool-add');
 	};
+	const handleAddLogClick = () => {
+		router.push('/fanpool-add');
+	};
 
 	const renderFanpool = () => {
 		return (
@@ -121,7 +124,7 @@ export default function ProfileTabMenu({ id }: ProfileTabMenuProps) {
 					<br />
 					지금 새 로그를 만들어 볼까요?
 				</Text>
-				<MakeFanpoolLogButton onClick={() => console.log('Button clicked!')} />
+				<MakeFanpoolLogButton onClick={handleAddLogClick} />
 			</div>
 		) : (
 			<div className="flex flex-col gap-12pxr">

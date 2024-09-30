@@ -10,7 +10,6 @@ export default function page() {
 		const getUserToken = async (code: string) => {
 			try {
 				const response = await getKakaoLoginToken(code);
-				console.log(response);
 				if (!response.firstLogin) {
 					router.push('/register');
 				} else {

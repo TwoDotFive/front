@@ -47,7 +47,7 @@ export const deleteBookmark = async (fanPoolLogId: string) => {
 };
 
 export const getFanpoolLogsByUser = async (
-	userId: BigInt,
+	userId: BigInt | string,
 	lastId?: string,
 	pageSize: number = 6
 ) => {

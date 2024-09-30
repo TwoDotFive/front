@@ -57,6 +57,8 @@ export default function LiveFanPool() {
 					handleMoreFanpool();
 				}}
 			/>
+
+			<div className="h-30pxr" />
 		</section>
 	);
 }

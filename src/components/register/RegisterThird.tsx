@@ -42,7 +42,6 @@ export const RegisterThird = ({
 		// 카카오 지도 API를 사용한 추가 처리
 		geocoder.coord2Address(coord.getLng(), coord.getLat(), (result, status) => {
 			if (status === window.kakao.maps.services.Status.OK) {
-				console.log('Kakao API Address:', result[0]);
 				setAddress(
 					result[0].address.region_1depth_name +
 						' ' +
@@ -93,7 +92,10 @@ export const RegisterThird = ({
 	const handleSubmitLocation = async () => {
 		try {
 			// 위도와 경도를 기반으로 주소 정보를 받아옴
-			const response = await getAddress(mapCenter.lng, mapCenter.lat);
+			const response = await getAddress(
+				mapCenter.lng.toString(),
+				mapCenter.lat.toString()
+			);
 
 			// 받은 주소 정보에 대표 위치 설정 추가
 			const locationData = {

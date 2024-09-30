@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { FanpoolInformation } from '@/types/types';
 
 interface FanpoolCardProps {
-	fanpool: FanpoolInformation;
+	fanpool?: FanpoolInformation;
 }
 
 export default function FanpoolCard({ fanpool }: FanpoolCardProps) {

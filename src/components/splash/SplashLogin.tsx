@@ -5,8 +5,7 @@ import getKakaoLogin from '@/api/auth/getKakaoLogin';
 export default function SplashLogin() {
 	const handleLogin = async () => {
 		try {
-			const KAKAO_SERVER = 'http://localhost:3000';
-			const REDIRECT_URI = KAKAO_SERVER + '/auth/kakao';
+			const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
 			const REST_API_KEY = '011aa7907a3ef6de56c400000fb08cf7';
 			const INITIAL_URL_BASE = 'https://kauth.kakao.com/oauth/authorize';
 			const INITIAL_URL_BASE_FULL =
@@ -16,7 +15,8 @@ export default function SplashLogin() {
 				'&redirect_uri=' +
 				REDIRECT_URI +
 				'&response_type=code';
-			// const response = await getKakaoLogin();
+
+			console.log(INITIAL_URL_BASE_FULL);
 
 			// URL로 리다이렉트
 			window.location.href = INITIAL_URL_BASE_FULL;
@@ -67,7 +67,15 @@ export default function SplashLogin() {
 					<div className="w-34pxr h-34pxr" />
 				</button>
 				<div className="flex gap-13pxr">
-					<Text fontSize={13} fontWeight={500} color="white">
+					<Text
+						fontSize={13}
+						fontWeight={500}
+						color="white"
+						onClick={() => {
+							window.location.href =
+								'https://aromatic-bull-390.notion.site/10f9c4b3a467806c93ded35db1ab9c6b';
+						}}
+					>
 						서비스 이용약관
 					</Text>
 					<Text fontSize={13} fontWeight={500} color="white">

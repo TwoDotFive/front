@@ -1,17 +1,17 @@
 import { format } from 'date-fns';
 import { teams } from '@/constants/teams';
-import { Text } from '../../common/Text';
 import Image from 'next/image';
-import { TagFanPool } from '../../common/tag/TagFanPool';
 import { Game } from '@/types/types';
 import { useUserStore } from '@/store/useUserStore';
 import { IconRightArrow } from '@/public/icons';
+import { Text } from '../common/Text';
+import { TagFanPool } from '../common/tag/TagFanPool';
 
-interface GameCardProps {
+interface FanpoolMatchItemProps {
 	game: Game;
 }
 
-export default function GameCard({ game }: GameCardProps) {
+export default function FanpoolMatchItem({ game }: FanpoolMatchItemProps) {
 	const myTeam = useUserStore((state) => state.userProfile?.favoriteTeam.name);
 
 	// 홈 팀과 원정 팀 정보
@@ -30,34 +30,16 @@ export default function GameCard({ game }: GameCardProps) {
 			className="w-full rounded-12pxr"
 			style={{ boxShadow: '0px 0px 11px 0px rgba(0, 0, 0, 0.11)' }}
 		>
-			<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden">
+			<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden py-16pxr px-12pxr">
 				<div
 					className="absolute inset-0 bg-cover bg-center opacity-30"
 					style={{ backgroundImage: 'url(/images/image_game_background.png)' }}
 				/>
 
 				{/**
-				 * 위치, 시간 정보
-				 */}
-				<section className="relative w-full flex flex-col items-center gap-4pxr pt-20pxr">
-					<Text fontSize={14} fontWeight={700} color="kboNavy">
-						{date}
-					</Text>
-					<div className="flex gap-4pxr items-center">
-						<Text fontSize={14} fontWeight={500} color="kboNavy">
-							{placeName}
-						</Text>
-						<TagFanPool
-							type={myTeam === game.homeTeam.name ? 'HOME' : 'AWAY'}
-						/>
-					</div>
-				</section>
-				<div className="h-12pxr" />
-
-				{/**
 				 * HOME VS AWAY
 				 */}
-				<section className="relative w-full pb-13pxr">
+				<section className="relative w-full">
 					<section className="flex justify-center items-center gap-14pxr">
 						<div className="flex gap-2pxr items-center">
 							<Image
@@ -66,7 +48,7 @@ export default function GameCard({ game }: GameCardProps) {
 								width={28}
 								height={28}
 							/>
-							<Text fontSize={18} fontWeight={800} color="kboNavy">
+							<Text fontSize={18} fontWeight={700} color="kboNavy">
 								{homeInfo.name}
 							</Text>
 						</div>
@@ -74,7 +56,7 @@ export default function GameCard({ game }: GameCardProps) {
 							VS
 						</Text>
 						<div className="flex gap-2pxr items-center">
-							<Text fontSize={18} fontWeight={800} color="kboNavy">
+							<Text fontSize={18} fontWeight={700} color="kboNavy">
 								{awayInfo.name}
 							</Text>
 							<Image
@@ -87,12 +69,23 @@ export default function GameCard({ game }: GameCardProps) {
 					</section>
 				</section>
 			</section>
-			<section className="flex justify-between items-center bg-white px-14pxr py-12pxr rounded-b-12pxr cursor-pointer">
-				<div className="w-16pxr" />
-				<Text fontSize={14} fontWeight={500} color="kboNavy">
-					현재 팬풀{136}건
-				</Text>
-				<IconRightArrow />
+			<section className="flex justify-between items-center bg-white p-12pxr rounded-b-12pxr cursor-pointer">
+				{/**
+				 * 위치, 시간 정보
+				 */}
+				<section className="relative w-full flex flex-col items-center">
+					<Text fontSize={14} fontWeight={700} color="kboNavy">
+						{date}
+					</Text>
+					<div className="flex gap-4pxr items-center">
+						<Text fontSize={14} fontWeight={500} color="kboNavy">
+							{placeName}
+						</Text>
+						<TagFanPool
+							type={myTeam === game.homeTeam.name ? 'HOME' : 'AWAY'}
+						/>
+					</div>
+				</section>
 			</section>
 		</div>
 	);

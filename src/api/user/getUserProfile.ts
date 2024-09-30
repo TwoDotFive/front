@@ -7,7 +7,7 @@ import apiClient from '..';
  * @param {string} userId 사용자 ID
  */
 interface UserProfileRequest {
-	userId: string;
+	userId: string | BigInt;
 }
 
 /**
@@ -21,9 +21,8 @@ const getUserProfile = async (
 ): Promise<UserProfileResponse> => {
 	// GET 요청으로 userId를 경로 파라미터로 전달
 	const response = await apiClient.get<UserProfileResponse>(
-		`/user/profile/${requestParameters.userId}`
+		`/user/profile/${requestParameters.userId || 0} `
 	);
-
 	return response.data;
 };
 

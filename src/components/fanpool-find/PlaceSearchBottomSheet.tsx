@@ -7,7 +7,14 @@ import useKakaoLoader from '../register/useKakaoLoader';
 interface PlaceSearchBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onSelectPlace: (place: { name: string; id: string }) => void;
+	onSelectPlace: (
+		place: {
+			name: string;
+			id: string;
+			x: string;
+			y: string;
+		} | null
+	) => void;
 }
 
 export const PlaceSearchBottomSheet = ({
@@ -32,7 +39,6 @@ export const PlaceSearchBottomSheet = ({
 		});
 	};
 
-	// query가 변경될 때마다 검색 실행
 	useEffect(() => {
 		if (query.trim()) {
 			const debounce = setTimeout(() => {
@@ -46,7 +52,12 @@ export const PlaceSearchBottomSheet = ({
 	}, [query]);
 
 	const handleSelectPlace = (place: any) => {
-		onSelectPlace({ name: place.place_name, id: place.id });
+		onSelectPlace({
+			name: place.place_name,
+			id: place.id,
+			x: place.x,
+			y: place.y,
+		});
 		onClose();
 	};
 
@@ -72,17 +83,27 @@ export const PlaceSearchBottomSheet = ({
 								<div
 									key={index}
 									onClick={() => handleSelectPlace(place)}
-									className="cursor-pointer py-4pxr underline"
+									className="cursor-pointer py-4pxr"
 								>
-									<Text fontSize={16} fontWeight={500}>
+									<Text fontSize={14} fontWeight={700} color="gray700">
 										{place.place_name}
+									</Text>
+									<Text fontSize={14} fontWeight={400} color="gray700">
+										{place.road_address_name}
 									</Text>
 								</div>
 							))}
 						</ul>
 					) : (
-						<Text fontSize={14} color="gray600">
-							검색 결과가 없습니다.
+						<Text
+							fontSize={14}
+							color="gray600"
+							onClick={() => {
+								onSelectPlace(null);
+							}}
+							className="cursor-pointer"
+						>
+							검색 결과가 없애기
 						</Text>
 					)}
 				</div>

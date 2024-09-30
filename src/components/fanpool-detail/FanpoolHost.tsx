@@ -3,24 +3,34 @@ import { IconRightArrow } from '@/public/icons';
 import { Text } from '../common/Text';
 import getUserProfile from '@/api/user/getUserProfile';
 import { UserProfileResponse } from '@/types/types';
+import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/useUserStore';
 
 interface FanpoolHostProps {
-	hostUserId: number;
+	hostUserId: BigInt;
 }
 
 export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
+	const router = useRouter();
 	const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
 		null
 	);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
+	const loginUserId = useUserStore((state) => state.userProfile?.id);
+	const handleProfileClick = () => {
+		if (hostUserId.toString() == loginUserId) {
+			router.push(`/profile`);
+		} else {
+			router.push(`/profile/${hostUserId}`);
+		}
+	};
 	useEffect(() => {
 		const fetchUserProfile = async () => {
 			try {
-				// hostUserId를 이용하여 사용자 프로필 조회
 				const response = await getUserProfile({
-					userId: hostUserId.toString(),
+					userId: hostUserId,
 				});
 				setUserProfile(response);
 			} catch (err) {
@@ -35,19 +45,19 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 	}, [hostUserId]);
 
 	if (loading) {
-		return <div>Loading...</div>; // 로딩 상태
+		return <div>Loading...</div>;
 	}
 
 	if (error) {
-		return <div>{error}</div>; // 오류 발생 시
+		return <div>{error}</div>;
 	}
 
 	if (!userProfile) {
-		return null; // 프로필 데이터가 없으면 아무것도 렌더링하지 않음
+		return null;
 	}
 
 	return (
-		<div>
+		<div onClick={handleProfileClick}>
 			<section className="flex gap-4pxr w-full justify-between items-center">
 				<div className="flex gap-8pxr">
 					{/* 프로필 이미지 */}

@@ -7,7 +7,7 @@ export interface Team {
 }
 
 export interface Game {
-	id: number;
+	id: string;
 	awayTeam: Team;
 	homeTeam: Team;
 	startDate: string;
@@ -27,9 +27,9 @@ export interface Location {
 }
 
 export interface FanpoolInformation {
-	id: number;
+	id: string;
 	title: string;
-	hostUserId: number;
+	hostUserId: BigInt;
 	game: Game;
 	departAt: string;
 	departFrom: Location;
@@ -38,6 +38,7 @@ export interface FanpoolInformation {
 	genderConstraint: string;
 	numberOfPeople: number;
 	currentNumberOfPeople: number;
+	memo: string;
 }
 
 export interface FanpoolType {
@@ -87,15 +88,15 @@ export interface UserProfileResponse {
 }
 
 export interface FanpoolLogList {
-  id: string;
-  image: string;
-  title: string;
-  stadium: string;
-  profile: {
-    nickname: string;
-    image: string;
-  };
-  places: string;
+	id: string;
+	image: string;
+	title: string;
+	stadium: string;
+	profile: {
+		nickname: string;
+		image: string;
+	};
+	places: string;
 }
 
 export interface PlaceContent {

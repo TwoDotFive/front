@@ -24,7 +24,6 @@ export default function Page() {
 				try {
 					const response = await getGameSchedule();
 					setGameSchedule(response);
-					console.log('Fetched games:', response);
 				} catch (error) {
 					console.error('Error fetching games:', error);
 				}

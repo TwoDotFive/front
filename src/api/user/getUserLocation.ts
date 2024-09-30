@@ -5,7 +5,7 @@ import apiClient from '..';
  */
 interface LocationResponse {
 	authenticatedLocations: {
-		id: number;
+		id: string;
 		representative: boolean; // 대표 여부
 		addressInformation: {
 			fullText: string;

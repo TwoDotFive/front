@@ -3,15 +3,15 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import getKakaoLoginToken from '@/api/auth/getKakaoLogin';
 
-export default function page() {
+export default function Page() {
 	const router = useRouter();
 
 	useEffect(() => {
 		const getUserToken = async (code: string) => {
 			try {
 				const response = await getKakaoLoginToken(code);
-				console.log(response);
-				if (response.firstLogin === 'T') {
+				localStorage.setItem('token', response.accessToken);
+				if (response.firstLogin) {
 					router.push('/register');
 				} else {
 					router.push('/home');

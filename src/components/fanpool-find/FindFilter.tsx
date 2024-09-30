@@ -15,6 +15,7 @@ import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 import getFanpoolFilter from '@/api/fanpool/getFanpoolFilter';
 import { FanpoolInformation } from '@/types/types';
 import { useSearchStore } from '@/store/useSearchStore'; // Zustand 스토어 import
+import getAddress from '@/api/geo/getAddress';
 
 interface FindFilterProps {
 	setFanpoolData: (fanpools: FanpoolInformation[]) => void;
@@ -58,7 +59,7 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 		setSelectedTeam(id); // 팀 선택시 상태 업데이트
 	};
 
-	const handleMatchSelect = (matchIds: number[]) => {
+	const handleMatchSelect = (matchIds: string[]) => {
 		setSelectedMatches(matchIds); // 경기 선택시 상태 업데이트
 	};
 
@@ -74,7 +75,14 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 		setBottomSheet({ visible: false, type: null });
 	};
 
-	const handlePlaceSelect = (place: { name: string; id: string }) => {
+	const handlePlaceSelect = (
+		place: {
+			name: string;
+			id: string;
+			x: string;
+			y: string;
+		} | null
+	) => {
 		setSelectedPlace(place); // 장소 선택시 상태 업데이트
 		closeBottomSheet();
 	};
@@ -85,16 +93,31 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 
 	useEffect(() => {
 		const fetchFanpoolData = async () => {
+			let dongCd; // dongCd 값을 저장할 변수
+
+			// selectedPlace가 있는 경우에만 getAddress 호출
+			if (selectedPlace) {
+				try {
+					const addressResponse = await getAddress(
+						selectedPlace.x,
+						selectedPlace.y
+					);
+					dongCd = addressResponse.dongCd;
+				} catch (error) {
+					console.error('Failed to fetch address:', error);
+				}
+			} else {
+				dongCd = undefined;
+			}
+
 			try {
-				const response = await getFanpoolFilter({
+				const fanpoolResponse = await getFanpoolFilter({
 					teamId: selectedTeam ? selectedTeam : undefined,
-					dongCd: selectedPlace ? selectedPlace.id : undefined,
+					dongCd: dongCd,
 					gameId: selectedMatches,
-					departAt: selectedDate ? selectedDate : undefined,
 					onlyGathering: isCheckDeadline,
 				});
-				console.log(response);
-				setFanpoolData(response.fanpools);
+				setFanpoolData(fanpoolResponse.fanpools);
 			} catch (error) {
 				console.error('Failed to fetch fanpool data:', error);
 			}

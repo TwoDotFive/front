@@ -6,7 +6,6 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../register/useKakaoLoader';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import SelectHighlightButton from '../common/button/SelectHighlightButton';
 import { FanpoolInformation } from '@/types/types';
 import CarShare from '../common/cardui/CarShare';
 import TaxiCard from '../common/cardui/TaxiCard';
@@ -37,7 +36,7 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 			<div className="h-4pxr" />
 
 			<Text fontSize={16} fontWeight={400} color="gray700">
-				{'설명'}
+				{fanpoolInformation.memo}
 			</Text>
 			<div className="h-40pxr" />
 			<Text fontSize={16} fontWeight={700} color="gray700">
@@ -51,8 +50,8 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 
 			<Map
 				center={{
-					lat: Number(x),
-					lng: Number(y),
+					lat: Number(y),
+					lng: Number(x),
 				}}
 				style={{ width: '100%', height: '129px' }}
 				level={3}

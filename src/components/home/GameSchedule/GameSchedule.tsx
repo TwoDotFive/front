@@ -79,10 +79,7 @@ export default function GameSchedule({ gameSchedule }: GameScheduleProps) {
 			</div>
 			<div className="h-36pxr" />
 			{gamesForSelectedDate.length > 0 ? (
-				<div
-					className="rounded-12pxr"
-					style={{ boxShadow: '0px 0px 11px 0px rgba(0, 0, 0, 0.11)' }}
-				>
+				<div className="rounded-12pxr flex flex-col gap-24pxr">
 					{/**
 					 * 경기 보여주는 부분
 					 */}
@@ -92,7 +89,7 @@ export default function GameSchedule({ gameSchedule }: GameScheduleProps) {
 					{/**
 					 * 팬풀 검색 버튼
 					 */}
-					<FanpoolButton />
+					{/* <FanpoolButton /> */}
 				</div>
 			) : (
 				<Text fontSize={16} color="gray700">

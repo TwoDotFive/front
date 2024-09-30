@@ -8,7 +8,6 @@ import {
 	IconPencilWhite,
 } from '@/public/icons';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import getUserLocation from '@/api/user/getUserLocation';
@@ -16,13 +15,14 @@ import SelectTeamButton from '../common/button/SelectTeamButton';
 import Button from '../common/Button';
 import { Location } from '@/types/types';
 import patchUserLocation from '@/api/user/patchUserLocation';
-import SelectTeamBottomSheet from '../home/SelectTeamBottomSheet';
 import patchUserProfile from '@/api/user/patchUserProfile';
 import { teams } from '@/constants/teams';
 import {
 	getPresignedUrl,
 	uploadImageToS3,
 } from '@/api/fanpool-log/create-log/step3';
+import SelectTeamBottomSheet from '../profile/SelectTeamBotomSheet';
+import deleteUserLocation from '@/api/user/deleteUserLocation';
 
 interface ProfileFormData {
 	nickname: string;
@@ -30,7 +30,7 @@ interface ProfileFormData {
 	location: string[];
 }
 interface LocationData {
-	id: number;
+	id: string;
 	representative: boolean;
 	addressInformation: Location;
 }
@@ -107,6 +107,9 @@ export default function ProfileEdit() {
 
 	useEffect(() => {
 		setSelectedTeam(userProfile?.favoriteTeam.id || '');
+		setImgSrc(
+			userProfile?.profileImageUrl || '/images/image_profile_default.png'
+		);
 	}, [userProfile]);
 	useEffect(() => {
 		const fetchUserLocations = async () => {
@@ -133,8 +136,21 @@ export default function ProfileEdit() {
 		fetchUserLocations();
 	}, [setValue]);
 
-	const handleDeleteLocation = (location: LocationData, index: number) => {
-		console.log('삭제');
+	const handleDeleteLocation = async (
+		location: LocationData,
+		index: number
+	) => {
+		if (location.representative) {
+			alert('대표동네를 해제하고 삭제해주세요');
+			return;
+		}
+		try {
+			await deleteUserLocation(location.id);
+			alert('삭제되었습니다.');
+			window.location.reload();
+		} catch {
+			alert('삭제 중 오류가 발생하였습니다.');
+		}
 	};
 
 	const handleCloseSheet = () => {
@@ -183,14 +199,10 @@ export default function ProfileEdit() {
 			nickname: data.nickname,
 			oneLiner: data.oneLiner,
 			profileImageUrl: imgSrc,
-			favoriteTeam: userProfile?.favoriteTeam.id,
+			favoriteTeam: selectedTeam,
 		};
-		console.log(updatedUserProfile);
-
 		try {
 			const response = await patchUserProfile(updatedUserProfile);
-			console.log(response);
-			console.log('Favorite team updated successfully');
 			router.back();
 		} catch (error) {
 			console.error('Failed to update favorite team:', error);
@@ -222,12 +234,11 @@ export default function ProfileEdit() {
 			>
 				<div className="h-14pxr" />
 				<div className="relative w-fit">
-					<Image
+					<img
 						src={imgSrc}
-						width={80}
-						height={80}
 						alt={'프로필 이미지'}
 						onError={handleImageError}
+						className="w-80pxr h-80pxr rounded-full"
 					/>
 					<div
 						className="absolute right-2pxr bottom-2pxr w-22pxr h-22pxr rounded-full bg-gray700 flex items-center justify-center cursor-pointer"

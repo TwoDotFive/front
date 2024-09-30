@@ -10,7 +10,9 @@ export default function FindResult({ fanpoolDatas }: FindResultProps) {
 		<section className="flex flex-col gap-12pxr">
 			{fanpoolDatas.length !== 0 ? (
 				fanpoolDatas.map((fanpoolData, index) => (
-					<FanpoolCard fanpool={fanpoolData} />
+					<div key={index}>
+						<FanpoolCard fanpool={fanpoolData} />
+					</div>
 				))
 			) : (
 				<div className="flex flex-col items-center gap-4pxr mt-150pxr">
@@ -20,6 +22,7 @@ export default function FindResult({ fanpoolDatas }: FindResultProps) {
 					</Text>
 				</div>
 			)}
+			<div className="h-50pxr" />
 		</section>
 	);
 }

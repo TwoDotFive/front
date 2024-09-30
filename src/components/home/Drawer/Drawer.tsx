@@ -89,7 +89,15 @@ export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
 							설정
 						</Text>
-						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
+						<Text
+							fontSize={14}
+							fontWeight={400}
+							className="cursor-pointer"
+							onClick={() => {
+								window.location.href =
+									'https://aromatic-bull-390.notion.site/10f9c4b3a467806c93ded35db1ab9c6b';
+							}}
+						>
 							서비스 약관
 						</Text>
 						<Text

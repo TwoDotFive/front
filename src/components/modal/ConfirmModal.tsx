@@ -4,7 +4,6 @@ import { useModalStore } from '@/store/modalStore';
 
 const ConfirmModal = () => {
 	const { modalProps, closeModal } = useModalStore();
-	console.log('ASD');
 	return (
 		<ModalPortal>
 			<div

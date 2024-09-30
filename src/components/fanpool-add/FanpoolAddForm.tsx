@@ -11,18 +11,24 @@ import { IconDefaultPin, IconPencilGray } from '@/public/icons';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { PlaceSearchBottomSheet } from './PlaceSearchBottomSheet';
 import { Game } from '@/types/types';
+import FanpoolMatchItem from './FanpoolMatchItem';
+import getAddress from '@/api/geo/getAddress';
+import postAddFanpool from '@/api/fanpool/postAddFanpool';
+import { useRouter } from 'next/navigation';
 
 interface FanpoolFormData {
 	title: string;
 	datePeriod: '오전' | '오후';
 	hour: number;
 	minute: number;
-	fanpoolType: '차량공유' | '택시팟' | null;
+	fanpoolType: 'CAR_SHARE' | 'TAXI_PARTY' | null;
 	collectCount: number;
-	passengerCondition: '남녀모두' | '남자만' | '여자만';
+	passengerCondition: 'ANY' | 'MALE_ONLY' | 'FEMALE_ONLY';
+	memo: string | '';
 }
 
 export default function FanpoolAddForm() {
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -34,10 +40,11 @@ export default function FanpoolAddForm() {
 		defaultValues: {
 			fanpoolType: null,
 			collectCount: 1,
-			passengerCondition: '남녀모두',
+			passengerCondition: 'ANY',
 			datePeriod: '오전',
 			hour: 12,
 			minute: 0,
+			memo: '',
 		},
 	});
 	const [bottomSheet, setBottomSheet] = useState<{
@@ -94,8 +101,59 @@ export default function FanpoolAddForm() {
 		title,
 	]);
 
-	const onSubmit: SubmitHandler<FanpoolFormData> = (data) => {
-		console.log('입력 데이터: ', { ...data, selectedPlace, selectedGame });
+	const onSubmit: SubmitHandler<FanpoolFormData> = async (data) => {
+		try {
+			// 주소 정보를 가져오는 API 호출
+			const addressResponse = await getAddress(
+				selectedPlace?.x!,
+				selectedPlace?.y!
+			);
+
+			// 오전/오후와 시간(hour), 분(minute)을 조합하여 departAt 생성
+			const gameDate = new Date(selectedGame!.startDate);
+			let hour = data.hour;
+
+			if (data.datePeriod === '오후' && hour !== 12) {
+				hour += 12;
+			} else if (data.datePeriod === '오전' && hour === 12) {
+				hour = 0;
+			}
+
+			// 새로운 Date 객체로 departAt 생성
+			const departAt = new Date(
+				gameDate.getFullYear(),
+				gameDate.getMonth(),
+				gameDate.getDate(),
+				hour, // 시간
+				data.minute, // 분
+				0 // 초는 항상 00
+			).toISOString();
+
+			// 입력 데이터를 콘솔에 출력
+			console.log('입력 데이터: ', {
+				...data,
+				selectedPlace,
+				selectedGame,
+				addressResponse,
+				departAt,
+			});
+			const inputData = {
+				title: data.title,
+				departAt: departAt,
+				gameId: selectedGame!.id,
+				numberOfPeople: data.collectCount,
+				memo: data.memo || '',
+				fanpoolType: data.fanpoolType!,
+				genderConstraint: data.passengerCondition,
+				departFrom: addressResponse,
+			};
+			// postAddFanpool 호출
+			await postAddFanpool(inputData);
+			alert('팬풀이 생성되었습니다.');
+			router.replace('/home');
+		} catch (error) {
+			console.error('팬풀 생성 중 오류 발생:', error);
+		}
 	};
 
 	const openBottomSheet = (type: 'date' | 'match' | 'place') => {
@@ -106,7 +164,7 @@ export default function FanpoolAddForm() {
 		setBottomSheet({ visible: false, type: null });
 	};
 
-	const handleTypeSelect = (type: '차량공유' | '택시팟') => {
+	const handleTypeSelect = (type: 'CAR_SHARE' | 'TAXI_PARTY') => {
 		setValue('fanpoolType', type);
 	};
 
@@ -140,13 +198,13 @@ export default function FanpoolAddForm() {
 					<div className="flex gap-8pxr">
 						<SelectHighlightButton
 							text="차량공유"
-							isSelected={fanpoolType === '차량공유'}
-							onClick={() => handleTypeSelect('차량공유')}
+							isSelected={fanpoolType === 'CAR_SHARE'}
+							onClick={() => handleTypeSelect('CAR_SHARE')}
 						/>
 						<SelectHighlightButton
 							text="택시팟"
-							isSelected={fanpoolType === '택시팟'}
-							onClick={() => handleTypeSelect('택시팟')}
+							isSelected={fanpoolType === 'TAXI_PARTY'}
+							onClick={() => handleTypeSelect('TAXI_PARTY')}
 						/>
 					</div>
 				</div>
@@ -155,14 +213,18 @@ export default function FanpoolAddForm() {
 					<Text fontSize={18} fontWeight={700} color="gray700">
 						보러 갈 경기
 					</Text>
-					<div
-						className="w-full h-full p-12pxr rounded-8pxr bg-gray100 cursor-pointer text-center"
-						onClick={() => openBottomSheet('match')}
-					>
-						<Text fontSize={16} fontWeight={500} color="gray700">
-							경기 찾아보기
-						</Text>
-					</div>
+					{!selectedGame ? (
+						<div
+							className="w-full h-full p-12pxr rounded-8pxr bg-gray100 cursor-pointer text-center"
+							onClick={() => openBottomSheet('match')}
+						>
+							<Text fontSize={16} fontWeight={500} color="gray700">
+								경기 찾아보기
+							</Text>
+						</div>
+					) : (
+						<FanpoolMatchItem game={selectedGame} />
+					)}
 				</div>
 
 				<div className="flex flex-col gap-8pxr">
@@ -239,7 +301,11 @@ export default function FanpoolAddForm() {
 					</Text>
 					<div className="h-14pxr" />
 					<div className="flex justify-between items-center">
-						<MinusButton onClick={() => handleCollectCountChange(-1)} />
+						<MinusButton
+							onClick={() => {
+								handleCollectCountChange(-1);
+							}}
+						/>
 						<div className="flex gap-2pxr items-center">
 							<Text fontSize={18} fontWeight={700} color="gray700">
 								{collectCount}명
@@ -265,7 +331,7 @@ export default function FanpoolAddForm() {
 						<label className="flex items-center gap-2pxr">
 							<input
 								type="radio"
-								value="성별무관"
+								value="ANY"
 								{...register('passengerCondition')}
 								defaultChecked
 							/>
@@ -277,7 +343,7 @@ export default function FanpoolAddForm() {
 						<label className="flex items-center gap-2pxr">
 							<input
 								type="radio"
-								value="여자만"
+								value="FEMALE_ONLY"
 								{...register('passengerCondition')}
 							/>
 							<Text fontSize={14} fontWeight={400} color="gray700">
@@ -288,7 +354,7 @@ export default function FanpoolAddForm() {
 						<label className="flex items-center gap-2pxr">
 							<input
 								type="radio"
-								value="남자만"
+								value="MALE_ONLY"
 								{...register('passengerCondition')}
 							/>
 							<Text fontSize={14} fontWeight={400} color="gray700">
@@ -361,6 +427,7 @@ export default function FanpoolAddForm() {
 					<textarea
 						placeholder="내 팬풀에 대해 더 자세한 정보를 제공하면 응답율이 높아져요."
 						className="w-full h-100pxr p-12pxr rounded-8pxr bg-gray050 placeholder:text-gray400 text-sm resize-none"
+						{...register('memo')}
 					/>
 				</div>
 				<div className="h-80pxr" />

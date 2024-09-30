@@ -7,6 +7,7 @@ export default function Page() {
 	const [showSplash, setShowSplash] = useState(true);
 
 	useEffect(() => {
+		localStorage.removeItem('token');
 		const timer = setTimeout(() => {
 			setShowSplash(false);
 		}, 1500);

@@ -13,7 +13,7 @@ import { formatDateTime } from '@/util/string';
 interface MatchSelectBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onMatchSelect: (code: number[]) => void;
+	onMatchSelect: (code: string[]) => void;
 }
 
 const MatchSelectBottomSheet = ({
@@ -25,7 +25,7 @@ const MatchSelectBottomSheet = ({
 
 	// 게임 목록을 저장할 상태
 	const [games, setGames] = useState<Game[]>([]);
-	const [selectedMatches, setSelectedMatches] = useState<number[]>([]);
+	const [selectedMatches, setSelectedMatches] = useState<string[]>([]);
 
 	// API 호출을 통해 게임 데이터를 가져오는 함수
 	useEffect(() => {
@@ -34,7 +34,6 @@ const MatchSelectBottomSheet = ({
 			console.log(formattedDate);
 			try {
 				const fetchedGames = await getGame(selectedTeam, formattedDate);
-				console.log(fetchedGames);
 				setGames(fetchedGames);
 			} catch (error) {
 				console.error('Failed to fetch games:', error);
@@ -45,7 +44,7 @@ const MatchSelectBottomSheet = ({
 		fetchGames();
 	}, [selectedTeam, selectedDate]);
 
-	const handleMatchSelect = (id: number) => {
+	const handleMatchSelect = (id: string) => {
 		setSelectedMatches((prevSelected) =>
 			prevSelected.includes(id)
 				? prevSelected.filter((matchId) => matchId !== id)

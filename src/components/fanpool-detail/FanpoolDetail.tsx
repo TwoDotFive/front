@@ -36,7 +36,7 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 			<div className="h-4pxr" />
 
 			<Text fontSize={16} fontWeight={400} color="gray700">
-				{'설명'}
+				{fanpoolInformation.memo}
 			</Text>
 			<div className="h-40pxr" />
 			<Text fontSize={16} fontWeight={700} color="gray700">

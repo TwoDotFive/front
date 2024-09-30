@@ -9,10 +9,13 @@ import apiClient from '..';
  * @returns {Promise<Game[]>} 해당 팀의 경기 목록 응답
  */
 const getGame = async (teamId: string, date: string): Promise<Game[]> => {
+	const startDate = `${date}T00:00:00`;
+	const endDate = `${date}T23:59:59`;
+
 	// 쿼리 파라미터를 동적으로 생성
 	const params: Record<string, string> = {
-		startDate: date,
-		endDate: date,
+		startDate: startDate,
+		endDate: endDate,
 	};
 
 	// teamId가 존재하는 경우에만 쿼리 파라미터에 추가

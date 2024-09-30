@@ -58,7 +58,7 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 		setSelectedTeam(id); // 팀 선택시 상태 업데이트
 	};
 
-	const handleMatchSelect = (matchIds: number[]) => {
+	const handleMatchSelect = (matchIds: string[]) => {
 		setSelectedMatches(matchIds); // 경기 선택시 상태 업데이트
 	};
 
@@ -74,7 +74,12 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 		setBottomSheet({ visible: false, type: null });
 	};
 
-	const handlePlaceSelect = (place: { name: string; id: string }) => {
+	const handlePlaceSelect = (place: {
+		name: string;
+		id: string;
+		x: string;
+		y: string;
+	}) => {
 		setSelectedPlace(place); // 장소 선택시 상태 업데이트
 		closeBottomSheet();
 	};

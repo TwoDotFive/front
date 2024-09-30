@@ -38,6 +38,7 @@ export interface FanpoolInformation {
 	genderConstraint: string;
 	numberOfPeople: number;
 	currentNumberOfPeople: number;
+	memo: string;
 }
 
 export interface FanpoolType {

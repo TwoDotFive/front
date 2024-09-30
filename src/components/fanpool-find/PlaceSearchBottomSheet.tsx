@@ -7,7 +7,12 @@ import useKakaoLoader from '../register/useKakaoLoader';
 interface PlaceSearchBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
-	onSelectPlace: (place: { name: string; x: string; y: string }) => void;
+	onSelectPlace: (place: {
+		name: string;
+		id: string;
+		x: string;
+		y: string;
+	}) => void;
 }
 
 export const PlaceSearchBottomSheet = ({
@@ -45,7 +50,12 @@ export const PlaceSearchBottomSheet = ({
 	}, [query]);
 
 	const handleSelectPlace = (place: any) => {
-		onSelectPlace({ name: place.place_name, x: place.x, y: place.y });
+		onSelectPlace({
+			name: place.place_name,
+			id: place.id,
+			x: place.x,
+			y: place.y,
+		});
 		onClose();
 	};
 

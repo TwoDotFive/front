@@ -11,7 +11,7 @@ export interface teamsType {
 }
 
 type Team = {
-	id: number;
+	id: string;
 	name: string;
 	representativeImageUrl: string;
 	stadiumName: string;
@@ -19,7 +19,7 @@ type Team = {
 };
 
 type Game = {
-	id: number;
+	id: string;
 	awayTeam: Team;
 	homeTeam: Team;
 	startDate: string;

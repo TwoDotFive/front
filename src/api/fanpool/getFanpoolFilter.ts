@@ -40,7 +40,7 @@ const getFanpoolFilter = async ({
 }: {
 	teamId?: string;
 	dongCd?: string;
-	gameId?: number[];
+	gameId?: string[];
 	departAt?: Date;
 	onlyGathering?: boolean;
 	page?: number;

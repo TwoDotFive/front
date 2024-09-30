@@ -1,15 +1,20 @@
 import { create } from 'zustand';
 
 interface SearchStore {
-	selectedMatches: number[]; // 선택된 경기 ID들
+	selectedMatches: string[]; // 선택된 경기 ID들
 	selectedDate: Date; // 선택된 날짜
 	selectedTeam: string; // 선택된 팀 ID
-	selectedPlace: { name: string; id: string } | null; // 선택된 장소 정보
+	selectedPlace: { name: string; id: string; x: string; y: string } | null; // 선택된 장소 정보
 	isCheckDeadline: boolean; // 마감된 팬풀 숨기기 여부
-	setSelectedMatches: (matches: number[]) => void; // 선택된 경기 설정
+	setSelectedMatches: (matches: string[]) => void; // 선택된 경기 설정
 	setSelectedDate: (date: Date) => void; // 선택된 날짜 설정
 	setSelectedTeam: (teamId: string) => void; // 선택된 팀 설정
-	setSelectedPlace: (place: { name: string; id: string }) => void; // 선택된 장소 설정
+	setSelectedPlace: (place: {
+		name: string;
+		id: string;
+		x: string;
+		y: string;
+	}) => void; // 선택된 장소 설정
 	toggleCheckDeadline: () => void; // 마감된 팬풀 숨기기 토글
 	resetFilters: () => void; // 필터 초기화
 }

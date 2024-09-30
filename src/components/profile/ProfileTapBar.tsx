@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { ProfileMenuBottomSheet } from './ProfileMenuBottomSheet';
 
 export default function ProfileTapbar({ id }: { id?: string }) {
-	const isMe =
-		id === undefined || useUserStore((state) => state.userProfile?.id) === id;
+	const userId = useUserStore((state) => state.userProfile?.id);
+	const isMe = id === undefined || userId === id;
 	const router = useRouter();
 	const handleBack = () => {
 		router.back();

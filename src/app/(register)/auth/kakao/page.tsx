@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import getKakaoLoginToken from '@/api/auth/getKakaoLogin';
 
-export default function page() {
+export default function Page() {
 	const router = useRouter();
 
 	useEffect(() => {

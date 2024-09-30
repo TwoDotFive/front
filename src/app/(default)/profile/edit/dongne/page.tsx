@@ -11,11 +11,7 @@ import TapBar from '@/components/common/TapBar';
 import { useRouter } from 'next/navigation';
 import getUserLocation from '@/api/user/getUserLocation';
 
-interface PageProps {
-	isFirst: boolean;
-}
-
-export default function Page({ isFirst }: PageProps) {
+export default function Page() {
 	const router = useRouter();
 	useKakaoLoader();
 

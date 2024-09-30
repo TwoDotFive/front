@@ -19,7 +19,8 @@ interface UserProfile {
 
 export default function Profile({ id }: { id?: string }) {
 	const { setUserProfile } = useUserStore();
-	const searchId = id || useUserStore((state) => state.userProfile?.id);
+	const userId = useUserStore((state) => state.userProfile?.id);
+	const searchId = id || userId;
 	const [userProfile, setUserProfiles] = useState<UserProfile | null>(null);
 	const [imgSrc, setImgSrc] = useState('/images/image_profile_default.png');
 

@@ -11,7 +11,7 @@ export default function Page() {
 			try {
 				const response = await getKakaoLoginToken(code);
 				localStorage.setItem('token', response.accessToken);
-				if (!response.firstLogin) {
+				if (response.firstLogin) {
 					router.push('/register');
 				} else {
 					router.push('/home');

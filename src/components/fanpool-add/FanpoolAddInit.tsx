@@ -55,6 +55,7 @@ export default function FanpoolAddInit({
 					경기 지연으로 시간이 늦어지면, 경기 전후 함께 택시로 이동할 인원을
 					모을 수 있어요. 목적지까지 방향이 비슷한 팬들을 모아 이동할 수 있어요.
 				</Text>
+				<div className="h-50pxr" />
 			</div>
 		);
 	};
@@ -64,7 +65,12 @@ export default function FanpoolAddInit({
 	};
 
 	return (
-		<div className="flex flex-col relative mt-30pxr px-20pxr">
+		<div
+			className="flex flex-col relative mt-30pxr px-20pxr overflow-scroll"
+			style={{
+				height: 'calc(100vh - 120px)',
+			}}
+		>
 			<Text fontSize={20} fontWeight={700} color="gray700">
 				팬풀이 뭔가요?
 			</Text>
@@ -75,7 +81,7 @@ export default function FanpoolAddInit({
 			<div className="h-60pxr" />
 
 			{/* 카드 영역 */}
-			<section className="w-full h-full">
+			<section className="w-full">
 				<div className="w-full h-full flex justify-center items-center">
 					{renderCards()}
 				</div>

@@ -44,7 +44,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
 	return (
 		<section className="relative">
-			<GameInfo game={fanpoolInformation.game} />
+			<GameInfo fanpoolInformation={fanpoolInformation} />
 			<div className="h-24pxr" />
 			<div className="px-20pxr">
 				<FanpoolHost hostUserId={fanpoolInformation.hostUserId} />

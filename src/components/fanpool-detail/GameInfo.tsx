@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GameCard from './GameCard';
-import { IconLeftArrowWhite } from '@/public/icons';
+import { IconLeftArrowWhite, IconMoreWhite } from '@/public/icons';
 import { useRouter } from 'next/navigation';
-import { Game } from '@/types/types';
+import { FanpoolInformation } from '@/types/types';
+import { FanpoolDetailBottomSheet } from './FanpoolDetailBottomSheet';
 
 interface GameInfoProps {
-	game: Game;
+	fanpoolInformation: FanpoolInformation;
 }
 
-export default function GameInfo({ game }: GameInfoProps) {
+export default function GameInfo({ fanpoolInformation }: GameInfoProps) {
+	const isHost =
+		fanpoolInformation.hostUserId.toString() == localStorage.getItem('userId');
+
 	const router = useRouter();
+	const [menuVisible, setMenuVisible] = useState(false);
 	return (
 		<section
 			className="w-full relative bg-cover bg-center"
@@ -22,12 +27,29 @@ export default function GameInfo({ game }: GameInfoProps) {
 						router.back();
 					}}
 				/>
-				<div className="w-25pxr h-24pxr" />
+				{isHost ? (
+					<div
+						className="w-25pxr cursor-pointer"
+						onClick={() => {
+							setMenuVisible(true);
+						}}
+					>
+						<IconMoreWhite />
+					</div>
+				) : (
+					<div className="w-25pxr h-24pxr" />
+				)}
 			</div>
 			<div className="px-20pxr">
-				<GameCard game={game} /> {/* GameCard에 게임 정보 전달 */}
+				<GameCard game={fanpoolInformation.game} />
+				{/* GameCard에 게임 정보 전달 */}
 			</div>
 			<div className="h-24pxr" />
+			<FanpoolDetailBottomSheet
+				isVisible={menuVisible}
+				onClose={() => setMenuVisible(false)}
+				fanpoolId={fanpoolInformation.id}
+			/>
 		</section>
 	);
 }

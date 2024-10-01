@@ -13,6 +13,8 @@ import {
   getStadiumInfo,
   getTourInfo,
 } from "@/api/fanpool-log/create-log/step2";
+import Lottie from "lottie-react";
+import spinner from "@/public/lottie/spinner3.json";
 
 interface TourInfoList {
   name: string;
@@ -68,8 +70,8 @@ export default function Page() {
   const fetchTourInfo = async () => {
     setIsLoading(true);
     const res = await getTourInfo(
-      stadiumPosition!.x.toString(),
       stadiumPosition!.y.toString(),
+      stadiumPosition!.x.toString(),
       selectedTagId,
       page
     );
@@ -155,7 +157,7 @@ export default function Page() {
     });
 
     useFanpoologStore.setState({ schedules: updatedSchedules });
-    router.push("/fanpool-log/create-log/step3");
+    router.replace("/fanpool-log/create-log/step3");
   };
 
   return (
@@ -187,6 +189,14 @@ export default function Page() {
 
       {/* 장소 리스트 */}
       <div className="flex flex-col gap-12pxr mt-24pxr px-20pxr overflow-y-scroll flex-grow">
+        {isLoading && (
+          <Lottie
+            animationData={spinner}
+            style={{ width: "50px", height: "50px", margin: "auto" }}
+            loop
+          />
+        )}
+
         {!isLoading && tourInfoList.length === 0 ? (
           <div className="flex justify-center items-center h-full">
             <img src="/images/no_result.png" className="w-93pxr h-84pxr" />

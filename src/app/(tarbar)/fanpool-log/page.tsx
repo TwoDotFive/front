@@ -112,7 +112,12 @@ export default function Page() {
             <TravelogWideCard
               key={travelog.id}
               id={travelog.id}
-              image={travelog.image}
+              image={
+                travelog.image ||
+                `/images/fanpool_log_image_default_wide_${
+                  (Number(travelog.id) % 5) + 1
+                }.png`
+              }
               userName={travelog.profile.nickname}
               title={travelog.title}
               locations={travelog.places}

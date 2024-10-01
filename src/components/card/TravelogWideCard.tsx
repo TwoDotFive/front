@@ -29,7 +29,7 @@ export default function TravelogWideCard({
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     setImageSrc(
-      `/images/fanpool_log_image_default_${(Number(id) % 5) + 1}.png`
+      `/images/fanpool_log_image_default_wide_${(Number(id) % 5) + 1}.png`
     );
   };
 

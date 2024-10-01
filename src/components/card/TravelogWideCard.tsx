@@ -62,7 +62,7 @@ export default function TravelogWideCard({
 
   return (
     <div
-      className="flex flex-col items-start justify-center w-full h-180pxr rounded-8pxr shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]"
+      className="flex flex-col items-start justify-center w-full h-180pxr rounded-8pxr shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)] cursor-pointer"
       onClick={handleClick}
     >
       <div className="w-full h-86pxr rounded-t-8pxr">

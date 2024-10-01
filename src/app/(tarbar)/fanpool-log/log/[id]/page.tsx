@@ -26,9 +26,11 @@ import {
   IconShare,
 } from "@/public/icons";
 import useFanpoologStore, { Schedule } from "@/store/fanpool-log/store";
+import Lottie from "lottie-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import spinner from "@/public/lottie/spinner3.json";
 
 interface DetailPageProps {
   id: string;
@@ -181,7 +183,14 @@ export default function FanpoolLogDetailPage() {
     } catch {}
   }, []);
 
-  if (!fanpoolLog) return <div>Loading...</div>;
+  if (!fanpoolLog)
+    return (
+      <Lottie
+        animationData={spinner}
+        style={{ width: "50px", height: "50px", margin: "auto" }}
+        loop
+      />
+    );
 
   return (
     <div className="w-full absolute flex flex-col h-screen">

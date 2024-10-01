@@ -153,225 +153,235 @@ export default function FanpoolLogDetailPage() {
   if (!fanpoolLog) return <div>Loading...</div>;
 
   return (
-    <div className="w-full">
+    <div className="w-full absolute flex flex-col h-screen">
       {hasToken ? (
         userId === fanpoolLogUserId ? (
-          <TapBar
-            text=""
-            type="edit"
-            isNextButton={true}
-            onEdit={handleEditButton}
-            onDelete={handleDeleteButton}
-          />
+          <div className="top-0 left-0 right-0 z-50">
+            <TapBar
+              text=""
+              type="edit"
+              isNextButton={true}
+              onEdit={handleEditButton}
+              onDelete={handleDeleteButton}
+            />
+          </div>
         ) : (
-          <TapBar text="" type="left" />
+          <div className="top-0 left-0 right-0 z-50">
+            <TapBar text="" type="left" />
+          </div>
         )
       ) : (
         <div className="mt-49pxr" />
       )}
 
       {/* 팬풀 로그 타이틀 및 장소 */}
-      <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
-        {fanpoolLog.image && (
-          <div className="w-85pxr h-85pxr">
-            <img
-              className="w-full h-full object-cover rounded-lg"
-              src={fanpoolLog.image}
-              alt={"Representative Image"}
+      <div className="mt-49pxr overflow-y-auto h-[calc(100vh-49px)]">
+        <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
+          {fanpoolLog.image && (
+            <div className="w-85pxr h-85pxr">
+              <img
+                className="w-full h-full object-cover rounded-lg"
+                src={fanpoolLog.image}
+                alt={"Representative Image"}
+              />
+            </div>
+          )}
+
+          <Text fontSize={20} fontWeight={700} color="gray700">
+            {fanpoolLog.title}
+          </Text>
+          <Text fontSize={16} fontWeight={400} color="gray600">
+            {fanpoolLog.stadium}
+          </Text>
+        </div>
+        <div className="mt-18pxr" />
+        {/* Kakao Map */}
+        <Map
+          id="map"
+          center={{
+            // 지도의 중심좌표
+            lat: stadiumPosition!.x,
+            lng: stadiumPosition!.y,
+          }}
+          style={{
+            // 지도의 크기
+            width: "100%",
+            height: "170px",
+          }}
+          level={7}
+        >
+          {fanpoolLog.schedules.map((schedule, index) => (
+            <MapMarker
+              key={index}
+              position={{
+                lat: schedule.place.y,
+                lng: schedule.place.x,
+              }}
+              image={{
+                src: "/icons/map/icon_default_pin.svg",
+                size: { width: 28, height: 40 },
+              }}
             />
-          </div>
+          ))}
+        </Map>
+        {/* 팬풀 등록자 */}
+        <FanpoologUser
+          id={fanpoolLog.user.id}
+          name={fanpoolLog.user.nickname}
+          image={
+            fanpoolLog.user.image === ""
+              ? "/images/default_profile.png"
+              : fanpoolLog.user.image
+          }
+        />
+
+        <InfinityLine
+          color="bg-gray-50"
+          thickness="h-3pxr"
+          marginTop="mt-20pxr"
+          marginBottom="mb-32pxr"
+        />
+
+        {/* 각 장소 카드*/}
+        <div className="relative flex flex-col items-start px-20pxr">
+          {Array.from(
+            new Set(fanpoolLog.schedules.map((schedule) => schedule.day))
+          ).map((day, dayIndex) => (
+            <div key={dayIndex} className="w-full">
+              <Text
+                fontSize={18}
+                fontWeight={700}
+                color="gray800"
+              >{`Day ${day}`}</Text>
+              <div className="mt-18pxr" />
+
+              {fanpoolLog.schedules
+                .filter((schedule) => schedule.day === day)
+                .map((schedule, index) => (
+                  <div
+                    key={schedule.place.contentId}
+                    className="relative flex items-center mb-16pxr w-full"
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-center">
+                        <IconDefaultPin />
+                      </div>
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <Text fontSize={12} fontWeight={700} color="white">
+                          {index + 1}
+                        </Text>
+                      </span>
+                    </div>
+                    <div className="ml-16pxr w-full">
+                      {schedule.memo && schedule.memo.content ? (
+                        <TravelogAddCard
+                          image={schedule.place.thumbnail}
+                          name={schedule.place.name}
+                          location={schedule.place.address}
+                          description={schedule.memo.content}
+                          userId={"myUserId"}
+                          locationImage={schedule.memo.images?.map(
+                            (img) => img.url
+                          )}
+                          onClick={() => {}}
+                          isEditing={true}
+                        />
+                      ) : (
+                        <TravelogLocationCard
+                          image={schedule.place.thumbnail}
+                          name={schedule.place.name}
+                          location={schedule.place.address}
+                          isEditing={true}
+                          onClick={() => {}}
+                        />
+                      )}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+        {hasToken ? (
+          <div className="mb-100pxr" />
+        ) : (
+          <div className="mb-150pxr" />
         )}
 
-        <Text fontSize={20} fontWeight={700} color="gray700">
-          {fanpoolLog.title}
-        </Text>
-        <Text fontSize={16} fontWeight={400} color="gray600">
-          {fanpoolLog.stadium}
-        </Text>
-      </div>
-      <div className="mt-18pxr" />
-      {/* Kakao Map */}
-      <Map
-        id="map"
-        center={{
-          // 지도의 중심좌표
-          lat: stadiumPosition!.x,
-          lng: stadiumPosition!.y,
-        }}
-        style={{
-          // 지도의 크기
-          width: "100%",
-          height: "170px",
-        }}
-        level={7}
-      >
-        {fanpoolLog.schedules.map((schedule, index) => (
-          <MapMarker
-            key={index}
-            position={{
-              lat: schedule.place.y,
-              lng: schedule.place.x,
-            }}
-            image={{
-              src: "/icons/map/icon_default_pin.svg",
-              size: { width: 28, height: 40 },
-            }}
-          />
-        ))}
-      </Map>
-      {/* 팬풀 등록자 */}
-      <FanpoologUser
-        id={fanpoolLog.user.id}
-        name={fanpoolLog.user.nickname}
-        image={
-          fanpoolLog.user.image === ""
-            ? "/images/default_profile.png"
-            : fanpoolLog.user.image
-        }
-      />
-
-      <InfinityLine
-        color="bg-gray-50"
-        thickness="h-3pxr"
-        marginTop="mt-20pxr"
-        marginBottom="mb-32pxr"
-      />
-
-      {/* 각 장소 카드*/}
-      <div className="relative flex flex-col items-start px-20pxr">
-        {Array.from(
-          new Set(fanpoolLog.schedules.map((schedule) => schedule.day))
-        ).map((day, dayIndex) => (
-          <div key={dayIndex} className="w-full">
-            <Text
-              fontSize={18}
-              fontWeight={700}
-              color="gray800"
-            >{`Day ${day}`}</Text>
-            <div className="mt-18pxr" />
-
-            {fanpoolLog.schedules
-              .filter((schedule) => schedule.day === day)
-              .map((schedule, index) => (
-                <div
-                  key={schedule.place.contentId}
-                  className="relative flex items-center mb-16pxr w-full"
-                >
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-center">
-                      <IconDefaultPin />
-                    </div>
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <Text fontSize={12} fontWeight={700} color="white">
-                        {index + 1}
-                      </Text>
-                    </span>
-                  </div>
-                  <div className="ml-16pxr w-full">
-                    {schedule.memo && schedule.memo.content ? (
-                      <TravelogAddCard
-                        image={schedule.place.thumbnail}
-                        name={schedule.place.name}
-                        location={schedule.place.address}
-                        description={schedule.memo.content}
-                        userId={"myUserId"}
-                        locationImage={schedule.memo.images?.map(
-                          (img) => img.url
-                        )}
-                        onClick={() => {}}
-                        isEditing={true}
-                      />
-                    ) : (
-                      <TravelogLocationCard
-                        image={schedule.place.thumbnail}
-                        name={schedule.place.name}
-                        location={schedule.place.address}
-                        isEditing={true}
-                        onClick={() => {}}
-                      />
-                    )}
-                  </div>
+        {/* 바텀 시트 */}
+        <div
+          className={
+            "absolute inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]"
+          }
+          style={{
+            zIndex: 1000,
+            maxHeight: "calc(100vh - 300px)",
+            overflowY: "auto",
+          }}
+        >
+          {hasToken ? (
+            <div className="flex justify-center items-center gap-8pxr">
+              <Button
+                width="170px"
+                height="50px"
+                text={"채팅방 공유"}
+                borderRadius={8}
+                enabledTextColor={"text-white"}
+                enabledBackgroundColor={"bg-primary"}
+                disabledTextColor={"text-[#5679A3]"}
+                disabledBackgroundColor={"bg-primary"}
+                onClick={() => {}}
+              />
+              <button className="flex items-center jusitify-center p-8pxr">
+                <IconShare />
+              </button>
+              <button
+                className="flex items-center jusitify-center p-8pxr"
+                onClick={handleShareButton}
+              >
+                <IconLink />
+              </button>
+              <button
+                className="flex items-center jusitify-center p-8pxr"
+                onClick={handleBookMarkButton}
+              >
+                {isSelected ? <IconBookMarkSelected /> : <IconBookMark />}
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col justify-center items-center gap-11pxr">
+              <Text fontSize={14} fontWeight={500} color="gray700">
+                팬풀의 회원이 되면 더 많은 컨텐츠를 이용할 수 있어요.
+              </Text>
+              <button
+                className="flex w-320pxr h-50pxr px-16pxr py-10pxr justify-center items-center gap-4pxr flex-shrink-0 rounded-12pxr bg-[#FEE500]"
+                onClick={handleLogin}
+              >
+                <div className="flex justify-center items-cetner gap-4pxr">
+                  <IconKakao />
+                  <Text fontSize={14} fontWeight={500} color="black">
+                    카카오톡으로 시작하기
+                  </Text>
                 </div>
-              ))}
-          </div>
-        ))}
-      </div>
-      {hasToken ? <div className="mb-50pxr" /> : <div className="mb-100pxr" />}
-
-      {/* 바텀 시트 */}
-      <div
-        className={
-          "absolute inset-x-0 bottom-0 w-full bg-white rounded-t-20pxr p-20pxr pt-16pxr shadow-[0px_0px_34px_0px_rgba(0,37,97,0.10)]"
-        }
-        style={{
-          zIndex: 1000,
-          maxHeight: "calc(100vh - 300px)",
-          overflowY: "auto",
-        }}
-      >
-        {hasToken ? (
-          <div className="flex justify-center items-center gap-8pxr">
-            <Button
-              width="170px"
-              height="50px"
-              text={"채팅방 공유"}
-              borderRadius={8}
-              enabledTextColor={"text-white"}
-              enabledBackgroundColor={"bg-primary"}
-              disabledTextColor={"text-[#5679A3]"}
-              disabledBackgroundColor={"bg-primary"}
-              onClick={() => {}}
-            />
-            <button className="flex items-center jusitify-center p-8pxr">
-              <IconShare />
-            </button>
-            <button
-              className="flex items-center jusitify-center p-8pxr"
-              onClick={handleShareButton}
-            >
-              <IconLink />
-            </button>
-            <button
-              className="flex items-center jusitify-center p-8pxr"
-              onClick={handleBookMarkButton}
-            >
-              {isSelected ? <IconBookMarkSelected /> : <IconBookMark />}
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col justify-center items-center gap-11pxr">
-            <Text fontSize={14} fontWeight={500} color="gray700">
-              팬풀의 회원이 되면 더 많은 컨텐츠를 이용할 수 있어요.
-            </Text>
-            <button
-              className="flex w-320pxr h-50pxr px-16pxr py-10pxr justify-center items-center gap-4pxr flex-shrink-0 rounded-12pxr bg-[#FEE500]"
-              onClick={handleLogin}
-            >
-              <div className="flex justify-center items-cetner gap-4pxr">
-                <IconKakao />
-                <Text fontSize={14} fontWeight={500} color="black">
-                  카카오톡으로 시작하기
+              </button>
+              <div>
+                <Text fontSize={12} fontWeight={500} color="gray500">
+                  이미 계정이 있으신가요?{" "}
+                  <button className="text-primary" onClick={handleLogin}>
+                    로그인하기
+                  </button>
                 </Text>
               </div>
-            </button>
-            <div>
-              <Text fontSize={12} fontWeight={500} color="gray500">
-                이미 계정이 있으신가요?{" "}
-                <button className="text-primary" onClick={handleLogin}>
-                  로그인하기
-                </button>
-              </Text>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <ToastMessage
+          message="링크가 복사되었어요!"
+          show={isToastOpen}
+          onClose={() => {
+            setIsToastOpen(false);
+          }}
+        />
       </div>
-      <ToastMessage
-        message="링크가 복사되었어요!"
-        show={isToastOpen}
-        onClose={() => {
-          setIsToastOpen(false);
-        }}
-      />
     </div>
   );
 }

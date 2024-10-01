@@ -84,9 +84,6 @@ export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 					<div className="h-24pxr" />
 					<div className="flex flex-col gap-18pxr">
 						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
-							나의 관심 팬풀
-						</Text>
-						<Text fontSize={14} fontWeight={400} className="cursor-pointer">
 							설정
 						</Text>
 						<Text

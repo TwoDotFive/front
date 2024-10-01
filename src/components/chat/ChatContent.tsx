@@ -1,4 +1,4 @@
-import { IconSend } from '@/public/icons';
+import { IconPhotoAdd, IconSend } from '@/public/icons';
 import { Text } from '../common/Text';
 import { TagFanPool } from '../common/tag/TagFanPool';
 
@@ -91,7 +91,7 @@ export default function ChatContent() {
 						</div>
 						{/* 왼쪽 배치 메시지 */}
 						<div className="flex justify-start items-end gap-8pxr">
-							<div className="px-12pxr max-w-192pxr py-8pxr bg-[#E9F1FF] rounded-b-8pxr rounded-tl-1pxr rounded-tr-8pxr">
+							<div className="px-12pxr max-w-192pxr py-8pxr bg-activeLylac100 rounded-b-8pxr rounded-tl-1pxr rounded-tr-8pxr">
 								<Text fontSize={14} fontWeight={500} color="gray700">
 									저는 좋아요~!!
 								</Text>
@@ -103,6 +103,7 @@ export default function ChatContent() {
 					</div>
 				</section>
 				<section className="absolute flex items-center gap-8pxr w-full h-60pxr bg-gray050 bottom-0 px-20pxr">
+					<IconPhotoAdd />
 					<input className="flex-grow px-10pxr h-38pxr rounded-30pxr border-1pxr border-gray100" />
 					<IconSend />
 				</section>

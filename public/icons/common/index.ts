@@ -41,6 +41,7 @@ import IconPencilWhite from './icon_pencil_white.svg';
 import IconFanpoolLog from './icon_fanpool_log.svg';
 import IconDelete from './icon_delete.svg';
 import IconSend from './icon_send.svg';
+import IconPhotoAdd from './icon_photo_add.svg';
 
 export {
 	IconCalender,
@@ -86,4 +87,5 @@ export {
 	IconFanpoolLog,
 	IconDelete,
 	IconSend,
+	IconPhotoAdd,
 };

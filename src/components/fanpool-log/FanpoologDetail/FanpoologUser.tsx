@@ -1,20 +1,28 @@
 import { Text } from "@/components/common/Text";
 import { IconRightArrow } from "@/public/icons";
+import { ro } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface FanpoologUserProps {
+  id: string;
   name: string;
   image: string;
 }
 
-export default function FanpoologUser({ name, image }: FanpoologUserProps) {
+export default function FanpoologUser({ id, name, image }: FanpoologUserProps) {
+  const router = useRouter();
   const [imageSrc, setImageSrc] = useState(image);
 
   const handleImageError = () => {
     setImageSrc("/images/default_profile.png");
   };
+
+  const handleProfileClick = () => {
+    router.push(`/profile/${id}`);
+  };
   return (
-    <div className="w-full h-45 flex items-center justify-start gap-8pxr p-20pxr pb-0">
+    <div className="w-full h-45 flex items-center justify-start gap-4pxr p-20pxr pb-0">
       <div className="w-40pxr h-40pxr rounded-24pxr">
         <img
           className="w-full h-full rounded-24pxr"
@@ -27,7 +35,10 @@ export default function FanpoologUser({ name, image }: FanpoologUserProps) {
           {name}
         </Text>
       </div>
-      <button className="flex items-center jusitify-center p-8pxr ml-auto">
+      <button
+        className="flex items-center jusitify-center p-8pxr ml-auto"
+        onClick={handleProfileClick}
+      >
         <IconRightArrow />
       </button>
     </div>

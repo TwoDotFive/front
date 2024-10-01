@@ -91,13 +91,6 @@ export default function Page() {
         alt="thumbnail"
       />
       <section className="w-full">
-        {/* 오버레이 */}
-        <div
-          className={
-            "absolute inset-0 w-full transition-opacity duration-300 opacity-50"
-          }
-        />
-
         {/* 바텀 시트 */}
         <div
           className={

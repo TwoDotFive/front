@@ -12,14 +12,14 @@ export const stadiumMap = new Map<string, number>([
   ["고척", 9],
 ]);
 
-export const reverseStadiumMap = new Map<number, string>([
-  [1, "잠실"],
-  [2, "수원"],
-  [3, "문학"],
-  [4, "창원"],
-  [5, "광주"],
-  [6, "사직"],
-  [7, "대구"],
-  [8, "대전"],
-  [9, "고척"],
+export const reverseStadiumMap = new Map<string, string>([
+  ["1", "잠실"],
+  ["2", "수원"],
+  ["3", "문학"],
+  ["4", "창원"],
+  ["5", "광주"],
+  ["6", "사직"],
+  ["7", "대구"],
+  ["8", "대전"],
+  ["9", "고척"],
 ]);

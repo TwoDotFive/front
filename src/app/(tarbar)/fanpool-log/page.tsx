@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import TagFilter from "@/components/fanpool-log/Create-log/TagFilter";
 import { getFanpoologList } from "@/api/fanpool-log/main";
 import { FanpoolLogList } from "@/types/types";
+import useFanpoologStore from "@/store/fanpool-log/store";
 
 // 지역 데이터
 const regions = [
@@ -58,6 +59,15 @@ export default function Page() {
           console.error(error);
         }
       );
+      // 팬풀로그 관련 전역상태 초기화
+      useFanpoologStore.setState({
+        title: "",
+        image: "",
+        schedules: [],
+        stadiumId: null,
+        stadiumPosition: null,
+        fanpoolLogId: null,
+      });
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
@@ -112,7 +122,12 @@ export default function Page() {
             <TravelogWideCard
               key={travelog.id}
               id={travelog.id}
-              image={travelog.image}
+              image={
+                travelog.image ||
+                `/images/fanpool_log_image_default_wide_${
+                  (Number(travelog.id) % 5) + 1
+                }.png`
+              }
               userName={travelog.profile.nickname}
               title={travelog.title}
               locations={travelog.places}

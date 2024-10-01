@@ -4,6 +4,7 @@ import { IconClose, IconHamburgerGray } from "@/public/icons";
 import { usePathname } from "next/navigation";
 
 type LocationInfoMiniCardProps = {
+  type: string;
   image: string;
   name: string;
   location: string;
@@ -12,6 +13,7 @@ type LocationInfoMiniCardProps = {
 };
 
 export default function LocationInfoMiniCard({
+  type,
   image,
   name,
   location,
@@ -21,6 +23,8 @@ export default function LocationInfoMiniCard({
   const pathname = usePathname();
 
   const isLogDetailPage = pathname.startsWith("/fanpool-log/log/");
+
+  const showCloseButton = !(type === "28" || name === "고척스카이돔");
 
   return (
     <div className="relative flex items-center gap-8pxr w-fit">
@@ -42,9 +46,11 @@ export default function LocationInfoMiniCard({
           {isEditing ? (
             <IconHamburgerGray />
           ) : (
-            <button onClick={onRemove}>
-              <IconClose />
-            </button>
+            showCloseButton && (
+              <button onClick={onRemove}>
+                <IconClose />
+              </button>
+            )
           )}
         </div>
       )}

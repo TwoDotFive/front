@@ -3,6 +3,7 @@ import LocationInfoMiniCard from "./LocationInfoMiniCard";
 import Button from "../common/Button";
 
 type TravelogLocationCardProps = {
+  type: string;
   image: string;
   name: string;
   location: string;
@@ -12,6 +13,7 @@ type TravelogLocationCardProps = {
 };
 
 export default function TravelogLocationCard({
+  type,
   image,
   name,
   location,
@@ -23,6 +25,7 @@ export default function TravelogLocationCard({
     <div className="flex w-300pxr p-12pxr items-center gap-8pxr flex-shrink-0 rounded-8pxr bg-gray000 shadow-[2px_2px_20px_0px_rgba(47,47,48,0.10)]">
       <div className="flex flex-col items-start gap-8pxr">
         <LocationInfoMiniCard
+          type={type}
           image={image}
           name={name}
           location={location}

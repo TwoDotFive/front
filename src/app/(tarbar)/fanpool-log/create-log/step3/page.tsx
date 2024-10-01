@@ -32,6 +32,8 @@ import {
 import { reverseStadiumMap } from "@/constants/stadium";
 import { useModalStore } from "@/store/modalStore";
 import ToastMessage from "@/components/common/ToastMessage";
+import Lottie from "lottie-react";
+import spinner from "@/public/lottie/spinner3.json";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -204,9 +206,9 @@ export default function Page() {
         if (rImage && rImage instanceof File) {
           const presignedUrl = await getPresignedUrl();
 
-          await uploadImageToS3(presignedUrl.data.toString(), rImage);
+          await uploadImageToS3(presignedUrl.toString(), rImage);
 
-          imageUrl = presignedUrl.data.toString().split("?")[0];
+          imageUrl = presignedUrl.toString().split("?")[0];
         } else if (typeof rImage === "string") {
           imageUrl = rImage;
         }
@@ -262,7 +264,14 @@ export default function Page() {
     console.log(schedules);
   }, [schedules]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Lottie
+        animationData={spinner}
+        style={{ width: "50px", height: "50px", margin: "auto" }}
+        loop
+      />
+    );
 
   return (
     <div className="absolute flex flex-col w-full h-screen">
@@ -333,7 +342,7 @@ export default function Page() {
               경기장
             </Text>
             <Text fontSize={16} fontWeight={700} color="gray700">
-              {reverseStadiumMap.get(stadiumId!)}
+              {reverseStadiumMap.get(stadiumId!.toString())}
             </Text>
           </div>
         </div>
@@ -342,8 +351,8 @@ export default function Page() {
         <Map
           id="map"
           center={{
-            lat: stadiumPosition!.x || 37.5123,
-            lng: stadiumPosition!.y || 127.0719,
+            lat: stadiumPosition!.y || 37.5123,
+            lng: stadiumPosition!.x || 127.0719,
           }}
           style={{
             width: "100%",
@@ -359,15 +368,10 @@ export default function Page() {
                 lat: schedule.place.y,
                 lng: schedule.place.x,
               }}
-              image={
-                schedule.place.contentType === "28" ||
-                schedule.place.name === "고척스카이돔"
-                  ? undefined
-                  : {
-                      src: "/icons/map/icon_default_pin.svg",
-                      size: { width: 28, height: 40 },
-                    }
-              }
+              image={{
+                src: "/icons/map/icon_default_pin.svg",
+                size: { width: 28, height: 40 },
+              }}
             />
           ))}
         </Map>
@@ -422,14 +426,36 @@ export default function Page() {
                             </span>
                           </div>
                           <div className="ml-16pxr w-full">
-                            <TravelogLocationCard
-                              image={schedule.place.thumbnail}
-                              name={schedule.place.name}
-                              location={schedule.place.address}
-                              isEditing={isChangeMode}
-                              onClick={() => handleMemoOpen(index)}
-                              onRemove={() => handleRemoveLocation(index)}
-                            />
+                            {schedule.memo &&
+                            (schedule.memo.content ||
+                              (schedule.memo.images &&
+                                schedule.memo.images?.length > 0)) ? (
+                              <TravelogAddCard
+                                type={schedule.place.contentType}
+                                image={schedule.place.thumbnail}
+                                name={schedule.place.name}
+                                location={schedule.place.address}
+                                description={schedule.memo.content || ""}
+                                userId={"myUserId"}
+                                locationImage={
+                                  schedule.memo.images?.map((img) => img.url) ||
+                                  []
+                                }
+                                onClick={() => handleMemoOpen(index)}
+                                isEditing={isChangeMode}
+                                onRemove={() => handleRemoveLocation(index)}
+                              />
+                            ) : (
+                              <TravelogLocationCard
+                                type={schedule.place.contentType}
+                                image={schedule.place.thumbnail}
+                                name={schedule.place.name}
+                                location={schedule.place.address}
+                                isEditing={isChangeMode}
+                                onClick={() => handleMemoOpen(index)}
+                                onRemove={() => handleRemoveLocation(index)}
+                              />
+                            )}
                           </div>
                         </div>
                       </SortableItem>

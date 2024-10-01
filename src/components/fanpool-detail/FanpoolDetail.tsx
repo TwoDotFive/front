@@ -88,7 +88,7 @@ const FanpoolDetail = ({ fanpoolInformation }: FanpoolDetailProps) => {
 					{fanpoolInformation.numberOfPeople})
 				</Text>
 			</div>
-			<div className="h-54pxr" />
+			<div className="h-100pxr" />
 		</section>
 	);
 };

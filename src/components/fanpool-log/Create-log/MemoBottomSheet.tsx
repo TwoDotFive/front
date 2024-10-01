@@ -90,17 +90,15 @@ export const MemoBottomSheet: React.FC<MemoBottomSheetProps> = ({
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       if (image instanceof File) {
-        try {
-          const presignedUrl = await getPresignedUrl();
-          await uploadImageToS3(presignedUrl.data.toString(), image);
-          const imageUrl = presignedUrl.data.toString().split("?")[0];
-          uploadedImageUrls.push({
-            sequence: uploadedImageUrls.length + 1,
-            url: imageUrl,
-          });
-        } catch (error) {
-          console.error("이미지 업로드에 실패했습니다.", error);
-        }
+        const presignedUrl = await getPresignedUrl();
+
+        await uploadImageToS3(presignedUrl.toString(), image);
+        const imageUrl = presignedUrl.toString().split("?")[0];
+
+        uploadedImageUrls.push({
+          sequence: uploadedImageUrls.length + 1,
+          url: imageUrl,
+        });
       }
     }
 

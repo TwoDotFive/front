@@ -115,8 +115,8 @@ export const RegisterSecond = ({
 					<div key="none" className="mb-8pxr">
 						<SelectTeamButton
 							code=""
-							isSelected={selectedTeam === ''}
-							onClick={() => handleTeamSelect('')}
+							isSelected={selectedTeam === '0'}
+							onClick={() => handleTeamSelect('0')}
 						/>
 					</div>
 				</div>

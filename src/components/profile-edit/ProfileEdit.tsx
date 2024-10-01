@@ -47,7 +47,7 @@ export default function ProfileEdit() {
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [isButtonActive, setIsButtonActive] = useState(false);
 	const [selectedTeam, setSelectedTeam] = useState<string>(
-		userProfile?.favoriteTeam.id || ''
+		userProfile?.favoriteTeam?.id || '0'
 	);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -96,7 +96,7 @@ export default function ProfileEdit() {
 		if (
 			userProfile?.nickname !== nicknameValue ||
 			userProfile?.oneLiner !== oneLinerValue ||
-			userProfile?.favoriteTeam.id !== selectedTeam ||
+			userProfile?.favoriteTeam?.id !== selectedTeam ||
 			userProfile?.profileImageUrl !== imgSrc
 		) {
 			setIsButtonActive(true);
@@ -106,7 +106,7 @@ export default function ProfileEdit() {
 	}, [nicknameValue, oneLinerValue, selectedTeam]);
 
 	useEffect(() => {
-		setSelectedTeam(userProfile?.favoriteTeam.id || '');
+		setSelectedTeam(userProfile?.favoriteTeam?.id || '');
 		setImgSrc(
 			userProfile?.profileImageUrl || '/images/image_profile_default.png'
 		);

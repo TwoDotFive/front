@@ -118,8 +118,8 @@ const FilterBottomSheet = ({
 				<div className="flex flex-wrap gap-8pxr">
 					<SelectTeamNameButton
 						code=""
-						isSelected={selectedTeam === ''}
-						onClick={() => onTeamSelect('')}
+						isSelected={selectedTeam === '0'}
+						onClick={() => onTeamSelect('0')}
 					/>
 					{teams.map((team) => (
 						<SelectTeamNameButton

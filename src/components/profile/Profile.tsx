@@ -65,7 +65,7 @@ export default function Profile({ id }: { id?: string }) {
 				<div className="h-2pxr" />
 
 				{/* 동네 정보 */}
-				<ProfileDongne />
+				<ProfileDongne id={searchId} />
 
 				<div className="h-14pxr" />
 

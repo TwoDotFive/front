@@ -5,6 +5,7 @@ import LocationInfoMiniCard from "./LocationInfoMiniCard";
 import classNames from "classnames";
 
 type TravelLogAddCardProps = {
+  type: string;
   image: string;
   name: string;
   location: string;
@@ -17,6 +18,7 @@ type TravelLogAddCardProps = {
 };
 
 export default function TravelogAddCard({
+  type,
   image,
   name,
   location,
@@ -44,6 +46,7 @@ export default function TravelogAddCard({
       <div className="flex w-fit p-12pxr items-center gap-8pxr">
         <div className="flex w-276pxr flex-col items-start gap-12pxr">
           <LocationInfoMiniCard
+            type={type}
             image={image}
             name={name}
             location={location}

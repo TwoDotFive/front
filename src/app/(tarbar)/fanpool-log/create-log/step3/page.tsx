@@ -431,6 +431,7 @@ export default function Page() {
                               (schedule.memo.images &&
                                 schedule.memo.images?.length > 0)) ? (
                               <TravelogAddCard
+                                type={schedule.place.contentType}
                                 image={schedule.place.thumbnail}
                                 name={schedule.place.name}
                                 location={schedule.place.address}
@@ -446,6 +447,7 @@ export default function Page() {
                               />
                             ) : (
                               <TravelogLocationCard
+                                type={schedule.place.contentType}
                                 image={schedule.place.thumbnail}
                                 name={schedule.place.name}
                                 location={schedule.place.address}

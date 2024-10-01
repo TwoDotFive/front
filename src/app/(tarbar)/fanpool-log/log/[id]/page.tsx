@@ -97,12 +97,12 @@ export default function FanpoolLogDetailPage() {
         (schedule) =>
           schedule.place.contentType === "28" ||
           schedule.place.name === "고척스카이돔"
-      )[0].place.y,
+      )[0].place.x,
       y: fanpoolLog!.schedules.filter(
         (schedule) =>
           schedule.place.contentType === "28" ||
           schedule.place.name === "고척스카이돔"
-      )[0].place.x,
+      )[0].place.y,
     });
     useFanpoologStore.setState({ schedules: fanpoolLog!.schedules });
     router.push(`/fanpool-log/create-log/step3`);
@@ -139,10 +139,10 @@ export default function FanpoolLogDetailPage() {
         // schedule.place.contentType이 28인 것으로 설정
         x: res.data.schedules.filter(
           (schedule: any) => schedule.place.contentType === "28"
-        )[0].place.y,
+        )[0].place.x,
         y: res.data.schedules.filter(
           (schedule: any) => schedule.place.contentType === "28"
-        )[0].place.x,
+        )[0].place.y,
       });
     });
     try {
@@ -279,6 +279,7 @@ export default function FanpoolLogDetailPage() {
                     <div className="ml-16pxr w-full">
                       {schedule.memo && schedule.memo.content ? (
                         <TravelogAddCard
+                          type={schedule.place.contentType}
                           image={schedule.place.thumbnail}
                           name={schedule.place.name}
                           location={schedule.place.address}
@@ -292,6 +293,7 @@ export default function FanpoolLogDetailPage() {
                         />
                       ) : (
                         <TravelogLocationCard
+                          type={schedule.place.contentType}
                           image={schedule.place.thumbnail}
                           name={schedule.place.name}
                           location={schedule.place.address}

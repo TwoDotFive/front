@@ -1,4 +1,6 @@
 import {
+	IconChatActive,
+	IconChatNav,
 	IconHome,
 	IconHomeActive,
 	IconMap,
@@ -33,6 +35,12 @@ export const navBarList: NavBarListTypes[] = [
 		path: '/fanpool-log',
 		defaultIcon: IconMap,
 		activeIcon: IconMapActive,
+	},
+	{
+		name: '채팅',
+		path: '/chat',
+		defaultIcon: IconChatNav,
+		activeIcon: IconChatActive,
 	},
 	{
 		name: '내 팬풀',

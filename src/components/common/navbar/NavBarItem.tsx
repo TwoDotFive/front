@@ -24,7 +24,7 @@ export default function NavItem({
 			<Text
 				fontSize={12}
 				fontWeight={700}
-				color={`${isActive ? 'primary' : 'gray100'}`}
+				color={`${isActive ? 'primary' : 'gray300'}`}
 			>
 				{name}
 			</Text>

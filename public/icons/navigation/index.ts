@@ -6,6 +6,8 @@ import IconPeople from './icon_people.svg';
 import IconPeopleActive from './icon_people_active.svg';
 import IconSearch from './icon_search.svg';
 import IconSearchActive from './icon_search_active.svg';
+import IconChatNav from './icon_chat.svg';
+import IconChatActive from './icon_chat_active.svg';
 
 export {
 	IconHome,
@@ -16,4 +18,6 @@ export {
 	IconPeopleActive,
 	IconSearch,
 	IconSearchActive,
+	IconChatNav,
+	IconChatActive,
 };

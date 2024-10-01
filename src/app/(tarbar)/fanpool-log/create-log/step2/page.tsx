@@ -157,7 +157,7 @@ export default function Page() {
     });
 
     useFanpoologStore.setState({ schedules: updatedSchedules });
-    router.push("/fanpool-log/create-log/step3");
+    router.replace("/fanpool-log/create-log/step3");
   };
 
   return (

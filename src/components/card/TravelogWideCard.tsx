@@ -41,7 +41,12 @@ export default function TravelogWideCard({
     if (places.length <= 3) {
       // 장소가 1~3개일 경우
       return (
-        <Text fontSize={14} fontWeight={600} color="gray600">
+        <Text
+          fontSize={14}
+          fontWeight={600}
+          color="gray600"
+          className="line-clamp-1"
+        >
           {places.join(", ")}
         </Text>
       );

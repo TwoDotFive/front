@@ -3,7 +3,7 @@ import { Text } from '../common/Text';
 import ModalPortal from './ModalPortal';
 import { useModalStore } from '@/store/modalStore';
 
-const ConfirmUserModal = () => {
+const DeleteFanpoolModal = () => {
 	const { modalProps, closeModal } = useModalStore();
 
 	return (
@@ -13,26 +13,24 @@ const ConfirmUserModal = () => {
 				onClick={closeModal}
 			>
 				<div
-					className="relative flex flex-col justify-center bg-white py-24pxr rounded-20pxr min-h-140pxr min-w-250pxr shadow-lg transform scale-100"
+					className="relative flex flex-col justify-center bg-white py-24pxr rounded-20pxr min-h-140pxr min-w-320pxr shadow-lg transform scale-100 gap-24pxr"
 					onClick={(e) => e.stopPropagation()}
 				>
-					<div className="flex-grow flex items-center justify-center">
-						<Text fontSize={18} fontWeight={700} color="gray700">
-							{modalProps.confirmText}
-						</Text>
+					<div className="flex items-center justify-center">
+						{modalProps.confirmText}
 					</div>
 					<div className="flex justify-between gap-4 px-4">
 						<button
 							onClick={closeModal}
-							className="w-full px-16pxr py-8pxr bg-gray-300 text-black rounded hover:brightness-90"
+							className="w-full px-14pxr py-11pxr bg-gray-300 text-black rounded-8pxr hover:brightness-90"
 						>
 							취소
 						</button>
 						<button
 							onClick={modalProps.confirmOnClick}
-							className="w-full px-16pxr py-8pxr bg-primary text-white rounded hover:brightness-75"
+							className="w-full px-14pxr py-11pxr bg-primary text-white rounded-8pxr hover:brightness-75"
 						>
-							확인
+							삭제
 						</button>
 					</div>
 				</div>
@@ -41,4 +39,4 @@ const ConfirmUserModal = () => {
 	);
 };
 
-export default ConfirmUserModal;
+export default DeleteFanpoolModal;

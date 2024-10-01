@@ -17,6 +17,22 @@ export const FanpoolDetailBottomSheet = ({
 }: FanpoolDetailBottomSheetProps) => {
 	const { openModal } = useModalStore();
 
+	const deleteFanpool = async () => {
+		// const response =
+	};
+	const handleDeleteFanpool = async () => {
+		openModal('deleteFanpool', {
+			confirmText: (
+				<Text fontSize={18} fontWeight={700} color="kboNavy">
+					팬풀 모집글을 삭제할까요?
+				</Text>
+			),
+			confirmOnClick() {
+				deleteFanpool();
+			},
+		});
+		onClose();
+	};
 	const handleReportUser = async () => {
 		openModal('reportUser', {
 			confirmText: fanpoolId,
@@ -41,7 +57,7 @@ export const FanpoolDetailBottomSheet = ({
 				{/* 삭제하기 */}
 				<div
 					className="flex gap-8pxr items-center cursor-pointer"
-					onClick={() => {}}
+					onClick={handleDeleteFanpool}
 				>
 					<IconTrashCan />
 					<Text fontSize={16} fontWeight={500} color="gray700">

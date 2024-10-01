@@ -92,12 +92,16 @@ export default function FanpoolLogDetailPage() {
     if (fanpoolLog!.image) setImage(fanpoolLog!.image);
     setStaidumId(stadiumMap.get(fanpoolLog!.stadium)!);
     setStadiumPosition({
-      // schedule.place.contentType이 28인 것으로 설정
+      // schedule.place.contentType이 28 또는 schedule.place.name이 "고척스카이돔"인 것으로 설정
       x: fanpoolLog!.schedules.filter(
-        (schedule) => schedule.place.contentType === "28"
+        (schedule) =>
+          schedule.place.contentType === "28" ||
+          schedule.place.name === "고척스카이돔"
       )[0].place.y,
       y: fanpoolLog!.schedules.filter(
-        (schedule) => schedule.place.contentType === "28"
+        (schedule) =>
+          schedule.place.contentType === "28" ||
+          schedule.place.name === "고척스카이돔"
       )[0].place.x,
     });
     useFanpoologStore.setState({ schedules: fanpoolLog!.schedules });
@@ -107,7 +111,7 @@ export default function FanpoolLogDetailPage() {
   const handleDeleteButton = () => {
     deleteFanpoolLog(id.toString()).then((res) => {
       if (res.status === 200) {
-        router.push("/fanpool-log");
+        router.replace("/fanpool-log");
       }
     });
   };
@@ -120,7 +124,7 @@ export default function FanpoolLogDetailPage() {
   };
 
   const handleLogin = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   useEffect(() => {

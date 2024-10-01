@@ -43,9 +43,9 @@ export default function Page() {
       setStadiumId(selectedStadiumId);
       setStadiumPosition({
         x: stadiumList.find((stadium) => stadium.id === selectedStadiumId)!
-          .address.x,
-        y: stadiumList.find((stadium) => stadium.id === selectedStadiumId)!
           .address.y,
+        y: stadiumList.find((stadium) => stadium.id === selectedStadiumId)!
+          .address.x,
       });
       router.replace("/fanpool-log/create-log/step2");
     }

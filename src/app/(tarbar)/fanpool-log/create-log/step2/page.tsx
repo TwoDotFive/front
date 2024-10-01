@@ -70,8 +70,8 @@ export default function Page() {
   const fetchTourInfo = async () => {
     setIsLoading(true);
     const res = await getTourInfo(
-      stadiumPosition!.x.toString(),
       stadiumPosition!.y.toString(),
+      stadiumPosition!.x.toString(),
       selectedTagId,
       page
     );

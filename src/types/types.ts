@@ -39,6 +39,7 @@ export interface FanpoolInformation {
 	numberOfPeople: number;
 	currentNumberOfPeople: number;
 	memo: string;
+	state: string;
 }
 
 export interface FanpoolType {

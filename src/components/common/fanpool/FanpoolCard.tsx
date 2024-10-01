@@ -29,7 +29,7 @@ export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
 	const awayTeamShort = fanpool.game.awayTeam.name.split(' ')[0];
 	const homeTeamShort = fanpool.game.homeTeam.name.split(' ')[0];
 
-	const isFinish = fanpool.currentNumberOfPeople === fanpool.numberOfPeople;
+	const isFinish = fanpool.state === 'END';
 	const isTaxi = fanpool.fanpoolType === 'CAR_SHARE';
 	const handleCardClick = () => {
 		router.push(`/fanpool-detail/${fanpool.id}`);

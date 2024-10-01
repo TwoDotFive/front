@@ -6,6 +6,10 @@ import { TagFanPool } from '../../common/tag/TagFanPool';
 import { Game } from '@/types/types';
 import { useUserStore } from '@/store/useUserStore';
 import { IconRightArrow } from '@/public/icons';
+import { useEffect, useState } from 'react';
+import getGameFanpoolCount from '@/api/baseball/getGameFanpoolCount';
+import { useSearchStore } from '@/store/useSearchStore';
+import { useRouter } from 'next/navigation';
 
 interface GameCardProps {
 	game: Game;
@@ -13,7 +17,11 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
 	const myTeam = useUserStore((state) => state.userProfile?.favoriteTeam.name);
+	const setSelectedMatches = useSearchStore(
+		(state) => state.setSelectedMatches
+	);
 
+	const router = useRouter();
 	// 홈 팀과 원정 팀 정보
 	const homeInfo = game.homeTeam;
 	const awayInfo = game.awayTeam;
@@ -25,6 +33,18 @@ export default function GameCard({ game }: GameCardProps) {
 		'yyyy. MM. dd aaa HH:mm'
 	).toUpperCase();
 
+	const handleCardClick = () => {
+		setSelectedMatches([game.id]);
+		router.push('fanpool-find');
+	};
+	const [fanpoolCount, setFanpoolCount] = useState<string>();
+	useEffect(() => {
+		const getFanpoolCount = async () => {
+			const response = await getGameFanpoolCount(game.id);
+			setFanpoolCount(response.id);
+		};
+		getFanpoolCount();
+	}, []);
 	return (
 		<div
 			className="w-full rounded-12pxr"
@@ -87,10 +107,13 @@ export default function GameCard({ game }: GameCardProps) {
 					</section>
 				</section>
 			</section>
-			<section className="flex justify-between items-center bg-white px-14pxr py-12pxr rounded-b-12pxr cursor-pointer">
+			<section
+				className="flex justify-between items-center bg-white px-14pxr py-12pxr rounded-b-12pxr cursor-pointer"
+				onClick={handleCardClick}
+			>
 				<div className="w-16pxr" />
 				<Text fontSize={14} fontWeight={500} color="kboNavy">
-					현재 팬풀{136}건
+					현재 팬풀{fanpoolCount}건
 				</Text>
 				<IconRightArrow />
 			</section>

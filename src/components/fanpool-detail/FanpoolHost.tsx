@@ -34,7 +34,8 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 				});
 				setUserProfile(response);
 			} catch (err) {
-				console.error('Failed to fetch user profile:', err);
+				alert('정보를 먼저 입력해주세요.');
+				router.replace('/register');
 				setError('');
 			} finally {
 				setLoading(false);

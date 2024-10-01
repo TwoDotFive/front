@@ -8,7 +8,7 @@ export default function FindSection() {
 	const [fanpoolData, setFanpoolData] = useState<FanpoolInformation[]>([]);
 	return (
 		<section className="px-20pxr">
-			<FindFilter setFanpoolData={setFanpoolData} />
+			<FindFilter fanpoolData={fanpoolData} setFanpoolData={setFanpoolData} />
 			<div className="h-16pxr" />
 			<FindResult fanpoolDatas={fanpoolData} />
 		</section>

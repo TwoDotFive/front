@@ -166,7 +166,7 @@ export default function ProfileEdit() {
 			try {
 				// Presigned URL 가져오기
 				const presignedUrlResponse = await getPresignedUrl();
-				const presignedUrl = presignedUrlResponse.data.toString();
+				const presignedUrl = presignedUrlResponse.toString();
 
 				// S3에 이미지 업로드
 				await uploadImageToS3(presignedUrl, file);

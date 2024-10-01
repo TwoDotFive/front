@@ -57,7 +57,7 @@ export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
 			className="w-full h-104pxr flex gap-12pxr cursor-pointer"
 			onClick={handleCardClick}
 		>
-			<div className="relative w-82pxr h-full">
+			<div className="relative min-w-82pxr h-full">
 				<img
 					src={getImagePath()}
 					alt={`${fanpool.game.awayTeam.name} 이미지`}
@@ -77,11 +77,13 @@ export default function FanpoolCard({ fanpool }: FanpoolCardProps) {
 					</Text>
 				</div>
 			</div>
-			<div className="flex flex-col justify-between py-8pxr">
+			<div className="flex flex-grow flex-col justify-between truncate py-8pxr">
 				<TagFanPool type={fanpool.fanpoolType as Tags} />
-				<Text fontSize={16} fontWeight={600}>
+
+				<Text fontSize={16} fontWeight={600} className="w-full truncate">
 					{fanpool.title}
 				</Text>
+
 				<Text fontSize={12} fontWeight={400}>
 					{formattedDepartAt} {stadiumShort} | {awayTeamShort} VS{' '}
 					{homeTeamShort}

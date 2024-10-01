@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { IconCheckNavy } from '@/public/icons';
 import BottomSheet from '../common/BottomSheet';
 import { Text } from '../common/Text';
@@ -14,32 +14,44 @@ interface MatchSelectBottomSheetProps {
 	isVisible: boolean;
 	onClose: () => void;
 	onMatchSelect: (code: string[]) => void;
+	fanpoolCount: number;
 }
 
 const MatchSelectBottomSheet = ({
 	isVisible,
 	onClose,
 	onMatchSelect,
+	fanpoolCount,
 }: MatchSelectBottomSheetProps) => {
 	const { selectedDate, selectedTeam } = useSearchStore();
+	const selectedMatch = useSearchStore((state) => state.selectedMatches);
+	const selectedMatchFunc = useSearchStore((state) => state.setSelectedMatches);
 
 	// 게임 목록을 저장할 상태
 	const [games, setGames] = useState<Game[]>([]);
 	const [selectedMatches, setSelectedMatches] = useState<string[]>([]);
 
-	// API 호출을 통해 게임 데이터를 가져오는 함수
-	useEffect(() => {
-		const fetchGames = async () => {
-			const formattedDate = formatDateTime(selectedDate);
-			try {
-				const fetchedGames = await getGame(selectedTeam, formattedDate);
-				setGames(fetchedGames);
-				setSelectedMatches([]);
-			} catch (error) {
-				console.error('Failed to fetch games:', error);
-			}
-		};
+	// isFirst를 useRef로 관리하여 값이 렌더링 사이에서 유지되도록 함
+	const isFirst = useRef(true);
 
+	const fetchGames = async () => {
+		const formattedDate = formatDateTime(selectedDate);
+		try {
+			const fetchedGames = await getGame(selectedTeam, formattedDate);
+			setGames(fetchedGames);
+
+			// isFirst가 true이면 selectedMatchFunc을 호출하지 않음
+			if (isFirst.current) {
+				isFirst.current = false;
+			} else {
+				selectedMatchFunc([]);
+			}
+		} catch (error) {
+			console.error('Failed to fetch games:', error);
+		}
+	};
+
+	useEffect(() => {
 		// API 호출
 		fetchGames();
 	}, [selectedTeam, selectedDate]);
@@ -53,6 +65,10 @@ const MatchSelectBottomSheet = ({
 
 		onMatchSelect(updatedSelectedMatches);
 	};
+
+	useEffect(() => {
+		setSelectedMatches(selectedMatch);
+	}, [selectedMatch]);
 
 	return (
 		<BottomSheet isVisible={isVisible} onClose={onClose}>
@@ -86,7 +102,7 @@ const MatchSelectBottomSheet = ({
 				onClick={() => onMatchSelect(selectedMatches)}
 			>
 				<Text fontSize={16} fontWeight={600} color="white">
-					{selectedMatches.length}개의 팬풀이 있어요
+					{fanpoolCount}개의 팬풀이 있어요
 				</Text>
 			</div>
 		</BottomSheet>

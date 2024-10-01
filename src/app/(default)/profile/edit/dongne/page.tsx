@@ -163,7 +163,7 @@ export default function Page() {
 					)}
 				</div>
 
-				<div className="fixed bottom-40pxr left-0 right-0 px-20pxr">
+				<div className="fixed bottom-40pxr max-w-399pxr w-full left-1/2 -translate-x-1/2 right-0 px-20pxr">
 					<Button
 						width="100%"
 						height="50px"

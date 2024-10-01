@@ -1,3 +1,4 @@
+'use client';
 import { IconLeftArrow } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { Text } from '../Text';
@@ -22,7 +23,7 @@ export default function ChatTapBar({
 	};
 
 	return (
-		<div className="w-full h-40pxr flex items-center gap-4pxr px-12pxr">
+		<div className="w-full flex items-center gap-4pxr px-12pxr py-11pxr">
 			<IconLeftArrow className="cursor-pointer" onClick={handleBack} />
 			<div className="flex flex-col">
 				<Text fontSize={16} fontWeight={700} color="gray700">

@@ -43,6 +43,7 @@ export default function FindFilter({
 	const [isMatchSelectBottomSheetVisible, setIsMatchSelectBottomSheetVisible] =
 		useState(false);
 
+	const [gameCount, setGameCount] = useState(0);
 	const [bottomSheet, setBottomSheet] = useState<{
 		visible: boolean;
 		type: 'date' | 'match' | 'place' | null;
@@ -177,7 +178,7 @@ export default function FindFilter({
 				</div>
 			</div>
 			<div onClick={toggleMatchBottomSheet}>
-				<FanpoolMatchSelectButton matchCount={selectedMatches.length} />
+				<FanpoolMatchSelectButton matchCount={gameCount} />
 			</div>
 			<div
 				className="relative w-full h-40pxr cursor-pointer"
@@ -210,6 +211,7 @@ export default function FindFilter({
 				onClose={toggleMatchBottomSheet}
 				onMatchSelect={handleMatchSelect}
 				fanpoolCount={fanpoolData.length}
+				setGameCount={setGameCount}
 			/>
 			<FilterBottomSheet
 				isVisible={isBottomSheetVisible}

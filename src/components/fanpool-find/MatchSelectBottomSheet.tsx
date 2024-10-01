@@ -15,6 +15,7 @@ interface MatchSelectBottomSheetProps {
 	onClose: () => void;
 	onMatchSelect: (code: string[]) => void;
 	fanpoolCount: number;
+	setGameCount: (count: number) => void;
 }
 
 const MatchSelectBottomSheet = ({
@@ -22,6 +23,7 @@ const MatchSelectBottomSheet = ({
 	onClose,
 	onMatchSelect,
 	fanpoolCount,
+	setGameCount,
 }: MatchSelectBottomSheetProps) => {
 	const { selectedDate, selectedTeam } = useSearchStore();
 	const selectedMatch = useSearchStore((state) => state.selectedMatches);
@@ -39,6 +41,7 @@ const MatchSelectBottomSheet = ({
 		try {
 			const fetchedGames = await getGame(selectedTeam, formattedDate);
 			setGames(fetchedGames);
+			setGameCount(fetchedGames.length);
 
 			// isFirst가 true이면 selectedMatchFunc을 호출하지 않음
 			if (isFirst.current) {

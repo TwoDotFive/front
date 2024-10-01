@@ -19,7 +19,7 @@ export default function FanpoologUser({ id, name, image }: FanpoologUserProps) {
   };
 
   const handleProfileClick = () => {
-    router.push(`/fanpool-log/user/${id}`);
+    router.push(`/profile/${id}`);
   };
   return (
     <div className="w-full h-45 flex items-center justify-start gap-8pxr p-20pxr pb-0">

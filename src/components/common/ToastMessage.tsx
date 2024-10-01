@@ -36,6 +36,7 @@ const ToastMessage: React.FC<ToastMessageProps> = ({
       className={`fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-primary text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 transition-opacity duration-500 ease-in-out ${
         visible ? "opacity-100" : "opacity-0"
       }`}
+      style={{ display: visible ? "flex" : "none" }}
     >
       {hasCheckBtn && <span>✔️</span>}
       <span>{message}</span>

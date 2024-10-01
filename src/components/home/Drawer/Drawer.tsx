@@ -30,7 +30,7 @@ export const Drawer = ({ isVisible, onClose }: DrawerProps) => {
 
 	const openLogoutConfirmModal = () => {
 		openModal('confirmUser', {
-			confirmText: '현재 게정에서 로그아웃할까요?',
+			confirmText: '현재 계정에서 로그아웃할까요?',
 			confirmOnClick: handleLogout,
 		});
 	};

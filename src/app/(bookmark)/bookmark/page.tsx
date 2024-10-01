@@ -41,7 +41,9 @@ export default function Page() {
 
   const renderFanpoolLogList = () => {
     return fanpoolLogList && fanpoolLogList.length === 0 ? (
-      <div className="text-center">관심 리스트가 없습니다.</div>
+      <div className="w-full h-full rounded-8pxr flex items-center justify-center">
+        <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+      </div>
     ) : (
       fanpoolLogList!.map((fanpoolLog) => (
         <TravelogWideCard

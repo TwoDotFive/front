@@ -8,6 +8,8 @@ interface ChatItem {
 	time: string;
 	unreadCount: number;
 	imageSrc: string;
+	awayName?: string;
+	homeName?: string;
 }
 
 export default function ChatList() {
@@ -19,6 +21,8 @@ export default function ChatList() {
 			time: '지금',
 			unreadCount: 1,
 			imageSrc: '/images/kia.png',
+			awayName: '키움히어로즈',
+			homeName: 'KIA타이거즈',
 		},
 		{
 			name: '김동철',
@@ -26,6 +30,8 @@ export default function ChatList() {
 			time: '16분전',
 			unreadCount: 1,
 			imageSrc: '/images/empty_image_place.png',
+			awayName: '두산베어스',
+			homeName: 'KIA타이거즈',
 		},
 		{
 			name: '배선미',
@@ -33,6 +39,8 @@ export default function ChatList() {
 			time: '오후 12:03',
 			unreadCount: 1,
 			imageSrc: '/images/default_profile.png',
+			awayName: '키움히어로즈',
+			homeName: 'LG트윈스',
 		},
 		{
 			name: '배성준',
@@ -40,6 +48,8 @@ export default function ChatList() {
 			time: '3일전',
 			unreadCount: 1,
 			imageSrc: '/images/doosan.png',
+			awayName: '삼성라이온즈',
+			homeName: 'KIA타이거즈',
 		},
 	];
 
@@ -67,18 +77,23 @@ export default function ChatList() {
 			{chatItems.map((chat, index) => (
 				<div
 					key={index}
-					className="flex justify-between items-center"
+					className="w-full flex justify-between items-center"
 					onClick={() => router.push('/chat/1')}
 				>
-					<div className="flex gap-8pxr">
+					<div className="w-full flex gap-8pxr">
 						<img
 							src={chat.imageSrc}
 							className="w-60pxr h-60pxr border border-gray100 rounded-full object-contain"
 						/>
-						<div className="flex flex-col">
-							<Text fontSize={16} fontWeight={700} color="gray700">
-								{chat.name}
-							</Text>
+						<div className="w-full flex flex-col">
+							<div className="flex justify-between">
+								<Text fontSize={16} fontWeight={700} color="gray700">
+									{chat.name}
+								</Text>
+								<Text fontSize={12} fontWeight={500} color="gray700">
+									{chat.awayName} VS {chat.homeName}
+								</Text>
+							</div>
 							<Text fontSize={14} fontWeight={400} color="gray600">
 								{chat.lastMessage}
 							</Text>

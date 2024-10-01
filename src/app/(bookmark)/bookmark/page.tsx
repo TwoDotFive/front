@@ -4,7 +4,9 @@ import { getFanpoolLogBookmarkList } from "@/api/bookmark/getFanpoolLogBookmarkL
 import TravelogWideCard from "@/components/card/TravelogWideCard";
 import TapBar from "@/components/common/TapBar";
 import { FanpoolLogList } from "@/types/types";
+import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
+import spinner from "@/public/lottie/spinner3.json";
 
 interface BookmarkedFanpoolLog {
   id: string;
@@ -64,7 +66,11 @@ export default function Page() {
       <TapBar text="관심 리스트" type="mid" />
       <div className="mt-24pxr" />
       {isLoading ? (
-        <div>로딩중...</div>
+        <Lottie
+          animationData={spinner}
+          style={{ width: "50px", height: "50px", margin: "auto" }}
+          loop
+        />
       ) : (
         <>
           <div className="flex justify-around border-b mb-4">

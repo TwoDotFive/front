@@ -32,6 +32,8 @@ import {
 import { reverseStadiumMap } from "@/constants/stadium";
 import { useModalStore } from "@/store/modalStore";
 import ToastMessage from "@/components/common/ToastMessage";
+import Lottie from "lottie-react";
+import spinner from "@/public/lottie/spinner3.json";
 
 function SortableItem({ id, children, isChangeMode }: any) {
   const {
@@ -262,7 +264,14 @@ export default function Page() {
     console.log(schedules);
   }, [schedules]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Lottie
+        animationData={spinner}
+        style={{ width: "50px", height: "50px", margin: "auto" }}
+        loop
+      />
+    );
 
   return (
     <div className="absolute flex flex-col w-full h-screen">

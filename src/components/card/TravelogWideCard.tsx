@@ -72,7 +72,7 @@ export default function TravelogWideCard({
           onError={handleImageError}
         />
       </div>
-      <div className="flex flex-col items-start justify-center gap-10pxr p-14pxr h-94pxr">
+      <div className="flex flex-col items-start justify-center gap-8pxr p-14pxr h-94pxr">
         <div className="flex items-center">
           <Text fontSize={12} fontWeight={700} color="gray600">
             {userName}

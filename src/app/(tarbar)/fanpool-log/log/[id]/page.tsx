@@ -9,7 +9,6 @@ import {
 } from "@/api/fanpool-log/log/main";
 import TravelogAddCard from "@/components/card/TravelogAddCard";
 import TravelogLocationCard from "@/components/card/TravelogLocationCard";
-import BottomSheet from "@/components/common/BottomSheet";
 import Button from "@/components/common/Button";
 import InfinityLine from "@/components/common/InfinityLine";
 import TapBar from "@/components/common/TapBar";
@@ -123,6 +122,34 @@ export default function FanpoolLogDetailPage() {
     });
   };
 
+  const handleKakaoShareButton = () => {
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: fanpoolLog?.title,
+        description: fanpoolLog?.stadium,
+        imageUrl:
+          fanpoolLog?.image ||
+          `/images/fanpool_log_image_default_${
+            (Number(fanpoolLog?.id) % 5) + 1
+          }.png`,
+        link: {
+          mobileWebUrl: window.location.href,
+          webUrl: window.location.href,
+        },
+      },
+      buttons: [
+        {
+          title: "팬풀로 이동하기",
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+      ],
+    });
+  };
+
   const handleLogin = () => {
     router.replace("/");
   };
@@ -204,8 +231,8 @@ export default function FanpoolLogDetailPage() {
           id="map"
           center={{
             // 지도의 중심좌표
-            lat: stadiumPosition!.x,
-            lng: stadiumPosition!.y,
+            lat: stadiumPosition!.y,
+            lng: stadiumPosition!.x,
           }}
           style={{
             // 지도의 크기
@@ -337,7 +364,10 @@ export default function FanpoolLogDetailPage() {
                 disabledBackgroundColor={"bg-primary"}
                 onClick={() => {}}
               />
-              <button className="flex items-center jusitify-center p-8pxr">
+              <button
+                className="flex items-center jusitify-center p-8pxr"
+                onClick={handleKakaoShareButton}
+              >
                 <IconShare />
               </button>
               <button

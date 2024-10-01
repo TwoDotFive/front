@@ -23,16 +23,10 @@ interface BookmarkedFanpoolLog {
 }
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<"fanpool" | "fanpoolLog">(
-    "fanpoolLog"
-  );
+  const [activeTab, setActiveTab] = useState<"fanpoolLog">("fanpoolLog");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [fanpoolLogList, setFanpoolLogList] =
     useState<BookmarkedFanpoolLog[]>();
-
-  const handleTabChange = (tab: "fanpool" | "fanpoolLog") => {
-    setActiveTab(tab);
-  };
 
   useEffect(() => {
     getFanpoolLogBookmarkList().then((res) => {
@@ -47,13 +41,20 @@ export default function Page() {
 
   const renderFanpoolLogList = () => {
     return fanpoolLogList && fanpoolLogList.length === 0 ? (
-      <div className="text-center">관심 리스트가 없습니다.</div>
+      <div className="w-full h-full rounded-8pxr flex items-center justify-center">
+        <img src="/images/no_result.png" className="w-93pxr h-84pxr" />
+      </div>
     ) : (
       fanpoolLogList!.map((fanpoolLog) => (
         <TravelogWideCard
           key={fanpoolLog.id}
           id={fanpoolLog.tourLog.id}
-          image={fanpoolLog.tourLog.image}
+          image={
+            fanpoolLog.tourLog.image ||
+            `/images/fanpool_log_image_default_wide_${
+              (Number(fanpoolLog.tourLog.id) % 5) + 1
+            }.png`
+          }
           title={fanpoolLog.tourLog.title}
           userName={fanpoolLog.tourLog.profile.nickname}
         />
@@ -73,31 +74,20 @@ export default function Page() {
         />
       ) : (
         <>
-          <div className="flex justify-around border-b mb-4">
-            <button
-              className={`px-48pxr py-12pxr ${
-                activeTab === "fanpool"
-                  ? "font-bold border-b-2 border-black"
-                  : ""
-              }`}
-              onClick={() => handleTabChange("fanpool")}
-            >
-              모집한 팬풀 3
-            </button>
+          <div className="flex justify-start border-b mb-4">
             <button
               className={`px-48pxr py-12pxr ${
                 activeTab === "fanpoolLog"
                   ? "font-bold border-b-2 border-black"
                   : ""
               }`}
-              onClick={() => handleTabChange("fanpoolLog")}
             >
               팬풀로그 {fanpoolLogList!.length > 0 ? fanpoolLogList!.length : 0}
             </button>
           </div>
           {/* 탭에 맞는 리스트 */}
           <div className="flex flex-col items-start px-20pxr gap-12pxr">
-            {activeTab === "fanpool" ? renderFanpool() : renderFanpoolLogList()}
+            {renderFanpoolLogList()}
           </div>
         </>
       )}

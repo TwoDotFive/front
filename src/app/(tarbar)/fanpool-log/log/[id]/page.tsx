@@ -215,7 +215,7 @@ export default function FanpoolLogDetailPage() {
       )}
 
       {/* 팬풀 로그 타이틀 및 장소 */}
-      <div className="mt-49pxr overflow-y-auto h-[calc(100vh-49px)]">
+      <div className="overflow-y-auto h-[calc(100vh-49px)]">
         <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
           {fanpoolLog.image && (
             <div className="w-85pxr h-85pxr">

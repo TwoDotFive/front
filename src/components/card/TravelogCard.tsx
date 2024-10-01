@@ -84,8 +84,15 @@ export default function TravelogCard({
           </Text>
           {places && (
             <div className="flex items-center">
-              <Text fontSize={14} fontWeight={600} color="gray600">
-                {places[0]}
+              <Text
+                fontSize={14}
+                fontWeight={600}
+                color="gray600"
+                className="line-clamp-1"
+              >
+                {places[0].length > 14
+                  ? `${places[0].slice(0, 14)}...`
+                  : places[0]}
               </Text>
               {places.length > 1 && (
                 <Text fontSize={14} fontWeight={400} color="gray600">

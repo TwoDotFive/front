@@ -17,6 +17,32 @@ export default function FanpoolDetailBottomBar({
 
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 
+  const handleKakaoShareButton = () => {
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: fanpoolInformation?.title,
+        description: fanpoolInformation?.memo,
+        imageUrl: `/images/fanpool_log_image_default_${
+          (Number(fanpoolInformation?.id) % 5) + 1
+        }.png`,
+        link: {
+          mobileWebUrl: window.location.href,
+          webUrl: window.location.href,
+        },
+      },
+      buttons: [
+        {
+          title: "팬풀로 이동하기",
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+      ],
+    });
+  };
+
   const handleShareButton = () => {
     const currentUrl = window.location.href;
     navigator.clipboard.writeText(currentUrl).then(() => {
@@ -39,7 +65,10 @@ export default function FanpoolDetailBottomBar({
         disabledBackgroundColor={"bg-gray100"}
         onClick={() => {}}
       />
-      <button className="flex items-center jusitify-center p-8pxr">
+      <button
+        className="flex items-center jusitify-center p-8pxr"
+        onClick={handleKakaoShareButton}
+      >
         <IconShare />
       </button>
       <button

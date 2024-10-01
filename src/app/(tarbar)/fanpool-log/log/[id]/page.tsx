@@ -140,7 +140,7 @@ export default function FanpoolLogDetailPage() {
       },
       buttons: [
         {
-          title: "팬풀 보러가기",
+          title: "팬풀로 이동하기",
           link: {
             mobileWebUrl: window.location.href,
             webUrl: window.location.href,

@@ -32,7 +32,7 @@ export default function FanpoolMatchItem({ game }: FanpoolMatchItemProps) {
 		>
 			<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden py-16pxr px-12pxr">
 				<div
-					className="absolute inset-0 bg-cover bg-center opacity-30"
+					className="absolute inset-0 bg-cover bg-center"
 					style={{ backgroundImage: 'url(/images/image_game_background.png)' }}
 				/>
 

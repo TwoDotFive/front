@@ -52,7 +52,7 @@ export default function GameCard({ game }: GameCardProps) {
 		>
 			<section className="relative w-full flex flex-col rounded-t-12pxr overflow-hidden">
 				<div
-					className="absolute inset-0 bg-cover bg-center opacity-30"
+					className="absolute inset-0 bg-cover bg-center"
 					style={{ backgroundImage: 'url(/images/image_game_background.png)' }}
 				/>
 

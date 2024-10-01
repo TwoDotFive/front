@@ -26,9 +26,11 @@ import {
   IconShare,
 } from "@/public/icons";
 import useFanpoologStore, { Schedule } from "@/store/fanpool-log/store";
+import Lottie from "lottie-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import spinner from "@/public/lottie/spinner3.json";
 
 interface DetailPageProps {
   id: string;
@@ -181,7 +183,14 @@ export default function FanpoolLogDetailPage() {
     } catch {}
   }, []);
 
-  if (!fanpoolLog) return <div>Loading...</div>;
+  if (!fanpoolLog)
+    return (
+      <Lottie
+        animationData={spinner}
+        style={{ width: "50px", height: "50px", margin: "auto" }}
+        loop
+      />
+    );
 
   return (
     <div className="w-full absolute flex flex-col h-screen">
@@ -206,7 +215,7 @@ export default function FanpoolLogDetailPage() {
       )}
 
       {/* 팬풀 로그 타이틀 및 장소 */}
-      <div className="mt-49pxr overflow-y-auto h-[calc(100vh-49px)]">
+      <div className="overflow-y-auto h-[calc(100vh-49px)]">
         <div className="w-full flex flex-col items-center gap-4pxr px-20pxr">
           {fanpoolLog.image && (
             <div className="w-85pxr h-85pxr">

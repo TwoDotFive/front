@@ -34,8 +34,6 @@ export default function FanpoolHost({ hostUserId }: FanpoolHostProps) {
 				});
 				setUserProfile(response);
 			} catch (err) {
-				alert('정보를 먼저 입력해주세요.');
-				router.replace('/register');
 				setError('');
 			} finally {
 				setLoading(false);

@@ -2,6 +2,8 @@ import { IconLink, IconShare } from "@/public/icons";
 import Button from "../common/Button";
 import Bookmark from "../common/Bookmark";
 import { FanpoolInformation } from "@/types/types";
+import { useState } from "react";
+import ToastMessage from "../common/ToastMessage";
 
 interface FanpoolDetailBottomBarProps {
   fanpoolInformation: FanpoolInformation;
@@ -12,6 +14,15 @@ export default function FanpoolDetailBottomBar({
 }: FanpoolDetailBottomBarProps) {
   const isHost =
     fanpoolInformation.hostUserId.toString() == localStorage.getItem("userId");
+
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+
+  const handleShareButton = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      setIsToastOpen(true);
+    });
+  };
 
   return (
     <section
@@ -33,10 +44,17 @@ export default function FanpoolDetailBottomBar({
       </button>
       <button
         className="flex items-center jusitify-center p-8pxr"
-        onClick={() => {}}
+        onClick={handleShareButton}
       >
         <IconLink />
       </button>
+      <ToastMessage
+        message="링크가 복사되었어요!"
+        show={isToastOpen}
+        onClose={() => {
+          setIsToastOpen(false);
+        }}
+      />
     </section>
   );
 }

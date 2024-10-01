@@ -18,10 +18,14 @@ import { useSearchStore } from '@/store/useSearchStore'; // Zustand 스토어 im
 import getAddress from '@/api/geo/getAddress';
 
 interface FindFilterProps {
+	fanpoolData: FanpoolInformation[];
 	setFanpoolData: (fanpools: FanpoolInformation[]) => void;
 }
 
-export default function FindFilter({ setFanpoolData }: FindFilterProps) {
+export default function FindFilter({
+	fanpoolData,
+	setFanpoolData,
+}: FindFilterProps) {
 	const {
 		selectedMatches,
 		selectedDate,
@@ -205,6 +209,7 @@ export default function FindFilter({ setFanpoolData }: FindFilterProps) {
 				isVisible={isMatchSelectBottomSheetVisible}
 				onClose={toggleMatchBottomSheet}
 				onMatchSelect={handleMatchSelect}
+				fanpoolCount={fanpoolData.length}
 			/>
 			<FilterBottomSheet
 				isVisible={isBottomSheetVisible}

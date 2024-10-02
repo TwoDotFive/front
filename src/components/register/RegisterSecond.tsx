@@ -107,7 +107,7 @@ export const RegisterSecond = ({
 							<SelectTeamButton
 								code={team.code}
 								isSelected={selectedTeam === team.id}
-								onClick={() => handleTeamSelect(team.id)}
+								onClick={() => handleTeamSelect(team.id || '0')}
 							/>
 						</div>
 					))}

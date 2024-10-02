@@ -12,7 +12,7 @@ interface FanpoolDetailResponse {
  * @returns {Promise<FanpoolDetailResponse>} 해당 팬풀의 상세 정보 응답
  */
 const getFanpoolDetail = async (
-	fanpoolId: number
+	fanpoolId: string
 ): Promise<FanpoolDetailResponse> => {
 	const response = await apiClient.get<FanpoolDetailResponse>(
 		`/fanpool/${fanpoolId}`

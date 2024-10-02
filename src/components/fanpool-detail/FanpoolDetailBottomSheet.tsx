@@ -3,6 +3,7 @@ import BottomSheet from '../common/BottomSheet';
 import { Text } from '../common/Text';
 import { IconPencil, IconReport, IconTrashCan } from '@/public/icons';
 import { useModalStore } from '@/store/modalStore';
+import getFanpoolDetail from '@/api/fanpool/getFanpoolDetail';
 
 interface FanpoolDetailBottomSheetProps {
 	isVisible: boolean;
@@ -33,11 +34,9 @@ export const FanpoolDetailBottomSheet = ({
 		});
 		onClose();
 	};
-	const handleReportUser = async () => {
-		openModal('reportUser', {
-			confirmText: fanpoolId,
-		});
-		onClose();
+	const editFanpool = async () => {
+		const response = await getFanpoolDetail(fanpoolId);
+		console.log(response.fanpoolInformation);
 	};
 
 	return (
@@ -46,7 +45,7 @@ export const FanpoolDetailBottomSheet = ({
 				{/* 수정하기 */}
 				<div
 					className="flex gap-8pxr items-center cursor-pointer"
-					onClick={() => {}}
+					onClick={editFanpool}
 				>
 					<IconPencil />
 					<Text fontSize={16} fontWeight={500} color="gray700">

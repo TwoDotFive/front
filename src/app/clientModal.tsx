@@ -7,6 +7,7 @@ import ConfirmUserModal from '@/components/modal/ConfirmUserModal';
 import BlockUserModal from '@/components/modal/BlockUserModal';
 import ReportUserModal from '@/components/modal/ReportUserModal';
 import DeleteFanpoolModal from '@/components/modal/DeleteFanpoolModal';
+import GoChatModal from '@/components/modal/goChatModal';
 
 export default function ClientModals() {
 	const { isOpen, modalType } = useModalStore();
@@ -20,6 +21,7 @@ export default function ClientModals() {
 			{isOpen && modalType === 'deleteFanpool' && <DeleteFanpoolModal />}
 			{isOpen && modalType === 'blockUser' && <BlockUserModal />}
 			{isOpen && modalType === 'reportUser' && <ReportUserModal />}
+			{isOpen && modalType === 'goChat' && <GoChatModal />}
 		</div>
 	);
 }

@@ -5,4 +5,5 @@ export type ModalType =
 	| 'blockUser'
 	| 'reportUser'
 	| 'deleteFanpool'
+	| 'goChat'
 	| '';

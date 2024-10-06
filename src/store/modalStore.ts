@@ -8,7 +8,7 @@ interface ModalState {
 	modalType: ModalType;
 	modalProps: {
 		confirmText?: ReactNode;
-		confirmOnClick?: () => void;
+		confirmOnClick?: (content?: string) => void;
 	};
 	openModal: (type: ModalType, props: ModalState['modalProps']) => void;
 	closeModal: () => void;

@@ -1,6 +1,9 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { Text } from '../common/Text';
+import { useEffect, useState } from 'react';
+import getRoomList, { RoomInfo } from '@/api/chat/getChatList';
+import { IconChat } from '@/public/icons';
 
 interface ChatItem {
 	name: string;
@@ -14,44 +17,15 @@ interface ChatItem {
 
 export default function ChatList() {
 	const router = useRouter();
-	const chatItems: ChatItem[] = [
-		{
-			name: '승요승요',
-			lastMessage: '저 하고싶어요',
-			time: '지금',
-			unreadCount: 1,
-			imageSrc: '/images/kia.png',
-			awayName: '키움히어로즈',
-			homeName: 'KIA타이거즈',
-		},
-		{
-			name: '김동철',
-			lastMessage: '아 언제 보실래용?',
-			time: '16분전',
-			unreadCount: 1,
-			imageSrc: '/images/empty_image_place.png',
-			awayName: '두산베어스',
-			homeName: 'KIA타이거즈',
-		},
-		{
-			name: '배선미',
-			lastMessage: '너무 배고파요',
-			time: '오후 12:03',
-			unreadCount: 1,
-			imageSrc: '/images/default_profile.png',
-			awayName: '키움히어로즈',
-			homeName: 'LG트윈스',
-		},
-		{
-			name: '배성준',
-			lastMessage: '곧 도착합니다',
-			time: '3일전',
-			unreadCount: 1,
-			imageSrc: '/images/doosan.png',
-			awayName: '삼성라이온즈',
-			homeName: 'KIA타이거즈',
-		},
-	];
+
+	const [chatList, setChatList] = useState<RoomInfo[]>([]);
+	useEffect(() => {
+		const fetchChatList = async () => {
+			const response = await getRoomList();
+			setChatList(response);
+		};
+		fetchChatList();
+	}, []);
 
 	return (
 		<section className="overflow-y-scroll px-20pxr flex flex-col gap-24pxr">
@@ -74,41 +48,45 @@ export default function ChatList() {
 			</div>
 
 			{/* 채팅 리스트 렌더링 */}
-			{chatItems.map((chat, index) => (
-				<div
-					key={index}
-					className="w-full flex justify-between items-center"
-					onClick={() => router.push('/chat/1')}
-				>
-					<div className="w-full flex gap-8pxr">
-						<img
-							src={chat.imageSrc}
-							className="w-60pxr h-60pxr border border-gray100 rounded-full object-contain"
-						/>
-						<div className="w-full flex flex-col">
-							<div className="flex justify-between">
-								<Text fontSize={16} fontWeight={700} color="gray700">
-									{chat.name}
+			{chatList.length > 0 ? (
+				chatList.map((chat, index) => (
+					<div
+						key={index}
+						className="w-full flex justify-between items-center"
+						onClick={() => router.push('/chat/1')}
+					>
+						<div className="w-full flex gap-8pxr">
+							<img
+								src={''}
+								className="w-60pxr h-60pxr border border-gray100 rounded-full object-contain"
+							/>
+							<div className="w-full flex flex-col">
+								<div className="flex justify-between">
+									<Text fontSize={16} fontWeight={700} color="gray700">
+										{'테스트'}
+									</Text>
+									<Text fontSize={12} fontWeight={500} color="gray700">
+										{chat.teams}
+									</Text>
+								</div>
+								<Text fontSize={14} fontWeight={400} color="gray600">
+									{chat.lastMessage.content}
 								</Text>
-								<Text fontSize={12} fontWeight={500} color="gray700">
-									{chat.awayName} VS {chat.homeName}
+								<Text fontSize={14} fontWeight={400} color="gray600">
+									{chat.lastMessage.time}
 								</Text>
 							</div>
-							<Text fontSize={14} fontWeight={400} color="gray600">
-								{chat.lastMessage}
-							</Text>
-							<Text fontSize={14} fontWeight={400} color="gray600">
-								{chat.time}
-							</Text>
 						</div>
 					</div>
-					<div className="flex items-center justify-center w-18pxr h-18pxr rounded-full bg-kboNavy">
-						<Text fontSize={14} fontWeight={700} color="gray000">
-							{chat.unreadCount}
-						</Text>
-					</div>
+				))
+			) : (
+				<div className="flex flex-col items-center gap-4pxr mt-150pxr">
+					<IconChat />
+					<Text fontSize={12} fontWeight={500} color="gray400">
+						앗 진행중인 채팅이 없어요!
+					</Text>
 				</div>
-			))}
+			)}
 		</section>
 	);
 }

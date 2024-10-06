@@ -11,7 +11,7 @@ interface Message {
 	content: string;
 	time: string;
 	type: string;
-	senderId: string; // 채팅에서 보낸 사람 정보 추가 (본인 or 상대)
+	senderId: string;
 }
 
 export default function ChatContent({ roomId }: { roomId: string }) {
@@ -36,7 +36,7 @@ export default function ChatContent({ roomId }: { roomId: string }) {
 		const newMessage = {
 			id: localStorage.getItem('userId')!,
 			content: message,
-			time: new Date().toISOString(), // ISO 8601 형식으로 시간 저장
+			time: new Date().toString(),
 			type: 'TEXT',
 			senderId: localStorage.getItem('userId')!,
 		};

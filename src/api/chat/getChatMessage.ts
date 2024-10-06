@@ -17,7 +17,7 @@ interface GetChatMessageParams {
 const getChatMessage = async ({
 	roomId,
 	lastId,
-	size = 30,
+	size = 100,
 }: GetChatMessageParams): Promise<ChatMessage[]> => {
 	const response = await apiClient.get<ChatMessage[]>(
 		`/chat/room/${roomId}/message`,

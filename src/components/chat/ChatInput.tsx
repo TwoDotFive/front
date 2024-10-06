@@ -7,7 +7,7 @@ interface ChatInputProps {
 
 export default function ChatInput({ onSend }: ChatInputProps) {
 	const [input, setInput] = useState('');
-	const isComposing = useRef(false); // 한글 조합 여부를 확인하는 ref
+	const isComposing = useRef(false);
 
 	const handleSend = () => {
 		if (input.trim()) {
@@ -23,11 +23,11 @@ export default function ChatInput({ onSend }: ChatInputProps) {
 	};
 
 	const handleCompositionStart = () => {
-		isComposing.current = true; // 한글 조합이 시작되면 true
+		isComposing.current = true;
 	};
 
 	const handleCompositionEnd = () => {
-		isComposing.current = false; // 한글 조합이 끝나면 false
+		isComposing.current = false;
 	};
 
 	return (
@@ -38,8 +38,8 @@ export default function ChatInput({ onSend }: ChatInputProps) {
 				value={input}
 				onChange={(e) => setInput(e.target.value)}
 				onKeyDown={handleKeyPress}
-				onCompositionStart={handleCompositionStart} // 한글 입력 시작 이벤트
-				onCompositionEnd={handleCompositionEnd} // 한글 입력 완료 이벤트
+				onCompositionStart={handleCompositionStart}
+				onCompositionEnd={handleCompositionEnd}
 				placeholder="메시지를 입력하세요"
 			/>
 			<IconSend onClick={handleSend} />

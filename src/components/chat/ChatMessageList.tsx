@@ -4,7 +4,7 @@ import { useMemo, useEffect, useRef } from 'react';
 interface Message {
 	id: string;
 	content: string;
-	time: string; // "2024-10-06T11:11:33.00183"
+	time: string;
 	type: string;
 	senderId: string;
 }
@@ -14,30 +14,26 @@ interface ChatMessageListProps {
 }
 
 export default function ChatMessageList({ messages }: ChatMessageListProps) {
-	const userId = localStorage.getItem('userId'); // 로컬스토리지에서 userId 가져오기
+	const userId = localStorage.getItem('userId');
 
-	// 스크롤을 제어하기 위한 ref
 	const scrollRef = useRef<HTMLDivElement>(null);
 
-	// 새로운 메시지가 추가될 때 스크롤을 아래로 이동
 	useEffect(() => {
 		const scrollToBottom = () => {
 			scrollRef.current!.scrollIntoView({ behavior: 'smooth' });
 		};
 		scrollToBottom();
-	}, [messages]); // 메시지가 바뀔 때마다 실행
+	}, [messages]);
 
-	// 유효한 ISO 8601 형식이 아닌 경우 처리
 	const parseDate = (time: string) => {
-		// 만약 시간 문자열에 소수점이 있고 길다면, 이를 적절히 잘라서 처리
 		if (time.includes('.')) {
 			const [datePart, milliseconds] = time.split('.');
-			const validTime = `${datePart}.${milliseconds.slice(0, 3)}`; // 소수점 이하 3자리까지만 사용
+			const validTime = `${datePart}.${milliseconds.slice(0, 3)}`;
 			const parsedDate = new Date(validTime);
-			return isNaN(parsedDate.getTime()) ? new Date() : parsedDate; // 유효하지 않으면 현재 시간 반환
+			return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 		} else {
 			const parsedDate = new Date(time);
-			return isNaN(parsedDate.getTime()) ? new Date() : parsedDate; // 유효하지 않으면 현재 시간 반환
+			return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 		}
 	};
 
@@ -51,7 +47,7 @@ export default function ChatMessageList({ messages }: ChatMessageListProps) {
 	// 날짜별로 메시지를 그룹화하는 함수
 	const groupedMessages = useMemo(() => {
 		return sortedMessages.reduce((groups, message) => {
-			const date = parseDate(message.time).toLocaleDateString(); // 날짜만 추출 (YYYY-MM-DD)
+			const date = parseDate(message.time).toLocaleDateString();
 			if (!groups[date]) {
 				groups[date] = [];
 			}
@@ -117,7 +113,7 @@ export default function ChatMessageList({ messages }: ChatMessageListProps) {
 										</div>
 									)}
 									<Text fontSize={12} fontWeight={400} color="gray500">
-										{formatTime(message.time)} {/* 시간 포맷 */}
+										{formatTime(message.time)}
 									</Text>
 								</div>
 							);

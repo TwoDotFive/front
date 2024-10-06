@@ -53,7 +53,10 @@ export default function ChatList() {
 					<div
 						key={index}
 						className="w-full flex justify-between items-center"
-						onClick={() => router.push('/chat/1')}
+						onClick={() => {
+							localStorage.setItem('otherId', chat.partner.id);
+							router.push(`/chat/${chat.roomId}`);
+						}}
 					>
 						<div className="w-full flex gap-8pxr">
 							<img

@@ -120,7 +120,7 @@ export default function ChatList() {
 							<div className="w-full flex flex-col">
 								<div className="flex justify-between">
 									<Text fontSize={16} fontWeight={700} color="gray700">
-										{'테스트'}
+										{chat.partner.nickname}
 									</Text>
 									<Text fontSize={12} fontWeight={500} color="gray700">
 										{chat.teams}

@@ -260,9 +260,6 @@ export default function Page() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(schedules);
-  }, [schedules]);
 
   if (isLoading)
     return (

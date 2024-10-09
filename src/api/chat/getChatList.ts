@@ -2,6 +2,7 @@ import apiClient from '..';
 
 export interface RoomInfo {
 	roomId: string;
+	fanpoolId: string;
 	isHost: boolean;
 	lastActivityTime: string;
 	partner: {

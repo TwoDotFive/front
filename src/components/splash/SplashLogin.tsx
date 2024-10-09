@@ -16,8 +16,6 @@ export default function SplashLogin() {
 				REDIRECT_URI +
 				'&response_type=code';
 
-			console.log(INITIAL_URL_BASE_FULL);
-
 			// URL로 리다이렉트
 			window.location.href = INITIAL_URL_BASE_FULL;
 		} catch (error) {

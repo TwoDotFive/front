@@ -5,6 +5,7 @@ import ChatMessageList from './ChatMessageList';
 import ChatInput from './ChatInput';
 import postSendMessage from '@/api/chat/postSendMessage';
 import { Text } from '../common/Text';
+import ChatGameInfo from './ChatGameInfo';
 
 interface Message {
 	id: string;
@@ -16,7 +17,6 @@ interface Message {
 
 export default function ChatContent({ roomId }: { roomId: string }) {
 	const [messages, setMessages] = useState<Message[]>([]);
-	console.log(messages);
 	useEffect(() => {
 		const fetchChatMessages = async () => {
 			try {
@@ -56,23 +56,7 @@ export default function ChatContent({ roomId }: { roomId: string }) {
 	};
 	return (
 		<section className="w-full h-full flex flex-col">
-			{/* <section className="py-16pxr px-20pxr flex flex-col gap-4pxr">
-				<div className="flex gap-4pxr">
-					<Text fontSize={12} fontWeight={700} color="gray700">
-						키움히어로즈 VS KIA타이거즈
-					</Text>
-					<Text fontSize={12} fontWeight={400} color="gray700">
-						07.14(금) 18:00, 잠실
-					</Text>
-				</div>
-				<div className="flex gap-4pxr items-center">
-					<TagFanPool type={'CAR_SHARE'} />
-					<TagFanPool type={'여자만'} />
-					<Text fontSize={12} fontWeight={400} color="gray700">
-						이대역 출발, 2명 모집
-					</Text>
-				</div>
-			</section> */}
+			<ChatGameInfo />
 			<div className="h-16pxr" />
 			<div className="flex flex-col">
 				<section className="py-8pxr px-35pxr bg-gray050">

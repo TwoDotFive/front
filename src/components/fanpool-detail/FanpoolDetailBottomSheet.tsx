@@ -36,7 +36,6 @@ export const FanpoolDetailBottomSheet = ({
 	};
 	const editFanpool = async () => {
 		const response = await getFanpoolDetail(fanpoolId);
-		console.log(response.fanpoolInformation);
 	};
 
 	return (

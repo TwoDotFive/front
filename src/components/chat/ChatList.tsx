@@ -108,6 +108,7 @@ export default function ChatList() {
 						className="w-full flex justify-between items-center"
 						onClick={() => {
 							localStorage.setItem('otherId', chat.partner.id);
+							localStorage.setItem('fanpoolId', chat.fanpoolId);
 							router.push(`/chat/${chat.roomId}`);
 						}}
 					>

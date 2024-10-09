@@ -129,14 +129,6 @@ export default function FanpoolAddForm() {
 				0 // 초는 항상 00
 			).toISOString();
 
-			// 입력 데이터를 콘솔에 출력
-			console.log('입력 데이터: ', {
-				...data,
-				selectedPlace,
-				selectedGame,
-				addressResponse,
-				departAt,
-			});
 			const inputData = {
 				title: data.title,
 				departAt: departAt,

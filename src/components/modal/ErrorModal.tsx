@@ -7,6 +7,16 @@ import { Text } from '../common/Text';
 
 const ErrorModal = () => {
 	const { modalProps, closeModal } = useModalStore();
+
+	// 중간 핸들러 함수로 이벤트 전달을 막고, modalProps.confirmOnClick 호출
+	const handleConfirmClick = () => {
+		if (modalProps.confirmOnClick) {
+			modalProps.confirmOnClick(); // 이벤트 객체를 전달하지 않고 confirmOnClick 호출
+		} else {
+			closeModal();
+		}
+	};
+
 	useEffect(() => {
 		const handleKeyPress = (event: any) => {
 			if (event.key === 'Enter') {
@@ -20,6 +30,7 @@ const ErrorModal = () => {
 			document.removeEventListener('keydown', handleKeyPress);
 		};
 	}, []);
+
 	return (
 		<ModalPortal>
 			<div
@@ -52,7 +63,7 @@ const ErrorModal = () => {
 							enabledBackgroundColor={'bg-primary'}
 							disabledTextColor={'text-[#5679A3]'}
 							disabledBackgroundColor={'bg-primary'}
-							onClick={modalProps.confirmOnClick || closeModal}
+							onClick={handleConfirmClick} // 수정된 부분
 						/>
 					</div>
 				</div>

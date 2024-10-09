@@ -6,6 +6,13 @@ import { useModalStore } from '@/store/modalStore';
 const ConfirmUserModal = () => {
 	const { modalProps, closeModal } = useModalStore();
 
+	// confirmOnClick을 안전하게 호출하는 핸들러
+	const handleConfirmClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		if (modalProps.confirmOnClick) {
+			modalProps.confirmOnClick(); // 이벤트 객체를 넘기지 않고 함수만 호출
+		}
+	};
+
 	return (
 		<ModalPortal>
 			<div
@@ -29,7 +36,7 @@ const ConfirmUserModal = () => {
 							취소
 						</button>
 						<button
-							onClick={modalProps.confirmOnClick}
+							onClick={handleConfirmClick} // 이벤트 핸들러로 수정된 함수 호출
 							className="w-full px-16pxr py-8pxr bg-primary text-white rounded hover:brightness-75"
 						>
 							확인

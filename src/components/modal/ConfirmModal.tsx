@@ -4,6 +4,17 @@ import { useModalStore } from '@/store/modalStore';
 
 const ConfirmModal = () => {
 	const { modalProps, closeModal } = useModalStore();
+
+	// onClick 핸들러에 맞게 처리
+	const handleConfirmClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		if (modalProps.confirmOnClick) {
+			// modalProps.confirmOnClick이 있을 때 호출
+			modalProps.confirmOnClick();
+		} else {
+			closeModal(); // 없을 때는 closeModal 호출
+		}
+	};
+
 	return (
 		<ModalPortal>
 			<div
@@ -20,7 +31,7 @@ const ConfirmModal = () => {
 					<div className="h-24pxr" />
 					<div className="flex justify-center">
 						<button
-							onClick={modalProps.confirmOnClick || closeModal}
+							onClick={handleConfirmClick}
 							className="px-16pxr py-8pxr w-full bg-primary text-white rounded hover:brightness-75"
 						>
 							확인

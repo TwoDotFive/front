@@ -4,6 +4,8 @@ import { Text } from '../common/Text';
 import { IconPencil, IconReport, IconTrashCan } from '@/public/icons';
 import { useModalStore } from '@/store/modalStore';
 import getFanpoolDetail from '@/api/fanpool/getFanpoolDetail';
+import deleteFanpool from '@/api/fanpool/deleteFanpool';
+import { useRouter } from 'next/navigation';
 
 interface FanpoolDetailBottomSheetProps {
 	isVisible: boolean;
@@ -16,10 +18,19 @@ export const FanpoolDetailBottomSheet = ({
 	onClose,
 	fanpoolId,
 }: FanpoolDetailBottomSheetProps) => {
-	const { openModal } = useModalStore();
+	const router = useRouter();
+	const { openModal, closeModal } = useModalStore();
 
-	const deleteFanpool = async () => {
-		// const response =
+	const deleteFanpoolHandler = async () => {
+		try {
+			const response = await deleteFanpool(fanpoolId);
+			if (response) {
+				alert('팬풀이 삭제되었습니다.');
+				router.replace('/home');
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 	const handleDeleteFanpool = async () => {
 		openModal('deleteFanpool', {
@@ -29,7 +40,8 @@ export const FanpoolDetailBottomSheet = ({
 				</Text>
 			),
 			confirmOnClick() {
-				deleteFanpool();
+				deleteFanpoolHandler();
+				closeModal();
 			},
 		});
 		onClose();
@@ -41,7 +53,7 @@ export const FanpoolDetailBottomSheet = ({
 	return (
 		<BottomSheet isVisible={isVisible} onClose={onClose}>
 			<section className="flex flex-col gap-20pxr">
-				{/* 수정하기 */}
+				{/* 수정하기
 				<div
 					className="flex gap-8pxr items-center cursor-pointer"
 					onClick={editFanpool}
@@ -50,7 +62,7 @@ export const FanpoolDetailBottomSheet = ({
 					<Text fontSize={16} fontWeight={500} color="gray700">
 						수정하기
 					</Text>
-				</div>
+				</div> */}
 
 				{/* 삭제하기 */}
 				<div

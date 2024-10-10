@@ -114,7 +114,7 @@ export default function ChatList() {
 					>
 						<div className="w-full flex gap-8pxr">
 							<img
-								src={''}
+								src={chat.partner.image}
 								className="w-60pxr h-60pxr border border-gray100 rounded-full object-contain"
 							/>
 							<div className="w-full flex flex-col">

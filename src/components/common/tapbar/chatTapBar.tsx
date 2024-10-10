@@ -34,7 +34,7 @@ export default function ChatTapBar() {
 			<IconLeftArrow className="cursor-pointer" onClick={handleBack} />
 			<div className="flex flex-col">
 				<Text fontSize={16} fontWeight={700} color="gray700">
-					{userInfo?.name}
+					{userInfo?.nickname}
 				</Text>
 				<div className="flex items-center">
 					<Text
